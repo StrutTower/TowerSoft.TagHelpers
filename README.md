@@ -12,6 +12,7 @@ Collection of ASP Core TagHelpers that I use.
 - [FormSelectTagHelper](../../wiki/FormSelectTagHelper)
 - [HorizontalFormFieldTagHelper](../../wiki/HorizontalFormFieldTagHelper)
 - [HorizontalFormSelectTagHelper](../../wiki/HorizontalFormSelectTagHelper)
+- [HorizontalFormSubmitTagHelper](../../wiki/HorizontalFormSubmitTagHelper)
 - [ImgBytesTagHelper](../../wiki/ImgBytesTagHelper)
 - [LabelRequiredTagHelper](../../wiki/LabelRequiredTagHelper)
 - [TruncateTagHelper](../../wiki/TruncateTagHelper)
