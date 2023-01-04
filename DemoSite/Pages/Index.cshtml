@@ -1,0 +1,137 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+    string testString = "From Variable";
+}
+
+@*<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+*@
+
+<div class="display-6 mb-3">Anchor/Link Enabled</div>
+
+<a href="https://github.com/StrutTower" target="_blank" rel="noopener noreferrer">Enabled Link</a>
+
+-
+
+<a href="https://github.com/StrutTower" target="_blank" rel="noopener noreferrer" asp-enabled="false">Disabled Link</a>
+
+<hr />
+
+<div class="display-6 mb-3">Breadcrumbs</div>
+
+<breadcrumbs>
+    <breadcrumb-item asp-action="Index" asp-controller="Test">Hard Coded String</breadcrumb-item>
+    <breadcrumb-item asp-action="Index" asp-controller="Test" display-for="@testString"></breadcrumb-item>
+    <breadcrumb-item asp-action="Index" asp-controller="Test" display-for="TestString"></breadcrumb-item>
+    <breadcrumb-item>Active Breadcrumb</breadcrumb-item>
+</breadcrumbs>
+
+<hr />
+
+<div class="display-6 mb-3">Description</div>
+
+<description asp-for="TestString"></description>
+
+<hr />
+
+<div class="display-6 mb-3">DisplayFor</div>
+
+<div display-for="TestString"></div>
+<div display-for="TestDate" template="Date"></div>
+<div display-for="TestDate"></div>
+
+<hr />
+
+<div class="display-6 mb-3">ImgBytes</div>
+
+
+<img asp-bytes="@Model.ImageData"></img>
+
+<hr />
+
+<div class="display-6 mb-3">Label Required</div>
+
+
+<label asp-for="TestString"></label>
+
+<hr />
+
+<div class="display-6 mb-3">Truncate</div>
+
+
+<truncate string="@Model.TestString" characters="3"></truncate>
+
+<hr />
+
+<div class="display-6 mb-3">Vertical Table Row</div>
+
+<table class="table-vertical">
+    <tr-display asp-for="TestString"></tr-display>
+    <tr-display asp-for="TestDate" template="Date"></tr-display>
+</table>
+
+<hr />
+
+<div class="display-6 mb-3">Visible</div>
+
+<div>
+    <button class="btn btn-primary">Button 1</button>
+    <button class="btn btn-primary" asp-visible="false">Button 2</button>
+    <button class="btn btn-primary">Button 3</button>
+</div>
+
+<div class="mb-5"></div>
+
+<div class="display-3 mb-3 pb-2 border-bottom">Form Field Tag Helpers</div>
+
+<div class="display-6 mb-3">FormField</div>
+
+<formField asp-for="TestString"></formField>
+
+<hr />
+
+<div class="display-6 mb-3">FormSelect</div>
+
+
+<formSelect asp-for="TestString" asp-items="Model.TestSelectList"></formSelect>
+
+<hr />
+
+<div class="display-6 mb-3">hrFormField</div>
+
+<hrFormField asp-for="TestString"></hrFormField>
+
+<hr />
+
+<div class="display-6 mb-3">hrFormSelect</div>
+
+
+<hrFormSelect asp-for="TestString" asp-items="Model.TestSelectList"></hrFormSelect>
+
+<hr />
+
+<div class="display-6 mb-3">hrFormSubmit</div>
+
+
+<hrFormSubmit></hrFormSubmit>
+
+<div class="display-5 mb-3">HtmlRenderers</div>
+
+<hrFormField asp-for="TestBoolean"></hrFormField>
+<hrFormField asp-for="TestBooleanNullable"></hrFormField>
+
+<hrFormField asp-for="TestBoolean" template="BooleanRadio"></hrFormField>
+<hrFormField asp-for="TestBooleanNullable" template="BooleanRadio"></hrFormField>
+
+<hrFormField asp-for="TestDate" label="Date and Time"></hrFormField>
+<hrFormField asp-for="TestDate" template="Date" label="Date"></hrFormField>
+<hrFormField asp-for="TestDate" template="Time" label="Time"></hrFormField>
+<hrFormField asp-for="TestFile"></hrFormField>
+<hrFormField asp-for="TestInt"></hrFormField>
+<hrFormField asp-for="TestLong"></hrFormField>
+<hrFormField asp-for="TestString"></hrFormField>
+<hrFormField asp-for="TestString" template="TextArea"></hrFormField>

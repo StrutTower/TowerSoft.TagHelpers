@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc.ViewFeatures;
+﻿using Microsoft.AspNetCore.Mvc.TagHelpers;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
+using System.Text.Encodings.Web;
 
 namespace TowerSoft.TagHelpers {
     /// <summary>
@@ -24,7 +26,9 @@ namespace TowerSoft.TagHelpers {
         /// <param name="output"></param>
         public override void Process(TagHelperContext context, TagHelperOutput output) {
             output.TagName = "div";
-            output.Attributes.Add("class", "form-help-text");
+            output.AddClass("text-muted", HtmlEncoder.Default);
+            output.AddClass("ps-3", HtmlEncoder.Default);
+            output.AddClass("small", HtmlEncoder.Default);
             var prop = ModelEx.Metadata.ContainerType.GetProperty(ModelEx.Name);
             if (prop != null) {
                 DescriptionAttribute? descAttr = prop.GetCustomAttribute<DescriptionAttribute>(true);

@@ -1,0 +1,66 @@
+﻿///<reference path="_variablesShared.scss" />
+///<reference path="_variablesLight.scss" />
+///<reference path="_variablesDark.scss" />
+///<reference path="../node_modules/bootstrap/scss/_variables.scss" />
+
+.mdi:before {
+    text-decoration: none;
+    //Set the font size to be larger. Default size seems too small
+    font-size: 1.2em;
+    line-height: 0.75em;
+    vertical-align: -15%;
+}
+
+.mdi-fw:before {
+    width: 1.2em;
+    text-align: center;
+}
+
+.mdi-lg {
+    font-size: 1.33333333em;
+    line-height: 0.75em;
+    vertical-align: -15%;
+}
+
+.mdi-2x {
+    font-size: 2em;
+}
+
+.mdi-3x {
+    font-size: 3em;
+}
+
+.mdi-4x {
+    font-size: 4em;
+}
+
+.mdi-spin-fast:before {
+    animation: mdi-spin 1s linear infinite;
+}
+
+.mdi-ul {
+    padding-left: 0;
+    margin-left: 2.14285714em;
+    list-style-type: none;
+
+    .mdi-li {
+        width: 0;
+        position: relative;
+
+        &:before {
+            position: absolute;
+            left: -19px;
+            top: 5px;
+            width: 0;
+        }
+
+        &.ul-bullet-style {
+            font-size: 0.3em;
+
+            &:before {
+                left: -14px;
+                top: -1px;
+            }
+        }
+    }
+}

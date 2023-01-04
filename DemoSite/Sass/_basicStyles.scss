@@ -1,0 +1,16 @@
+﻿///<reference path="_variablesShared.scss" />
+///<reference path="_variablesLight.scss" />
+///<reference path="_variablesDark.scss" />
+///<reference path="../node_modules/bootstrap/scss/_variables.scss" />
+///<reference path="../_varialbesDark.scss" />
+
+a.disable-link {
+    pointer-events: none;
+    cursor: default;
+    text-decoration:none !important;
+    color: $body-color;
+}
+
+hr {
+    border-top-color: #929299
+}

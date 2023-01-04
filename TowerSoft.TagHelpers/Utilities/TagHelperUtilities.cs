@@ -104,8 +104,14 @@ namespace TowerSoft.TagHelpers.Utilities {
                     }
                 } else {
                     foreach (SelectListItem item in items) {
-                        if (item.Value.ToString() == For.Model.ToString()) {
-                            item.Selected = true;
+                        if (item.Value == null) {
+                            if (item.Text == For.Model.ToString()) {
+                                item.Selected = true;
+                            }
+                        } else {
+                            if (item.Value.ToString() == For.Model.ToString()) {
+                                item.Selected = true;
+                            }
                         }
                     }
                 }

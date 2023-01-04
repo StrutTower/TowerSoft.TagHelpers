@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System.Collections.Generic;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using TowerSoft.TagHelpers.Utilities;
 
@@ -51,7 +53,7 @@ namespace TowerSoft.TagHelpers {
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output) {
             output.TagName = "div";
-            output.Attributes.SetAttribute("class", "form-group");
+            output.AddClass("mb-3", HtmlEncoder.Default);
 
             TagHelperUtilities utils = new TagHelperUtilities(For, HtmlGenerator, HtmlHelper, ViewContext);
 

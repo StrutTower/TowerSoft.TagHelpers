@@ -38,7 +38,7 @@ namespace TowerSoft.TagHelpers {
             ((IViewContextAware)HtmlHelper).Contextualize(ViewContext);
 
             output.TagName = "div";
-            output.Attributes.SetAttribute("class", "form-group");
+            output.Attributes.SetAttribute("class", "mb-3");
 
             TagHelperUtilities utils = new TagHelperUtilities(For, HtmlGenerator, HtmlHelper, ViewContext);
 

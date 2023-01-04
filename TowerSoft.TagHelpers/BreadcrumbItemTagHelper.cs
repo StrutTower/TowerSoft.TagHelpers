@@ -1,13 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.AspNetCore.Routing;
 using System;
 using System.Collections.Generic;
+using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using TowerSoft.TagHelpers.Extensions;
+using TowerSoft.TagHelpers.Utilities;
 
 namespace TowerSoft.TagHelpers {
     /// <summary>
@@ -66,6 +69,18 @@ namespace TowerSoft.TagHelpers {
         public string Route { get; set; }
 
         /// <summary>
+        /// Model expression for the property
+        /// </summary>
+        [HtmlAttributeName("display-for")]
+        public ModelExpression? Model { get; set; }
+
+        /// <summary>
+        /// Name of the display template
+        /// </summary>
+        [HtmlAttributeName("template")]
+        public string TemplateName { get; set; }
+
+        /// <summary>
         /// Route values for the link
         /// </summary>
         [HtmlAttributeName(RouteValuesDictionaryName, DictionaryAttributePrefix = RouteValuesPrefix)]
@@ -108,14 +123,20 @@ namespace TowerSoft.TagHelpers {
 
             if (string.IsNullOrWhiteSpace(Action)) {
                 output.TagName = "li";
-                output.Attributes.Add("class", "breadcrumb-item active");
+                output.AddClass("breadcrumb-item", HtmlEncoder.Default);
+                output.AddClass("active", HtmlEncoder.Default);
             } else {
                 TagBuilder a = new TagBuilder("a");
                 a.Attributes.Add("href", urlHelper.Action(Action, Controller, routeValues));
+
+                if (Model != null) {
+                    a.InnerHtml.AppendHtml(TagHelperUtilities.TagHelperDisplay(htmlHelper, Model, TemplateName));
+                }
+
                 a.InnerHtml.AppendHtml((await output.GetChildContentAsync()).GetContent());
 
                 output.TagName = "li";
-                output.Attributes.Add("class", "breadcrumb-item");
+                output.AddClass("breadcrumb-item", HtmlEncoder.Default);
                 output.Content.SetHtmlContent(a.ToRawString());
             }
         }

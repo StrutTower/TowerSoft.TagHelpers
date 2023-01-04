@@ -1,0 +1,42 @@
+﻿///<reference path="_variablesShared.scss" />
+///<reference path="_variablesLight.scss" />
+///<reference path="_variablesDark.scss" />
+///<reference path="../node_modules/bootstrap/scss/_variables.scss" />
+
+table.table-vertical {
+    th, td {
+        padding: 7px;
+    }
+
+    th {
+        text-align: right;
+        font-weight: 600;
+        min-width: 100px;
+
+        &:after {
+            content:':';
+        }
+    }
+
+    &.table-vertical-sm {
+        th, td {
+            padding:1px 4px;
+        }
+    }
+}
+
+table.table-align-middle {
+    th, td {
+        vertical-align: middle;
+    }
+}
+
+table.table-auto-width {
+    width: auto;
+}
+
+@media screen and (max-width: 768px) {
+    table.table-auto-width {
+        width: 100%;
+    }
+}

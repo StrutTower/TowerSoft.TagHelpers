@@ -3,13 +3,24 @@
 	<PropertyGroup>
 		<TargetFramework>netcoreapp3.1</TargetFramework>
 		<Nullable>enable</Nullable>
-		<AssemblyVersion>0.1.0</AssemblyVersion>
+		<AssemblyVersion>1.0.0</AssemblyVersion>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<Authors>TowerSoft</Authors>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Version>$(AssemblyVersion)</Version>
 		<FileVersion>$(AssemblyVersion)</FileVersion>
+		<PackageProjectUrl>https://github.com/StrutTower/TowerSoft.TagHelpers</PackageProjectUrl>
+		<PackageIcon>towersoft-logo-T_128x.png</PackageIcon>
+		<RepositoryUrl>https://github.com/StrutTower/TowerSoft.TagHelpers</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <None Include="..\..\..\..\OneDrive\Pictures\Logo\towersoft-logo-T_128x.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />

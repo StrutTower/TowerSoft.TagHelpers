@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Razor.TagHelpers;
+﻿using Microsoft.AspNetCore.Mvc.TagHelpers;
+using Microsoft.AspNetCore.Razor.TagHelpers;
+using System.Text.Encodings.Web;
 
 namespace TowerSoft.TagHelpers {
     /// <summary>
@@ -15,7 +17,7 @@ namespace TowerSoft.TagHelpers {
         /// <param name="output"></param>
         public override void Process(TagHelperContext context, TagHelperOutput output) {
             output.TagName = "ul";
-            output.Attributes.Add("class", "breadcrumb");
+            output.AddClass("breadcrumb", HtmlEncoder.Default);
         }
     }
 }

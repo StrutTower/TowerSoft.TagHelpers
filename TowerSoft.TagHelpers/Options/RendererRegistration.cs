@@ -74,6 +74,7 @@ namespace TowerSoft.TagHelpers.Options {
         /// </summary>
         public static void RegisterDefaultRenderers() {
             Add<BooleanInputRenderer>("boolean");
+            Add<BooleanRadioInputRenderer>("booleanradio");
             Add<DateInputRenderer>("date");
             Add<DateTimeInputRenderer>("datetime");
             Add<FormFileInputRenderer>("iformfile");
