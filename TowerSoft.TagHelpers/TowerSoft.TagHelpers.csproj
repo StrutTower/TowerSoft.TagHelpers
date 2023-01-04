@@ -13,10 +13,12 @@
 		<PackageIcon>towersoft-logo-T_128x.png</PackageIcon>
 		<RepositoryUrl>https://github.com/StrutTower/TowerSoft.TagHelpers</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
+		<PackageLicenseFile>license.txt</PackageLicenseFile>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <None Include="..\..\..\..\OneDrive\Pictures\Logo\towersoft-logo-T_128x.png">
+	  <None Include="..\README.md">
 	    <Pack>True</Pack>
 	    <PackagePath>\</PackagePath>
 	  </None>
@@ -24,6 +26,17 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="license.txt">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	  <None Update="towersoft-logo-T_128x.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
 	</ItemGroup>
 
 </Project>
