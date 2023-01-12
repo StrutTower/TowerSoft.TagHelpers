@@ -22,6 +22,8 @@ namespace TowerSoft.TagHelpers {
     [HtmlTargetElement("breadcrumb-item", Attributes = ControllerAttributeName, ParentTag = "breadcrumbs")]
     [HtmlTargetElement("breadcrumb-item", Attributes = AreaAttributeName, ParentTag = "breadcrumbs")]
     [HtmlTargetElement("breadcrumb-item", Attributes = RouteValuesPrefix + "*", ParentTag = "breadcrumbs")]
+    [HtmlTargetElement("breadcrumb-item", Attributes = DisplayForAttributeName, ParentTag = "breadcrumbs")]
+    [HtmlTargetElement("breadcrumb-item", Attributes = TemplateAttributeName, ParentTag = "breadcrumbs")]
     public class BreadcrumbItemTagHelper : TagHelper {
         private readonly IHtmlHelper htmlHelper;
         private readonly IUrlHelperFactory UrlHelperFactory;
@@ -33,6 +35,8 @@ namespace TowerSoft.TagHelpers {
         private const string RouteAttributeName = "asp-route";
         private const string RouteValuesDictionaryName = "asp-all-route-data";
         private const string RouteValuesPrefix = "asp-route-";
+        private const string DisplayForAttributeName = "display-for";
+        private const string TemplateAttributeName = "template";
 
         /// <summary>
         /// BreadcrumbItem constructor
@@ -71,13 +75,13 @@ namespace TowerSoft.TagHelpers {
         /// <summary>
         /// Model expression for the property
         /// </summary>
-        [HtmlAttributeName("display-for")]
+        [HtmlAttributeName(DisplayForAttributeName)]
         public ModelExpression? Model { get; set; }
 
         /// <summary>
         /// Name of the display template
         /// </summary>
-        [HtmlAttributeName("template")]
+        [HtmlAttributeName(TemplateAttributeName)]
         public string TemplateName { get; set; }
 
         /// <summary>

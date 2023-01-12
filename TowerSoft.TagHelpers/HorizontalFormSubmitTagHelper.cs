@@ -40,6 +40,8 @@ namespace TowerSoft.TagHelpers {
             field.AddCssClass(fieldColumnCss);
             field.InnerHtml.SetHtmlContent(button);
 
+            field.InnerHtml.AppendHtml(await output.GetChildContentAsync());
+
             output.TagName = "div";
             output.AddClass("row", HtmlEncoder.Default);
             output.AddClass("mb-3", HtmlEncoder.Default);
