@@ -29,7 +29,7 @@ namespace TowerSoft.TagHelpers {
             output.AddClass("text-muted", HtmlEncoder.Default);
             output.AddClass("ps-3", HtmlEncoder.Default);
             output.AddClass("small", HtmlEncoder.Default);
-            var prop = ModelEx.Metadata.ContainerType.GetProperty(ModelEx.Name);
+            var prop = ModelEx.Metadata.ContainerType.GetProperty(ModelEx.Metadata.Name);
             if (prop != null) {
                 DescriptionAttribute? descAttr = prop.GetCustomAttribute<DescriptionAttribute>(true);
                 if (descAttr != null) {
