@@ -77,6 +77,7 @@ namespace TowerSoft.TagHelpers.Options {
             Add<BooleanRadioInputRenderer>("booleanradio");
             Add<DateInputRenderer>("date");
             Add<DateTimeInputRenderer>("datetime");
+            Add<EmailInputHtmlRenderer>("email");
             Add<FormFileInputRenderer>("iformfile");
             Add<IntInputRenderer>("int32");
             Add<LongInputRenderer>("int64");
