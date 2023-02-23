@@ -66,9 +66,9 @@ namespace TowerSoft.TagHelpers.Utilities {
             return labelOutput;
         }
 
-        internal IHtmlContent CreateInputElement(string? rendererName = null, string? css = null) {
+        internal IHtmlContent CreateInputElement(string? rendererName = null, string? css = null, Dictionary<string, string>? htmlAttributes = null) {
             if (!string.IsNullOrWhiteSpace(rendererName))
-                return RendererRegistration.Get(rendererName).Render(For, HtmlGenerator, HtmlHelper, ViewContext, css);
+                return RendererRegistration.Get(rendererName).Render(For, HtmlGenerator, HtmlHelper, ViewContext, css, htmlAttributes);
 
             Type type = For.Metadata.ModelType;
             if (type != null) {
@@ -81,20 +81,22 @@ namespace TowerSoft.TagHelpers.Utilities {
                     if (prop != null && prop.IsDefined(typeof(DataTypeAttribute))) {
                         DataTypeAttribute? attr = prop.GetCustomAttribute<DataTypeAttribute>();
                         if (attr != null && RendererRegistration.Exists(attr.DataType.ToString())) {
-                            return RendererRegistration.Get(attr.DataType.ToString()).Render(For, HtmlGenerator, HtmlHelper, ViewContext, css);
+                            return RendererRegistration.Get(attr.DataType.ToString()).Render(For, HtmlGenerator, HtmlHelper, ViewContext, css, htmlAttributes);
                         }
                     }
                 }
             }
 
             if (type != null && RendererRegistration.Exists(type.Name)) {
-                return RendererRegistration.Get(type.Name).Render(For, HtmlGenerator, HtmlHelper, ViewContext, css);
+                return RendererRegistration.Get(type.Name).Render(For, HtmlGenerator, HtmlHelper, ViewContext, css, htmlAttributes);
             } else {
-                return RendererRegistration.Default().Render(For, HtmlGenerator, HtmlHelper, ViewContext, css);
+                return RendererRegistration.Default().Render(For, HtmlGenerator, HtmlHelper, ViewContext, css, htmlAttributes);
             }
         }
 
-        internal async Task<TagHelperOutput> CreateSelectElement(TagHelperContext context, IEnumerable<SelectListItem> items, bool multiple = false, string? optionLabel = null) {
+        internal async Task<TagHelperOutput> CreateSelectElement(TagHelperContext context, IEnumerable<SelectListItem> items, bool multiple = false,
+            string? optionLabel = null, Dictionary<string, string>? htmlAttributes = null) {
+
             if (For.Model != null) {
                 if (For.ModelExplorer.ModelType.IsEnum) {
                     foreach (SelectListItem item in items) {
@@ -133,6 +135,15 @@ namespace TowerSoft.TagHelpers.Utilities {
             }
             if (multiple) {
                 selectOutput.Attributes.Add("multiple", "");
+            }
+            if (htmlAttributes != null) {
+                foreach(KeyValuePair<string, string> keyValuePair in htmlAttributes) {
+                    if (selectOutput.Attributes.ContainsName(keyValuePair.Key)) {
+                        selectOutput.Attributes.SetAttribute(keyValuePair.Key, keyValuePair.Value);
+                    } else {
+                        selectOutput.Attributes.Add(keyValuePair.Key, keyValuePair.Value);
+                    }
+                }
             }
             await selectTagHelper.ProcessAsync(context, selectOutput);
             return selectOutput;

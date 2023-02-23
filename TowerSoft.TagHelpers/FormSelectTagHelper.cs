@@ -19,6 +19,9 @@ namespace TowerSoft.TagHelpers {
             HtmlHelper = htmlHelper;
         }
 
+        public IHtmlGenerator HtmlGenerator { get; }
+        public IHtmlHelper HtmlHelper { get; }
+
         /// <summary>
         /// An expression to be evaluated against the current model.
         /// </summary>
@@ -38,13 +41,12 @@ namespace TowerSoft.TagHelpers {
         [HtmlAttributeName("asp-option-label")]
         public string? OptionLabel { get; set; }
 
+        /// <summary>
+        /// Overrides the label display text
+        /// </summary>
         public string? Label { get; set; }
 
         public bool Multiple { get; set; } = false;
-
-        public IHtmlGenerator HtmlGenerator { get; }
-
-        public IHtmlHelper HtmlHelper { get; }
 
         /// <summary></summary>
         [ViewContext]
@@ -55,10 +57,15 @@ namespace TowerSoft.TagHelpers {
             output.TagName = "div";
             output.AddClass("mb-3", HtmlEncoder.Default);
 
+            Dictionary<string, string> htmlAttributes = new Dictionary<string, string>();
+            if (context.AllAttributes.ContainsName("autofocus")) {
+                htmlAttributes.Add("autofocus", string.Empty);
+            }
+
             TagHelperUtilities utils = new TagHelperUtilities(For, HtmlGenerator, HtmlHelper, ViewContext);
 
             TagHelperOutput labelElement = await utils.CreateLabelRequiredElement(context, Label);
-            IHtmlContent inputElement = await utils.CreateSelectElement(context, Items, Multiple, OptionLabel);
+            IHtmlContent inputElement = await utils.CreateSelectElement(context, Items, Multiple, OptionLabel, htmlAttributes);
             TagHelperOutput validationMessageElement = await utils.CreateValidationMessageElement(context);
             TagHelperOutput descriptionElement = await utils.CreateDescriptionElement(context);
 

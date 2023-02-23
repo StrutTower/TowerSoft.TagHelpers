@@ -7,7 +7,7 @@ using TowerSoft.TagHelpers.Utilities;
 
 namespace TowerSoft.TagHelpers {
     /// <summary>
-    /// Generates a table row to diplay the value of a property with a th and td.
+    /// Generates a table row to display the value of a property with a th and td.
     /// The th will have the display name of the property. The td will have the value of the property
     /// </summary>
     [HtmlTargetElement("tr-display")]
@@ -32,7 +32,7 @@ namespace TowerSoft.TagHelpers {
         public string LabelName { get; set; }
 
         /// <summary>
-        /// Name of the display template to use the display the value
+        /// Name of the display template to use to display the value
         /// </summary>
         [HtmlAttributeName("template")]
         public string TemplateName { get; set; }

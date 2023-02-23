@@ -1,32 +1,22 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using System;
 using System.Collections.Generic;
+using System.Text;
 using TowerSoft.TagHelpers.Interfaces;
 
 namespace TowerSoft.TagHelpers.HtmlRenderers {
-    /// <summary>
-    /// Render for textarea inputs
-    /// </summary>
-    public class TextAreaRenderer : IHtmlRenderer {
-        /// <summary>
-        /// Renders the element
-        /// </summary>
-        /// <param name="modelEx"></param>
-        /// <param name="htmlGenerator"></param>
-        /// <param name="htmlHelper"></param>
-        /// <param name="viewContext"></param>
-        /// <param name="css">Custom CSS to add to the input</param>
-        /// <returns></returns>
+    public class EmailInputHtmlRenderer : IHtmlRenderer {
         public IHtmlContent Render(ModelExpression modelEx, IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper, ViewContext viewContext, string? css, Dictionary<string, string>? htmlAttributes) {
-            TagBuilder output = htmlGenerator.GenerateTextArea(viewContext, modelEx.ModelExplorer, modelEx.Name, 6, 10, null);
+            TagBuilder output = htmlGenerator.GenerateTextBox(viewContext, modelEx.ModelExplorer, modelEx.Name, modelEx.Model, null, null);
+            output.Attributes["type"] = "email";
             output.AddCssClass("form-control");
-
             if (!string.IsNullOrWhiteSpace(css))
                 output.AddCssClass(css);
 
             if (htmlAttributes != null) {
-                output.MergeAttributes(htmlAttributes);
+                output.MergeAttributes(htmlAttributes, true);
             }
 
             return output;

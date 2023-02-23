@@ -24,6 +24,9 @@ namespace TowerSoft.TagHelpers {
             HtmlHelper = htmlHelper;
         }
 
+        public IHtmlGenerator HtmlGenerator { get; }
+        public IHtmlHelper HtmlHelper { get; }
+
         /// <summary>
         /// An expression to be evaluated against the current model.
         /// </summary>
@@ -64,12 +67,6 @@ namespace TowerSoft.TagHelpers {
         public bool Multiple { get; set; } = false;
 
         /// <summary></summary>
-        public IHtmlGenerator HtmlGenerator { get; }
-
-        /// <summary></summary>
-        public IHtmlHelper HtmlHelper { get; }
-
-        /// <summary></summary>
         [ViewContext]
         [HtmlAttributeNotBound]
         public ViewContext ViewContext { get; set; }
@@ -93,10 +90,15 @@ namespace TowerSoft.TagHelpers {
             TagBuilder fieldDiv = new TagBuilder("div");
             fieldDiv.AddCssClass(fieldColumnCss);
 
+            Dictionary<string, string> htmlAttributes = new Dictionary<string, string>();
+            if (context.AllAttributes.ContainsName("autofocus")) {
+                htmlAttributes.Add("autofocus", string.Empty);
+            }
+
             TagHelperUtilities utils = new TagHelperUtilities(For, HtmlGenerator, HtmlHelper, ViewContext);
 
             TagHelperOutput labelElement = await utils.CreateLabelRequiredElement(context, LabelName);
-            IHtmlContent inputElement = await utils.CreateSelectElement(context, Items, Multiple, OptionLabel);
+            IHtmlContent inputElement = await utils.CreateSelectElement(context, Items, Multiple, OptionLabel, htmlAttributes);
             TagHelperOutput validationMessageElement = await utils.CreateValidationMessageElement(context);
             TagHelperOutput descriptionElement = await utils.CreateDescriptionElement(context);
 

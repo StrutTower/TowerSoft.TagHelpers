@@ -4,34 +4,75 @@ using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System;
+using System.Collections.Generic;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using TowerSoft.TagHelpers.Enums;
 using TowerSoft.TagHelpers.Utilities;
 
 namespace TowerSoft.TagHelpers {
     [HtmlTargetElement("hrFormField", Attributes = "asp-for")]
     public class HorizontalFormFieldTagHelper : TagHelper {
+        private AutocompleteSetting _autocompleteSetting;
+
         public HorizontalFormFieldTagHelper(IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper) {
             HtmlGenerator = htmlGenerator;
             HtmlHelper = htmlHelper;
         }
 
+        public IHtmlGenerator HtmlGenerator { get; }
+        public IHtmlHelper HtmlHelper { get; }
+
         [HtmlAttributeName("asp-for")]
         public ModelExpression For { get; set; }
 
-        public string? Template { get; set; }
+        /// <summary>
+        /// Sets the renderer used for this field. Default will be based on the datatype of the property
+        /// </summary>
+        public string? Renderer { get; set; }
 
+        /// <summary>
+        /// Overrides the label display text
+        /// </summary>
         public string? Label { get; set; }
 
+        /// <summary>
+        /// Bootstrap column CSS for the label. If not set, defaults to: col-md-4 col-lg-3
+        /// </summary>
         public string? LabelCol { get; set; }
 
+        /// <summary>
+        /// Bootstrap column CSS for the input. If not set, defaults to: col-md-7 col-lg-6
+        /// </summary>
         public string? InputCol { get; set; }
 
+        /// <summary>
+        /// Set additional CSS on the input
+        /// </summary>
         public string? InputCss { get; set; }
 
-        public IHtmlGenerator HtmlGenerator { get; }
+        /// <summary>
+        /// Sets the placeholder text for the input
+        /// </summary>
+        public string? Placeholder { get; set; }
 
-        public IHtmlHelper HtmlHelper { get; }
+        /// <summary>
+        /// Sets the autocomplete attribute on the input. Default is off
+        /// </summary>
+        public AutocompleteSetting Autocomplete {
+            get => _autocompleteSetting;
+            set {
+                switch (value) {
+                    case AutocompleteSetting.off:
+                    case AutocompleteSetting.on:
+                        _autocompleteSetting = value;
+                        break;
+                    default:
+                        throw new ArgumentException(
+                            message: "Invalid Autocomplete Value", paramName: nameof(value));
+                }
+            }
+        }
 
         /// <summary></summary>
         [ViewContext]
@@ -53,7 +94,7 @@ namespace TowerSoft.TagHelpers {
             string labelColumnCss = LabelCol ?? "col-md-4 col-lg-3";
             string fieldColumnCss = InputCol ?? "col-md-7 col-lg-6";
 
-            if (type == typeof(bool) && string.IsNullOrWhiteSpace(Template)) {
+            if (type == typeof(bool) && string.IsNullOrWhiteSpace(Renderer)) {
                 TagBuilder labelDiv = new TagBuilder("div");
                 labelDiv.AddCssClass(labelColumnCss);
                 TagBuilder fieldDiv = new TagBuilder("div");
@@ -76,9 +117,19 @@ namespace TowerSoft.TagHelpers {
                 TagBuilder fieldDiv = new TagBuilder("div");
                 fieldDiv.AddCssClass(fieldColumnCss);
 
+                Dictionary<string, string> htmlAttributes = new Dictionary<string, string> {
+                    { "autocomplete", Autocomplete.ToString() }
+                };
+                if (!string.IsNullOrWhiteSpace(Placeholder)) {
+                    htmlAttributes.Add("placeholder", Placeholder);
+                }
+                if (context.AllAttributes.ContainsName("autofocus")) {
+                    htmlAttributes.Add("autofocus", string.Empty);
+                }
+
                 // Default editor or supplied editor template
                 TagHelperOutput labelElement = await utils.CreateLabelRequiredElement(context, Label);
-                IHtmlContent inputElement = utils.CreateInputElement(Template, InputCss);
+                IHtmlContent inputElement = utils.CreateInputElement(Renderer, InputCss, htmlAttributes);
                 TagHelperOutput validationMessageElement = await utils.CreateValidationMessageElement(context);
                 TagHelperOutput descriptionElement = await utils.CreateDescriptionElement(context);
 

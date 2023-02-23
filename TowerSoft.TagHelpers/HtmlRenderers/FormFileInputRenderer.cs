@@ -10,7 +10,7 @@ using TowerSoft.TagHelpers.Interfaces;
 
 namespace TowerSoft.TagHelpers.HtmlRenderers {
     public class FormFileInputRenderer : IHtmlRenderer {
-        public IHtmlContent Render(ModelExpression modelEx, IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper, ViewContext viewContext, string? css) {
+        public IHtmlContent Render(ModelExpression modelEx, IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper, ViewContext viewContext, string? css, Dictionary<string, string>? htmlAttributes) {
             TagBuilder output = new TagBuilder("input");
             output.AddCssClass("form-control");
             output.Attributes.Add("type", "file");

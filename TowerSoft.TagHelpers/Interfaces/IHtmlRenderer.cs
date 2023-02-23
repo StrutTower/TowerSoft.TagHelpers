@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using System.Collections.Generic;
 
 namespace TowerSoft.TagHelpers.Interfaces {
     /// <summary>
@@ -16,6 +17,6 @@ namespace TowerSoft.TagHelpers.Interfaces {
         /// <param name="viewContext"></param>
         /// <param name="css">Custom CSS for the input element passed through from the input-css attribute</param>
         /// <returns></returns>
-        public IHtmlContent Render(ModelExpression modelEx, IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper, ViewContext viewContext, string? css);
+        public IHtmlContent Render(ModelExpression modelEx, IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper, ViewContext viewContext, string? css, Dictionary<string, string>? htmlAttributes);
     }
 }

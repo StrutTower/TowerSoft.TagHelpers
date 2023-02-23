@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using TowerSoft.TagHelpers.Enums;
 using TowerSoft.TagHelpers.Utilities;
 
 // Source: https://stackoverflow.com/questions/47547844/tag-helper-embedded-in-another-tag-helpers-code-doesnt-render
@@ -11,23 +13,56 @@ using TowerSoft.TagHelpers.Utilities;
 namespace TowerSoft.TagHelpers {
     [HtmlTargetElement("formField", Attributes = "asp-for")]
     public class FormFieldTagHelper : TagHelper {
+        private AutocompleteSetting _autocompleteSetting;
+
         public FormFieldTagHelper(IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper) {
             HtmlGenerator = htmlGenerator;
             HtmlHelper = htmlHelper;
         }
 
+        public IHtmlGenerator HtmlGenerator { get; }
+        public IHtmlHelper HtmlHelper { get; }
+
         [HtmlAttributeName("asp-for")]
         public ModelExpression For { get; set; }
 
-        public string? Template { get; set; }
+        /// <summary>
+        /// Sets the renderer used for this field. Default will be based on the datatype of the property
+        /// </summary>
+        public string? Renderer { get; set; }
 
+        /// <summary>
+        /// Overrides the label display text
+        /// </summary>
         public string? Label { get; set; }
 
+        /// <summary>
+        /// Set additional CSS on the input
+        /// </summary>
         public string? InputCss { get; set; }
 
-        public IHtmlGenerator HtmlGenerator { get; }
+        /// <summary>
+        /// Sets the placeholder text for the input
+        /// </summary>
+        public string? Placeholder { get; set; }
 
-        public IHtmlHelper HtmlHelper { get; }
+        /// <summary>
+        /// Sets the autocomplete attribute on the input. Default is off
+        /// </summary>
+        public AutocompleteSetting Autocomplete {
+            get => _autocompleteSetting;
+            set {
+                switch (value) {
+                    case AutocompleteSetting.off:
+                    case AutocompleteSetting.on:
+                        _autocompleteSetting = value;
+                        break;
+                    default:
+                        throw new ArgumentException(
+                            message: "Invalid Autocomplete Value", paramName: nameof(value));
+                }
+            }
+        }
 
         /// <summary></summary>
         [ViewContext]
@@ -45,7 +80,7 @@ namespace TowerSoft.TagHelpers {
             Type type = For.Metadata.ModelType;
             type = Nullable.GetUnderlyingType(type) ?? type;
 
-            if (type == typeof(bool) && string.IsNullOrWhiteSpace(Template)) {
+            if (type == typeof(bool) && string.IsNullOrWhiteSpace(Renderer)) {
                 // Handle Booleans/Checkbox
                 TagBuilder formCheck = new TagBuilder("div");
                 formCheck.AddCssClass("form-check");
@@ -56,9 +91,19 @@ namespace TowerSoft.TagHelpers {
                 output.Content.AppendHtml(await utils.CreateValidationMessageElement(context));
                 output.Content.AppendHtml(await utils.CreateDescriptionElement(context));
             } else {
+                Dictionary<string, string> htmlAttributes = new Dictionary<string, string> {
+                    { "autocomplete", Autocomplete.ToString() }
+                };
+                if (!string.IsNullOrWhiteSpace(Placeholder)) {
+                    htmlAttributes.Add("placeholder", Placeholder);
+                }
+                if (context.AllAttributes.ContainsName("autofocus")) {
+                    htmlAttributes.Add("autofocus", string.Empty);
+                }
+
                 // Default editor or supplied editor template
                 TagHelperOutput labelElement = await utils.CreateLabelRequiredElement(context, Label);
-                IHtmlContent inputElement = utils.CreateInputElement(Template, InputCss);
+                IHtmlContent inputElement = utils.CreateInputElement(Renderer, InputCss, htmlAttributes);
                 TagHelperOutput validationMessageElement = await utils.CreateValidationMessageElement(context);
                 TagHelperOutput descriptionElement = await utils.CreateDescriptionElement(context);
 

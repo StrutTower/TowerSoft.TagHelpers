@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using System.Collections.Generic;
 using TowerSoft.TagHelpers.Interfaces;
 
 namespace TowerSoft.TagHelpers.HtmlRenderers {
@@ -17,7 +18,7 @@ namespace TowerSoft.TagHelpers.HtmlRenderers {
         /// <param name="viewContext"></param>
         /// <param name="css">Custom CSS to add to the input</param>
         /// <returns></returns>
-        public IHtmlContent Render(ModelExpression modelEx, IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper, ViewContext viewContext, string? css) {
+        public IHtmlContent Render(ModelExpression modelEx, IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper, ViewContext viewContext, string? css, Dictionary<string, string>? htmlAttributes) {
             TagBuilder output = htmlGenerator.GenerateCheckBox(viewContext, modelEx.ModelExplorer, modelEx.Name, (bool?)modelEx.Model, null);
             output.AddCssClass("form-check-input");
             if (!string.IsNullOrWhiteSpace(css))

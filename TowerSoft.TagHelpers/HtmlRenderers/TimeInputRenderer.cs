@@ -3,9 +3,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TowerSoft.TagHelpers.Interfaces;
 
 namespace TowerSoft.TagHelpers.HtmlRenderers {
@@ -22,7 +19,7 @@ namespace TowerSoft.TagHelpers.HtmlRenderers {
         /// <param name="viewContext"></param>
         /// <param name="css">Custom CSS to add to the input</param>
         /// <returns></returns>
-        public IHtmlContent Render(ModelExpression modelEx, IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper, ViewContext viewContext, string? css) {
+        public IHtmlContent Render(ModelExpression modelEx, IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper, ViewContext viewContext, string? css, Dictionary<string, string>? htmlAttributes) {
             string value = string.Empty;
             if (modelEx.Model != null && modelEx.Model is DateTime time) {
                 if (time != DateTime.MinValue)
@@ -34,6 +31,10 @@ namespace TowerSoft.TagHelpers.HtmlRenderers {
             output.AddCssClass("form-control");
             if (!string.IsNullOrWhiteSpace(css))
                 output.AddCssClass(css);
+
+            if (htmlAttributes != null) {
+                output.MergeAttributes(htmlAttributes);
+            }
 
             return output;
         }

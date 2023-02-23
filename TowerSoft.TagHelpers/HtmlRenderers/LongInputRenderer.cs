@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using System.Collections.Generic;
 using TowerSoft.TagHelpers.Interfaces;
 
 namespace TowerSoft.TagHelpers.HtmlRenderers {
     public class LongInputRenderer : IHtmlRenderer {
-        public IHtmlContent Render(ModelExpression modelEx, IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper, ViewContext viewContext, string? css) {
+        public IHtmlContent Render(ModelExpression modelEx, IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper, ViewContext viewContext, string? css, Dictionary<string, string>? htmlAttributes) {
             string? value = string.Empty;
             if (modelEx.Model != null && modelEx.Model is long numberLong && numberLong != 0) {
                 value = numberLong.ToString();
@@ -18,6 +19,10 @@ namespace TowerSoft.TagHelpers.HtmlRenderers {
             output.AddCssClass("form-control");
             if (!string.IsNullOrWhiteSpace(css))
                 output.AddCssClass(css);
+
+            if (htmlAttributes != null) {
+                output.MergeAttributes(htmlAttributes);
+            }
 
             return output;
         }

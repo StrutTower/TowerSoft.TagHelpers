@@ -6,9 +6,9 @@
 }
 
 @*<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+        <h1 class="display-4">Welcome</h1>
+        <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    </div>
 *@
 
 <div class="display-6 mb-3">Anchor/Link Enabled</div>
@@ -49,7 +49,7 @@
 <div class="display-6 mb-3">ImgBytes</div>
 
 
-<img asp-bytes="@Model.ImageData"></img>
+<img asp-bytes="@Model.ImageData" />
 
 <hr />
 
@@ -104,13 +104,12 @@
 <div class="display-6 mb-3">hrFormField</div>
 
 <hrFormField asp-for="TestString"></hrFormField>
-
 <hr />
 
 <div class="display-6 mb-3">hrFormSelect</div>
 
 
-<hrFormSelect asp-for="TestString" asp-items="Model.TestSelectList"></hrFormSelect>
+<hrFormSelect asp-for="TestString" asp-items="Model.TestSelectList" autofocus></hrFormSelect>
 
 <hr />
 
@@ -132,14 +131,14 @@
 <hrFormField asp-for="TestBoolean"></hrFormField>
 <hrFormField asp-for="TestBooleanNullable"></hrFormField>
 
-<hrFormField asp-for="TestBoolean" template="BooleanRadio"></hrFormField>
-<hrFormField asp-for="TestBooleanNullable" template="BooleanRadio"></hrFormField>
+<hrFormField asp-for="TestBoolean" renderer="BooleanRadio"></hrFormField>
+<hrFormField asp-for="TestBooleanNullable" renderer="BooleanRadio"></hrFormField>
 
 <hrFormField asp-for="TestDate" label="Date and Time"></hrFormField>
-<hrFormField asp-for="TestDate" template="Date" label="Date"></hrFormField>
-<hrFormField asp-for="TestDate" template="Time" label="Time"></hrFormField>
+<hrFormField asp-for="TestDate" renderer="Date" label="Date"></hrFormField>
+<hrFormField asp-for="TestDate" renderer="Time" label="Time"></hrFormField>
 <hrFormField asp-for="TestFile"></hrFormField>
 <hrFormField asp-for="TestInt"></hrFormField>
 <hrFormField asp-for="TestLong"></hrFormField>
 <hrFormField asp-for="TestString"></hrFormField>
-<hrFormField asp-for="TestString" template="TextArea"></hrFormField>
+<hrFormField asp-for="TestString" renderer="TextArea"></hrFormField>
