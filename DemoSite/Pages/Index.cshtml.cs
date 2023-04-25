@@ -35,6 +35,10 @@ namespace DemoSite.Pages {
 
         public byte[] ImageData { get; set; }
 
+        public string NullString { get; set; }
+
+        public int? NullInt { get; set; }
+
         public void OnGet() {
             TestString = "Model String";
             TestBoolean = true;

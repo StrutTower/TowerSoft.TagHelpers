@@ -7,10 +7,15 @@
 a.disable-link {
     pointer-events: none;
     cursor: default;
-    text-decoration:none !important;
+    text-decoration: none !important;
     color: $body-color;
 }
 
 hr {
     border-top-color: #929299
+}
+
+.twr-taghelper-tr-display-null {
+    font-style: italic;
+    opacity: 0.9;
 }

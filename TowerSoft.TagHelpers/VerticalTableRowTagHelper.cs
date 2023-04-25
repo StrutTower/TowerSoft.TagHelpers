@@ -37,6 +37,11 @@ namespace TowerSoft.TagHelpers {
         [HtmlAttributeName("template")]
         public string TemplateName { get; set; }
 
+        /// <summary>
+        /// Optional text to show if the value is null or an empty string
+        /// </summary>
+        public string NullText { get; set; }
+
         /// <summary></summary>
         [ViewContext]
         public ViewContext ViewContext { get; set; }
@@ -58,10 +63,15 @@ namespace TowerSoft.TagHelpers {
                     th.InnerHtml.SetContent(LabelName);
 
                 TagBuilder td = new TagBuilder("td");
-                if (Model.Model is bool boolean) {
-                    td.InnerHtml.SetHtmlContent(BooleanIconAndText(boolean));
+                if (!string.IsNullOrWhiteSpace(NullText) && (Model.Model == null || (Model.Model is string modelStr && string.IsNullOrWhiteSpace(modelStr)))) {
+                    td.AddCssClass("twr-taghelper-tr-display-null");
+                    td.InnerHtml.SetHtmlContent(NullText);
                 } else {
-                    td.InnerHtml.SetHtmlContent(TagHelperUtilities.TagHelperDisplay(HtmlHelper, Model, TemplateName).ToRawString());
+                    if (Model.Model is bool boolean) {
+                        td.InnerHtml.SetHtmlContent(BooleanIconAndText(boolean));
+                    } else {
+                        td.InnerHtml.SetHtmlContent(TagHelperUtilities.TagHelperDisplay(HtmlHelper, Model, TemplateName).ToRawString());
+                    }
                 }
 
                 output.Content.SetHtmlContent(th.ToRawString() + td.ToRawString());
