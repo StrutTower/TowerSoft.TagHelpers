@@ -35,6 +35,7 @@ namespace TowerSoft.TagHelpers {
         private const string RouteAttributeName = "asp-route";
         private const string RouteValuesDictionaryName = "asp-all-route-data";
         private const string RouteValuesPrefix = "asp-route-";
+        private const string FragmentAttributeName = "asp-fragment";
         private const string DisplayForAttributeName = "display-for";
         private const string TemplateAttributeName = "template";
 
@@ -71,6 +72,12 @@ namespace TowerSoft.TagHelpers {
         /// </summary>
         [HtmlAttributeName(RouteAttributeName)]
         public string Route { get; set; }
+
+        /// <summary>
+        ///
+        /// </summary>
+        [HtmlAttributeName(FragmentAttributeName)]
+        public string Fragment { get; set; }
 
         /// <summary>
         /// Model expression for the property
@@ -132,6 +139,9 @@ namespace TowerSoft.TagHelpers {
             } else {
                 TagBuilder a = new TagBuilder("a");
                 a.Attributes.Add("href", urlHelper.Action(Action, Controller, routeValues));
+
+                if (!string.IsNullOrWhiteSpace(Fragment))
+                    a.Attributes["href"] += "#" + Fragment;
 
                 if (Model != null) {
                     a.InnerHtml.AppendHtml(TagHelperUtilities.TagHelperDisplay(htmlHelper, Model, TemplateName));
