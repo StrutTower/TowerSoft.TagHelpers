@@ -75,6 +75,8 @@
     <tr-display asp-for="TestDate" template="Date"></tr-display>
     <tr-display asp-for="NullString" null-text="Unknown"></tr-display>
     <tr-display asp-for="NullInt" null-text="Unknown"></tr-display>
+    <tr-display asp-for="NullInt" hide-null="true" label="Should be hidden"></tr-display>
+    <tr-display asp-for="BlankString" hide-null="true" label="Should be hidden"></tr-display>
 </table>
 
 <hr />
@@ -101,6 +103,7 @@
 
 
 <formSelect asp-for="TestString" asp-items="Model.TestSelectList"></formSelect>
+<formSelect asp-for="TestString" asp-items="Model.TestSelectList"></formSelect>
 
 <hr />
 
@@ -112,7 +115,7 @@
 <div class="display-6 mb-3">hrFormSelect</div>
 
 
-<hrFormSelect asp-for="TestString" asp-items="Model.TestSelectList" autofocus></hrFormSelect>
+<hrFormSelect asp-for="TestString" asp-items="Model.TestSelectList" input-css="additional-css-class" autofocus></hrFormSelect>
 
 <hr />
 
@@ -120,11 +123,11 @@
 
 
 <hrFormSubmit>
-    <button type="button" class="btn btn-primary">Save</button>
+    <button type="button" class="btn btn-secondary">Cancel</button>
 
-    <div class="form-check form-check-inline">
+    <div class="form-check form-check-inline ms-2">
         <label class="form-check-label">
-            <input class="form-check-input" /> Test
+            <input type="checkbox" class="form-check-input" /> Test
         </label>
     </div>
 </hrFormSubmit>

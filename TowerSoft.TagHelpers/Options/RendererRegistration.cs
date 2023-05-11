@@ -12,6 +12,24 @@ namespace TowerSoft.TagHelpers.Options {
         private static Dictionary<string, IHtmlRenderer> Renderers { get; set; } = new Dictionary<string, IHtmlRenderer>();
 
         /// <summary>
+        /// Registers all of the HtmlRenders included in the project
+        /// </summary>
+        public static void RegisterDefaultRenderers() {
+            Add<BooleanInputRenderer>("boolean");
+            Add<BooleanRadioInputRenderer>("booleanradio");
+            Add<YesNoBooleanHtmlRenderer>("yesnoradio");
+            Add<DateInputRenderer>("date");
+            Add<DateTimeInputRenderer>("datetime");
+            Add<EmailInputHtmlRenderer>("email");
+            Add<FormFileInputRenderer>("iformfile");
+            Add<IntInputRenderer>("int32");
+            Add<LongInputRenderer>("int64");
+            Add<StringInputRenderer>("string");
+            Add<TextAreaRenderer>("textarea");
+            Add<TimeInputRenderer>("time");
+        }
+
+        /// <summary>
         /// Adds an IHtmlRenderer to the registration
         /// </summary>
         /// <typeparam name="T">HtmlRender to add to the registration</typeparam>
@@ -54,6 +72,9 @@ namespace TowerSoft.TagHelpers.Options {
         /// </summary>
         /// <param name="name"></param>
         public static bool Exists(string name) {
+            if (Renderers.Count == 0) {
+                RegisterDefaultRenderers();
+            }
             return Renderers.ContainsKey(name.ToLower());
         }
 
@@ -69,21 +90,11 @@ namespace TowerSoft.TagHelpers.Options {
             return Renderers.Values.First();
         }
 
-        /// <summary>
-        /// Registers all of the HtmlRenders included in the project
-        /// </summary>
-        public static void RegisterDefaultRenderers() {
-            Add<BooleanInputRenderer>("boolean");
-            Add<BooleanRadioInputRenderer>("booleanradio");
-            Add<DateInputRenderer>("date");
-            Add<DateTimeInputRenderer>("datetime");
-            Add<EmailInputHtmlRenderer>("email");
-            Add<FormFileInputRenderer>("iformfile");
-            Add<IntInputRenderer>("int32");
-            Add<LongInputRenderer>("int64");
-            Add<StringInputRenderer>("string");
-            Add<TextAreaRenderer>("textarea");
-            Add<TimeInputRenderer>("time");
+        internal static List<KeyValuePair<string, Type>> GetRendererList() {
+            if (Renderers.Count == 0) {
+                RegisterDefaultRenderers();
+            }
+            return Renderers.Select(x => new KeyValuePair<string, Type>(x.Key, x.Value.GetType())).ToList();
         }
     }
 }

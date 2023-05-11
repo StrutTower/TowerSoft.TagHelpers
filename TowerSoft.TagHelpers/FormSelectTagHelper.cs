@@ -42,9 +42,16 @@ namespace TowerSoft.TagHelpers {
         public string? OptionLabel { get; set; }
 
         /// <summary>
+        /// Set additional CSS on the input
+        /// </summary>
+        [HtmlAttributeName("input-css")]
+        public string InputCss { get; set; }
+
+        /// <summary>
         /// Overrides the label display text
         /// </summary>
-        public string? Label { get; set; }
+        [HtmlAttributeName("label")]
+        public string? LabelName { get; set; }
 
         public bool Multiple { get; set; } = false;
 
@@ -61,10 +68,13 @@ namespace TowerSoft.TagHelpers {
             if (context.AllAttributes.ContainsName("autofocus")) {
                 htmlAttributes.Add("autofocus", string.Empty);
             }
+            if (!string.IsNullOrWhiteSpace(InputCss)) {
+                htmlAttributes.Add("class", InputCss);
+            }
 
             TagHelperUtilities utils = new TagHelperUtilities(For, HtmlGenerator, HtmlHelper, ViewContext);
 
-            TagHelperOutput labelElement = await utils.CreateLabelRequiredElement(context, Label);
+            TagHelperOutput labelElement = await utils.CreateLabelRequiredElement(context, LabelName);
             IHtmlContent inputElement = await utils.CreateSelectElement(context, Items, Multiple, OptionLabel, htmlAttributes);
             TagHelperOutput validationMessageElement = await utils.CreateValidationMessageElement(context);
             TagHelperOutput descriptionElement = await utils.CreateDescriptionElement(context);

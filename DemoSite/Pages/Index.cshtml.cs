@@ -37,6 +37,8 @@ namespace DemoSite.Pages {
 
         public string NullString { get; set; }
 
+        public string BlankString { get; set; }
+
         public int? NullInt { get; set; }
 
         public void OnGet() {
@@ -46,6 +48,7 @@ namespace DemoSite.Pages {
             string imagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "towersoft-logo_256x.png");
             ImageData = System.IO.File.ReadAllBytes(imagePath);
             TestSelectList = new SelectList(new[] { "Item 1", "Item 2", "Item 3" });
+            BlankString = string.Empty;
         }
     }
 }

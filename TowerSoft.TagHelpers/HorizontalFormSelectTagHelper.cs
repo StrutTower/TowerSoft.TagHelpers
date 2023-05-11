@@ -49,16 +49,25 @@ namespace TowerSoft.TagHelpers {
         /// <summary>
         /// Bootstrap column CSS for the label. If not set, defaults to: col-md-4 col-lg-3
         /// </summary>
+        [HtmlAttributeName("label-col")]
         public string LabelCol { get; set; }
 
         /// <summary>
         /// Bootstrap column CSS for the input. If not set, defaults to: col-md-7 col-lg-6
         /// </summary>
+        [HtmlAttributeName("input-col")]
         public string InputCol { get; set; }
+
+        /// <summary>
+        /// Set additional CSS on the input
+        /// </summary>
+        [HtmlAttributeName("input-css")]
+        public string InputCss { get; set; }
 
         /// <summary>
         /// Override the label name
         /// </summary>
+        [HtmlAttributeName("label")]
         public string LabelName { get; set; }
 
         /// <summary>
@@ -93,6 +102,9 @@ namespace TowerSoft.TagHelpers {
             Dictionary<string, string> htmlAttributes = new Dictionary<string, string>();
             if (context.AllAttributes.ContainsName("autofocus")) {
                 htmlAttributes.Add("autofocus", string.Empty);
+            }
+            if (!string.IsNullOrWhiteSpace(InputCss)) {
+                htmlAttributes.Add("class", InputCss);
             }
 
             TagHelperUtilities utils = new TagHelperUtilities(For, HtmlGenerator, HtmlHelper, ViewContext);

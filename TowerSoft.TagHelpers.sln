@@ -5,7 +5,9 @@ VisualStudioVersion = 17.2.32526.322
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TowerSoft.TagHelpers", "TowerSoft.TagHelpers\TowerSoft.TagHelpers.csproj", "{9B872363-58AE-4795-B834-5797F319E8E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoSite", "DemoSite\DemoSite.csproj", "{2E9B943E-DDE6-42F7-95C8-3A00D79DA908}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoSite", "DemoSite\DemoSite.csproj", "{2E9B943E-DDE6-42F7-95C8-3A00D79DA908}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TowerSoft.TagHelpersTests", "TowerSoft.TagHelpersTests\TowerSoft.TagHelpersTests.csproj", "{94D09A3F-1F06-4841-BD78-A5D8F854BD55}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{2E9B943E-DDE6-42F7-95C8-3A00D79DA908}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E9B943E-DDE6-42F7-95C8-3A00D79DA908}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E9B943E-DDE6-42F7-95C8-3A00D79DA908}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94D09A3F-1F06-4841-BD78-A5D8F854BD55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94D09A3F-1F06-4841-BD78-A5D8F854BD55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94D09A3F-1F06-4841-BD78-A5D8F854BD55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94D09A3F-1F06-4841-BD78-A5D8F854BD55}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

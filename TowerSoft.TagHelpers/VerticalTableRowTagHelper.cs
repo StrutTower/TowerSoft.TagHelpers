@@ -40,7 +40,14 @@ namespace TowerSoft.TagHelpers {
         /// <summary>
         /// Optional text to show if the value is null or an empty string
         /// </summary>
+        [HtmlAttributeName("null-text")]
         public string NullText { get; set; }
+
+        /// <summary>
+        /// Hides the entire row if the model expression is null. Default false
+        /// </summary>
+        [HtmlAttributeName("hide-null")]
+        public bool HideNull { get; set; }
 
         /// <summary></summary>
         [ViewContext]
@@ -53,28 +60,32 @@ namespace TowerSoft.TagHelpers {
         /// <param name="output"></param>
         public override void Process(TagHelperContext context, TagHelperOutput output) {
             if (Model != null) {
-                ((IViewContextAware)HtmlHelper).Contextualize(ViewContext);
-                output.TagName = "tr";
-
-                TagBuilder th = new TagBuilder("th");
-                if (string.IsNullOrWhiteSpace(LabelName))
-                    th.InnerHtml.SetContent(Model.Metadata.GetDisplayName());
-                else
-                    th.InnerHtml.SetContent(LabelName);
-
-                TagBuilder td = new TagBuilder("td");
-                if (!string.IsNullOrWhiteSpace(NullText) && (Model.Model == null || (Model.Model is string modelStr && string.IsNullOrWhiteSpace(modelStr)))) {
-                    td.AddCssClass("twr-taghelper-tr-display-null");
-                    td.InnerHtml.SetHtmlContent(NullText);
+                if (HideNull && (Model.Model == null || (Model.Model is string modelStr && string.IsNullOrWhiteSpace(modelStr)))) {
+                    output.SuppressOutput();
                 } else {
-                    if (Model.Model is bool boolean) {
-                        td.InnerHtml.SetHtmlContent(BooleanIconAndText(boolean));
-                    } else {
-                        td.InnerHtml.SetHtmlContent(TagHelperUtilities.TagHelperDisplay(HtmlHelper, Model, TemplateName).ToRawString());
-                    }
-                }
+                    ((IViewContextAware)HtmlHelper).Contextualize(ViewContext);
+                    output.TagName = "tr";
 
-                output.Content.SetHtmlContent(th.ToRawString() + td.ToRawString());
+                    TagBuilder th = new TagBuilder("th");
+                    if (string.IsNullOrWhiteSpace(LabelName))
+                        th.InnerHtml.SetContent(Model.Metadata.GetDisplayName());
+                    else
+                        th.InnerHtml.SetContent(LabelName);
+
+                    TagBuilder td = new TagBuilder("td");
+                    if (!string.IsNullOrWhiteSpace(NullText) && (Model.Model == null || (Model.Model is string modelStr2 && string.IsNullOrWhiteSpace(modelStr2)))) {
+                        td.AddCssClass("twr-taghelper-tr-display-null");
+                        td.InnerHtml.SetHtmlContent(NullText);
+                    } else {
+                        if (Model.Model is bool boolean) {
+                            td.InnerHtml.SetHtmlContent(BooleanIconAndText(boolean));
+                        } else {
+                            td.InnerHtml.SetHtmlContent(TagHelperUtilities.TagHelperDisplay(HtmlHelper, Model, TemplateName).ToRawString());
+                        }
+                    }
+
+                    output.Content.SetHtmlContent(th.ToRawString() + td.ToRawString());
+                }
             }
         }
 
