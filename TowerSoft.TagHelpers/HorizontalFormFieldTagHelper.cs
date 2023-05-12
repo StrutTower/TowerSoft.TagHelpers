@@ -47,7 +47,7 @@ namespace TowerSoft.TagHelpers {
         public string? InputCol { get; set; }
 
         /// <summary>
-        /// Set additional CSS on the input
+        /// Sets CSS on the input. Overrides the default Bootstrap class
         /// </summary>
         public string? InputCss { get; set; }
 

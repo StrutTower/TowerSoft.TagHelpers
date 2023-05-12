@@ -10,7 +10,7 @@ namespace TowerSoft.TagHelpers.HtmlRenderers {
             TagBuilder output = htmlGenerator.GenerateTextBox(viewContext, modelEx.ModelExplorer, modelEx.Name, modelEx.Model, null, null);
             output.AddCssClass("form-control");
             if (!string.IsNullOrWhiteSpace(css))
-                output.AddCssClass(css);
+                output.Attributes["class"] = css;
 
             if (htmlAttributes != null) {
                 output.MergeAttributes(htmlAttributes, true);

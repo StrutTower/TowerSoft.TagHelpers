@@ -96,6 +96,7 @@
 <div class="display-6 mb-3">FormField</div>
 
 <formField asp-for="TestString"></formField>
+<formField asp-for="TestString" input-css="form-control additional-css-class"></formField>
 
 <hr />
 
@@ -103,7 +104,7 @@
 
 
 <formSelect asp-for="TestString" asp-items="Model.TestSelectList"></formSelect>
-<formSelect asp-for="TestString" asp-items="Model.TestSelectList"></formSelect>
+<formSelect asp-for="TestString" asp-items="Model.TestSelectList" input-css="form-select additional-css-class"></formSelect>
 
 <hr />
 
@@ -115,7 +116,7 @@
 <div class="display-6 mb-3">hrFormSelect</div>
 
 
-<hrFormSelect asp-for="TestString" asp-items="Model.TestSelectList" input-css="additional-css-class" autofocus></hrFormSelect>
+<hrFormSelect asp-for="TestString" asp-items="Model.TestSelectList" input-css="form-select additional-css-class" autofocus></hrFormSelect>
 
 <hr />
 

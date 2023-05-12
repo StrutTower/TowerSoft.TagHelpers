@@ -21,9 +21,8 @@ namespace TowerSoft.TagHelpers.HtmlRenderers {
         public IHtmlContent Render(ModelExpression modelEx, IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper, ViewContext viewContext, string? css, Dictionary<string, string>? htmlAttributes) {
             TagBuilder output = htmlGenerator.GenerateTextArea(viewContext, modelEx.ModelExplorer, modelEx.Name, 6, 10, null);
             output.AddCssClass("form-control");
-
             if (!string.IsNullOrWhiteSpace(css))
-                output.AddCssClass(css);
+                output.Attributes["class"] = css;
 
             if (htmlAttributes != null) {
                 output.MergeAttributes(htmlAttributes);

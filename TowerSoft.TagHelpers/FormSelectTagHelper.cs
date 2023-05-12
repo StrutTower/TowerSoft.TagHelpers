@@ -42,7 +42,7 @@ namespace TowerSoft.TagHelpers {
         public string? OptionLabel { get; set; }
 
         /// <summary>
-        /// Set additional CSS on the input
+        /// Sets CSS on the input. Overrides the default Bootstrap class
         /// </summary>
         [HtmlAttributeName("input-css")]
         public string InputCss { get; set; }

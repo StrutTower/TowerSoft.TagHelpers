@@ -18,7 +18,7 @@ namespace TowerSoft.TagHelpers.HtmlRenderers {
 
             output.AddCssClass("form-control");
             if (!string.IsNullOrWhiteSpace(css))
-                output.AddCssClass(css);
+                output.Attributes["class"] = css;
 
             if (htmlAttributes != null) {
                 output.MergeAttributes(htmlAttributes);

@@ -13,6 +13,8 @@ namespace TowerSoft.TagHelpers.HtmlRenderers {
         public IHtmlContent Render(ModelExpression modelEx, IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper, ViewContext viewContext, string? css, Dictionary<string, string>? htmlAttributes) {
             TagBuilder output = new TagBuilder("input");
             output.AddCssClass("form-control");
+            if (!string.IsNullOrWhiteSpace(css))
+                output.Attributes["class"] = css;
             output.Attributes.Add("type", "file");
             output.Attributes.Add("name", htmlHelper.Name(modelEx.Name));
             output.Attributes.Add("id", htmlHelper.Id(modelEx.Name));

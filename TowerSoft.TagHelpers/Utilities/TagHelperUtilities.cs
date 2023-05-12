@@ -126,6 +126,7 @@ namespace TowerSoft.TagHelpers.Utilities {
             };
 
             TagHelperOutput selectOutput = CreateTagHelperOutput("select");
+            selectOutput.AddClass("form-select", HtmlEncoder.Default);
             if (!multiple && optionLabel != "null" || multiple && !string.IsNullOrWhiteSpace(optionLabel)) {
                 TagBuilder option = new TagBuilder("option");
                 option.InnerHtml.SetContent(optionLabel);
@@ -144,7 +145,6 @@ namespace TowerSoft.TagHelpers.Utilities {
                     }
                 }
             }
-            selectOutput.AddClass("form-select", HtmlEncoder.Default);
             await selectTagHelper.ProcessAsync(context, selectOutput);
             return selectOutput;
         }

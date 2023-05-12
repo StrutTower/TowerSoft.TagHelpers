@@ -8,12 +8,24 @@ using System.Threading.Tasks;
 namespace TowerSoft.TagHelpers {
     [HtmlTargetElement("hrFormSubmit")]
     public class HorizontalFormSubmitTagHelper : TagHelper {
+        /// <summary>
+        /// Bootstrap column CSS for the label. If not set, defaults to: col-md-4 col-lg-3
+        /// </summary>
         public string LabelCol { get; set; }
 
+        /// <summary>
+        /// Bootstrap column CSS for the input. If not set, defaults to: col-md-7 col-lg-6
+        /// </summary>
         public string InputCol { get; set; }
 
+        /// <summary>
+        /// Sets the CSS class on the button. Default 'btn btn-primary'
+        /// </summary>
         public string ButtonClass { get; set; }
 
+        /// <summary>
+        /// Sets the text of the button. Default 'Save'
+        /// </summary>
         public string ButtonText { get; set; }
 
         /// <summary>

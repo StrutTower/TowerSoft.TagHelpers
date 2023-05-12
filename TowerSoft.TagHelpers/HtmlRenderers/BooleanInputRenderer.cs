@@ -22,7 +22,7 @@ namespace TowerSoft.TagHelpers.HtmlRenderers {
             TagBuilder output = htmlGenerator.GenerateCheckBox(viewContext, modelEx.ModelExplorer, modelEx.Name, (bool?)modelEx.Model, null);
             output.AddCssClass("form-check-input");
             if (!string.IsNullOrWhiteSpace(css))
-                output.AddCssClass(css);
+                output.Attributes["class"] = css;
 
             return output;
         }
