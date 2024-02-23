@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TowerSoft.TagHelpers", "Tow
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoSite", "DemoSite\DemoSite.csproj", "{2E9B943E-DDE6-42F7-95C8-3A00D79DA908}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TowerSoft.TagHelpersTests", "TowerSoft.TagHelpersTests\TowerSoft.TagHelpersTests.csproj", "{94D09A3F-1F06-4841-BD78-A5D8F854BD55}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TowerSoft.TagHelpersTests", "TowerSoft.TagHelpersTests\TowerSoft.TagHelpersTests.csproj", "{94D09A3F-1F06-4841-BD78-A5D8F854BD55}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

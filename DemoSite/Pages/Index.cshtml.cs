@@ -19,9 +19,15 @@ namespace DemoSite.Pages {
         [Description("This is the description for the TestString property")]
         public string TestString { get; set; }
 
-        public bool TestBoolean { get; set; }
+        public bool TestBooleanTrue { get; set; }
+
+        public bool TestBooleanFalse { get; set; }
 
         public bool? TestBooleanNullable { get; set; }
+
+        public bool? TestBooleanNullableTrue { get; set; }
+
+        public bool? TestBooleanNullableFalse { get; set; }
 
         public DateTime TestDate { get; set; }
 
@@ -43,7 +49,11 @@ namespace DemoSite.Pages {
 
         public void OnGet() {
             TestString = "Model String";
-            TestBoolean = true;
+            TestBooleanTrue = true;
+            TestBooleanFalse = false;
+            TestBooleanNullable = null;
+            TestBooleanNullableTrue = true;
+            TestBooleanNullableFalse = false;
             TestDate = DateTime.Now;
             string imagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "towersoft-logo_256x.png");
             ImageData = System.IO.File.ReadAllBytes(imagePath);

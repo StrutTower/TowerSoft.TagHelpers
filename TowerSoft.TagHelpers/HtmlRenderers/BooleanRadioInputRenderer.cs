@@ -19,26 +19,26 @@ namespace TowerSoft.TagHelpers.HtmlRenderers {
         /// <param name="css">Custom CSS to add to the input</param>
         /// <returns></returns>
         public IHtmlContent Render(ModelExpression modelEx, IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper, ViewContext viewContext, string? css, Dictionary<string, string>? htmlAttributes) {
-            TagBuilder output = new TagBuilder("div");
-            var trueButton = GetFormCheckInput(true, modelEx, htmlGenerator, viewContext, css);
-            var falseButton = GetFormCheckInput(false, modelEx, htmlGenerator, viewContext, css);
+            TagBuilder output = new("div");
+            var trueButton = GetFormCheckInput(true, modelEx, htmlGenerator, viewContext, css, htmlAttributes);
+            var falseButton = GetFormCheckInput(false, modelEx, htmlGenerator, viewContext, css, htmlAttributes);
 
             output.InnerHtml.AppendHtml(trueButton);
             output.InnerHtml.AppendHtml(falseButton);
 
             if (modelEx.ModelExplorer.Metadata.IsNullableValueType) {
-                var nullButton = GetFormCheckInput(null, modelEx, htmlGenerator, viewContext, css);
+                var nullButton = GetFormCheckInput(null, modelEx, htmlGenerator, viewContext, css, htmlAttributes);
                 output.InnerHtml.AppendHtml(nullButton);
             }
 
             return output;
         }
 
-        private TagBuilder GetFormCheckInput(bool? value, ModelExpression modelEx, IHtmlGenerator htmlGenerator, ViewContext viewContext, string css) {
-            TagBuilder div = new TagBuilder("div");
+        private TagBuilder GetFormCheckInput(bool? value, ModelExpression modelEx, IHtmlGenerator htmlGenerator, ViewContext viewContext, string css, Dictionary<string, string>? htmlAttributes) {
+            TagBuilder div = new("div");
             div.AddCssClass("form-check form-check-inline");
 
-            TagBuilder label = new TagBuilder("label");
+            TagBuilder label = new("label");
             label.AddCssClass("form-check-label");
 
             TagBuilder input = htmlGenerator.GenerateRadioButton(viewContext, modelEx.ModelExplorer, modelEx.Name, value, (bool?)modelEx.Model == value, null);
@@ -50,13 +50,30 @@ namespace TowerSoft.TagHelpers.HtmlRenderers {
                 input.Attributes.Add("checked", "");
             }
 
+            string trueLabelText = "True";
+            string falseLabelText = "False";
+            string nullLabelText = "Unknown";
+            if (htmlAttributes != null && htmlAttributes.ContainsKey("data-labels")) {
+                string labels = htmlAttributes["data-labels"];
+                string[] parts = labels.Split(",", System.StringSplitOptions.RemoveEmptyEntries);
+                if (parts.Length >= 1) {
+                    trueLabelText = parts[0].Trim();
+                }
+                if (parts.Length >= 2) {
+                    falseLabelText = parts[1].Trim();
+                }
+                if (parts.Length >= 3) {
+                    nullLabelText = parts[2].Trim();
+                }
+            }
+
             label.InnerHtml.AppendHtml(input);
             if (value.HasValue && value.Value)
-                label.InnerHtml.Append("True");
+                label.InnerHtml.Append(trueLabelText);
             else if (value.HasValue)
-                label.InnerHtml.Append("False");
+                label.InnerHtml.Append(falseLabelText);
             else
-                label.InnerHtml.Append("Unknown");
+                label.InnerHtml.Append(nullLabelText);
             div.InnerHtml.AppendHtml(label);
             return div;
         }

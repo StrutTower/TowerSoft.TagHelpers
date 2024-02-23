@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
+﻿using System.Reflection;
 using TowerSoft.TagHelpers.HtmlRenderers;
 using TowerSoft.TagHelpers.Interfaces;
 using TowerSoft.TagHelpers.Options;

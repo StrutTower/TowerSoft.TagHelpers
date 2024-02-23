@@ -4,13 +4,14 @@ using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using TowerSoft.TagHelpers.Utilities;
 
 namespace TowerSoft.TagHelpers {
     /// <summary>
-    /// Form group tag helper for select lists
+    /// Horizontal form group tag helper for select lists
     /// </summary>
     [HtmlTargetElement("hrFormSelect", Attributes = "asp-for")]
     public class HorizontalFormSelectTagHelper : TagHelper {
@@ -94,20 +95,23 @@ namespace TowerSoft.TagHelpers {
             string labelColumnCss = LabelCol ?? "col-md-4 col-lg-3";
             string fieldColumnCss = InputCol ?? "col-md-7 col-lg-6";
 
-            TagBuilder labelDiv = new TagBuilder("div");
+            TagBuilder labelDiv = new("div");
             labelDiv.AddCssClass(labelColumnCss + " text-md-end");
-            TagBuilder fieldDiv = new TagBuilder("div");
+            TagBuilder fieldDiv = new("div");
             fieldDiv.AddCssClass(fieldColumnCss);
 
-            Dictionary<string, string> htmlAttributes = new Dictionary<string, string>();
+            Dictionary<string, string> htmlAttributes = new();
             if (context.AllAttributes.ContainsName("autofocus")) {
                 htmlAttributes.Add("autofocus", string.Empty);
             }
             if (!string.IsNullOrWhiteSpace(InputCss)) {
                 htmlAttributes.Add("class", InputCss);
             }
+            foreach (var attr in context.AllAttributes.Where(x => x.Name.StartsWith("data-"))) {
+                htmlAttributes.Add(attr.Name, attr.Value.ToString());
+            }
 
-            TagHelperUtilities utils = new TagHelperUtilities(For, HtmlGenerator, HtmlHelper, ViewContext);
+            TagHelperUtilities utils = new(For, HtmlGenerator, HtmlHelper, ViewContext);
 
             TagHelperOutput labelElement = await utils.CreateLabelRequiredElement(context, LabelName);
             IHtmlContent inputElement = await utils.CreateSelectElement(context, Items, Multiple, OptionLabel, htmlAttributes);

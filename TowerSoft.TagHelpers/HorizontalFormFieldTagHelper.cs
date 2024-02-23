@@ -5,12 +5,16 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using TowerSoft.TagHelpers.Enums;
 using TowerSoft.TagHelpers.Utilities;
 
 namespace TowerSoft.TagHelpers {
+    /// <summary>
+    /// Renders a horizontal Bootstrap style form group with a label, input, description, and ASP.NET validation message
+    /// </summary>
     [HtmlTargetElement("hrFormField", Attributes = "asp-for")]
     public class HorizontalFormFieldTagHelper : TagHelper {
         private AutocompleteSetting _autocompleteSetting;
@@ -86,7 +90,7 @@ namespace TowerSoft.TagHelpers {
             output.AddClass("row", HtmlEncoder.Default);
             output.AddClass("mb-3", HtmlEncoder.Default);
 
-            TagHelperUtilities utils = new TagHelperUtilities(For, HtmlGenerator, HtmlHelper, ViewContext);
+            TagHelperUtilities utils = new(For, HtmlGenerator, HtmlHelper, ViewContext);
 
             Type type = For.Metadata.ModelType;
             type = Nullable.GetUnderlyingType(type) ?? type;
@@ -95,13 +99,13 @@ namespace TowerSoft.TagHelpers {
             string fieldColumnCss = InputCol ?? "col-md-7 col-lg-6";
 
             if (type == typeof(bool) && string.IsNullOrWhiteSpace(Renderer)) {
-                TagBuilder labelDiv = new TagBuilder("div");
+                TagBuilder labelDiv = new("div");
                 labelDiv.AddCssClass(labelColumnCss);
-                TagBuilder fieldDiv = new TagBuilder("div");
+                TagBuilder fieldDiv = new("div");
                 fieldDiv.AddCssClass(fieldColumnCss);
 
                 // Handle Booleans/Checkbox
-                TagBuilder formCheck = new TagBuilder("div");
+                TagBuilder formCheck = new("div");
                 formCheck.AddCssClass("form-check");
                 formCheck.InnerHtml.AppendHtml(utils.CreateInputElement(null, InputCss));
                 formCheck.InnerHtml.AppendHtml(await utils.CreateLabelElement(context, Label, "form-check-label"));
@@ -112,12 +116,12 @@ namespace TowerSoft.TagHelpers {
                 output.Content.AppendHtml(labelDiv);
                 output.Content.AppendHtml(fieldDiv);
             } else {
-                TagBuilder labelDiv = new TagBuilder("div");
+                TagBuilder labelDiv = new("div");
                 labelDiv.AddCssClass(labelColumnCss + " text-md-end");
-                TagBuilder fieldDiv = new TagBuilder("div");
+                TagBuilder fieldDiv = new("div");
                 fieldDiv.AddCssClass(fieldColumnCss);
 
-                Dictionary<string, string> htmlAttributes = new Dictionary<string, string> {
+                Dictionary<string, string> htmlAttributes = new() {
                     { "autocomplete", Autocomplete.ToString() }
                 };
                 if (!string.IsNullOrWhiteSpace(Placeholder)) {
@@ -125,6 +129,9 @@ namespace TowerSoft.TagHelpers {
                 }
                 if (context.AllAttributes.ContainsName("autofocus")) {
                     htmlAttributes.Add("autofocus", string.Empty);
+                }
+                foreach(var attr in context.AllAttributes.Where(x => x.Name.StartsWith("data-"))) {
+                    htmlAttributes.Add(attr.Name, attr.Value.ToString());
                 }
 
                 // Default editor or supplied editor template

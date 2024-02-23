@@ -6,6 +6,9 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
 namespace TowerSoft.TagHelpers {
+    /// <summary>
+    /// Creates a submit button with the horizontal layout. Additional elements can be rendered next to the button from the inner HTML.
+    /// </summary>
     [HtmlTargetElement("hrFormSubmit")]
     public class HorizontalFormSubmitTagHelper : TagHelper {
         /// <summary>
@@ -40,15 +43,15 @@ namespace TowerSoft.TagHelpers {
             string buttonClass = ButtonClass ?? "btn btn-primary";
             string buttonText = ButtonText ?? "Save";
 
-            TagBuilder button = new TagBuilder("button");
+            TagBuilder button = new("button");
             button.Attributes.Add("type", "submit");
             button.AddCssClass(buttonClass);
             button.InnerHtml.Append(buttonText);
 
-            TagBuilder label = new TagBuilder("div");
+            TagBuilder label = new("div");
             label.AddCssClass(labelColumnCss);
 
-            TagBuilder field = new TagBuilder("div");
+            TagBuilder field = new("div");
             field.AddCssClass(fieldColumnCss);
             field.InnerHtml.SetHtmlContent(button);
 

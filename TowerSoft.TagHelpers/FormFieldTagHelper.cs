@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using TowerSoft.TagHelpers.Enums;
 using TowerSoft.TagHelpers.Utilities;
@@ -11,6 +12,9 @@ using TowerSoft.TagHelpers.Utilities;
 // Source: https://stackoverflow.com/questions/47547844/tag-helper-embedded-in-another-tag-helpers-code-doesnt-render
 // Source: https://stackoverflow.com/questions/48322431/what-is-the-tag-helper-equivalent-of-html-editorfor
 namespace TowerSoft.TagHelpers {
+    /// <summary>
+    /// Renders a Bootstrap style form group with a label, input, description, and ASP.NET validation message
+    /// </summary>
     [HtmlTargetElement("formField", Attributes = "asp-for")]
     public class FormFieldTagHelper : TagHelper {
         private AutocompleteSetting _autocompleteSetting;
@@ -75,14 +79,14 @@ namespace TowerSoft.TagHelpers {
             output.TagName = "div";
             output.Attributes.SetAttribute("class", "mb-3");
 
-            TagHelperUtilities utils = new TagHelperUtilities(For, HtmlGenerator, HtmlHelper, ViewContext);
+            TagHelperUtilities utils = new(For, HtmlGenerator, HtmlHelper, ViewContext);
 
             Type type = For.Metadata.ModelType;
             type = Nullable.GetUnderlyingType(type) ?? type;
 
             if (type == typeof(bool) && string.IsNullOrWhiteSpace(Renderer)) {
                 // Handle Booleans/Checkbox
-                TagBuilder formCheck = new TagBuilder("div");
+                TagBuilder formCheck = new("div");
                 formCheck.AddCssClass("form-check");
                 formCheck.InnerHtml.AppendHtml(utils.CreateInputElement(null, InputCss));
                 formCheck.InnerHtml.AppendHtml(await utils.CreateLabelElement(context, Label, "form-check-label"));
@@ -99,6 +103,9 @@ namespace TowerSoft.TagHelpers {
                 }
                 if (context.AllAttributes.ContainsName("autofocus")) {
                     htmlAttributes.Add("autofocus", string.Empty);
+                }
+                foreach (var attr in context.AllAttributes.Where(x => x.Name.StartsWith("data-"))) {
+                    htmlAttributes.Add(attr.Name, attr.Value.ToString());
                 }
 
                 // Default editor or supplied editor template

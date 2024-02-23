@@ -15,18 +15,18 @@ namespace TowerSoft.TagHelpers.Options {
         /// Registers all of the HtmlRenders included in the project
         /// </summary>
         public static void RegisterDefaultRenderers() {
-            Add<BooleanInputRenderer>("boolean");
-            Add<BooleanRadioInputRenderer>("booleanradio");
-            Add<YesNoBooleanHtmlRenderer>("yesnoradio");
-            Add<DateInputRenderer>("date");
-            Add<DateTimeInputRenderer>("datetime");
-            Add<EmailInputHtmlRenderer>("email");
-            Add<FormFileInputRenderer>("iformfile");
-            Add<IntInputRenderer>("int32");
-            Add<LongInputRenderer>("int64");
-            Add<StringInputRenderer>("string");
-            Add<TextAreaRenderer>("textarea");
-            Add<TimeInputRenderer>("time");
+            Add<BooleanInputRenderer>(HtmlRenderer.Boolean);
+            Add<BooleanRadioInputRenderer>(HtmlRenderer.BooleanRadio);
+            Add<YesNoBooleanHtmlRenderer>(HtmlRenderer.YesNoRadio);
+            Add<DateInputRenderer>(HtmlRenderer.Date);
+            Add<DateTimeInputRenderer>(HtmlRenderer.DateTime);
+            Add<EmailInputHtmlRenderer>(HtmlRenderer.Email);
+            Add<FormFileInputRenderer>(HtmlRenderer.File);
+            Add<IntInputRenderer>(HtmlRenderer.Int);
+            Add<LongInputRenderer>(HtmlRenderer.Long);
+            Add<StringInputRenderer>(HtmlRenderer.String);
+            Add<TextAreaRenderer>(HtmlRenderer.TextArea);
+            Add<TimeInputRenderer>(HtmlRenderer.Time);
         }
 
         /// <summary>
@@ -58,9 +58,7 @@ namespace TowerSoft.TagHelpers.Options {
         /// <param name="name">Name of the renderer to get</param>
         /// <exception cref="ArgumentException">Thrown if the name is not registered</exception>
         public static IHtmlRenderer Get(string name) {
-            if (Renderers.Count == 0) {
-                RegisterDefaultRenderers();
-            }
+            CheckDefaultRenderers();
             if (!Renderers.ContainsKey(name.ToLower()))
                 throw new ArgumentException($"The key '{name.ToLower()}' was not registered for any HtmlRenderers");
 
@@ -72,9 +70,7 @@ namespace TowerSoft.TagHelpers.Options {
         /// </summary>
         /// <param name="name"></param>
         public static bool Exists(string name) {
-            if (Renderers.Count == 0) {
-                RegisterDefaultRenderers();
-            }
+            CheckDefaultRenderers();
             return Renderers.ContainsKey(name.ToLower());
         }
 
@@ -82,19 +78,21 @@ namespace TowerSoft.TagHelpers.Options {
         /// Returns a HtmlRenderer named 'string'. If it doesn't exist returns the first renderer
         /// </summary>
         public static IHtmlRenderer Default() {
-            if (Renderers.Count == 0) {
-                RegisterDefaultRenderers();
-            }
+            CheckDefaultRenderers();
             if (Renderers.ContainsKey("string"))
                 return Get("string");
             return Renderers.Values.First();
         }
 
         internal static List<KeyValuePair<string, Type>> GetRendererList() {
+            CheckDefaultRenderers();
+            return Renderers.Select(x => new KeyValuePair<string, Type>(x.Key, x.Value.GetType())).ToList();
+        }
+
+        private static void CheckDefaultRenderers() {
             if (Renderers.Count == 0) {
                 RegisterDefaultRenderers();
             }
-            return Renderers.Select(x => new KeyValuePair<string, Type>(x.Key, x.Value.GetType())).ToList();
         }
     }
 }

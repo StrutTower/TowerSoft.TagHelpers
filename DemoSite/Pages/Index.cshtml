@@ -5,12 +5,6 @@
     string testString = "From Variable";
 }
 
-@*<div class="text-center">
-        <h1 class="display-4">Welcome</h1>
-        <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    </div>
-*@
-
 <div class="display-6 mb-3">Anchor/Link Enabled</div>
 
 <a href="https://github.com/StrutTower" target="_blank" rel="noopener noreferrer">Enabled Link</a>
@@ -120,6 +114,21 @@
 
 <hr />
 
+<div class="display-6 mb-3">hrFormContainer</div>
+<p>Allows adding an input element manually while still using the horizontal field layout</p>
+
+<hrFormContainer asp-for="TestString">
+    <select asp-for="TestString" class="form-select">
+        <option value=""></option>
+        <option value="value1">Value 1</option>
+        <option value="value2">Value 2</option>
+        <option value="value3">Value 3</option>
+        <option value="value4">Value 4</option>
+    </select>
+</hrFormContainer>
+
+<hr />
+
 <div class="display-6 mb-3">hrFormSubmit</div>
 
 
@@ -135,17 +144,23 @@
 
 <div class="display-5 mb-3">HtmlRenderers</div>
 
-<hrFormField asp-for="TestBoolean"></hrFormField>
+<hrFormField asp-for="TestBooleanTrue"></hrFormField>
+<hrFormField asp-for="TestBooleanFalse"></hrFormField>
 <hrFormField asp-for="TestBooleanNullable"></hrFormField>
+<hrFormField asp-for="TestBooleanNullableTrue"></hrFormField>
+<hrFormField asp-for="TestBooleanNullableFalse"></hrFormField>
 
-<hrFormField asp-for="TestBoolean" renderer="BooleanRadio"></hrFormField>
-<hrFormField asp-for="TestBooleanNullable" renderer="BooleanRadio"></hrFormField>
+<hrFormField asp-for="TestBooleanTrue" renderer="@HtmlRenderer.BooleanRadio" data-labels="Yes,No"></hrFormField>
+<hrFormField asp-for="TestBooleanFalse" renderer="@HtmlRenderer.BooleanRadio"></hrFormField>
+<hrFormField asp-for="TestBooleanNullable" renderer="@HtmlRenderer.BooleanRadio" data-labels="Affirmative,Negative,Unknown"></hrFormField>
+<hrFormField asp-for="TestBooleanNullableTrue" renderer="@HtmlRenderer.BooleanRadio"></hrFormField>
+<hrFormField asp-for="TestBooleanNullableFalse" renderer="@HtmlRenderer.BooleanRadio"></hrFormField>
 
 <hrFormField asp-for="TestDate" label="Date and Time"></hrFormField>
-<hrFormField asp-for="TestDate" renderer="Date" label="Date"></hrFormField>
-<hrFormField asp-for="TestDate" renderer="Time" label="Time"></hrFormField>
+<hrFormField asp-for="TestDate" renderer="@HtmlRenderer.Date" label="Date"></hrFormField>
+<hrFormField asp-for="TestDate" renderer="@HtmlRenderer.Time" label="Time"></hrFormField>
 <hrFormField asp-for="TestFile"></hrFormField>
 <hrFormField asp-for="TestInt"></hrFormField>
 <hrFormField asp-for="TestLong"></hrFormField>
 <hrFormField asp-for="TestString"></hrFormField>
-<hrFormField asp-for="TestString" renderer="TextArea"></hrFormField>
+<hrFormField asp-for="TestString" renderer="@HtmlRenderer.TextArea"></hrFormField>
