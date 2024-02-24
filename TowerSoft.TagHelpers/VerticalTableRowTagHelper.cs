@@ -66,51 +66,23 @@ namespace TowerSoft.TagHelpers {
                     ((IViewContextAware)HtmlHelper).Contextualize(ViewContext);
                     output.TagName = "tr";
 
-                    TagBuilder th = new TagBuilder("th");
+                    TagBuilder th = new("th");
                     if (string.IsNullOrWhiteSpace(LabelName))
                         th.InnerHtml.SetContent(Model.Metadata.GetDisplayName());
                     else
                         th.InnerHtml.SetContent(LabelName);
 
-                    TagBuilder td = new TagBuilder("td");
+                    TagBuilder td = new("td");
                     if (!string.IsNullOrWhiteSpace(NullText) && (Model.Model == null || (Model.Model is string modelStr2 && string.IsNullOrWhiteSpace(modelStr2)))) {
                         td.AddCssClass("twr-taghelper-tr-display-null");
                         td.InnerHtml.SetHtmlContent(NullText);
                     } else {
-                        if (Model.Model is bool boolean) {
-                            td.InnerHtml.SetHtmlContent(BooleanIconAndText(boolean));
-                        } else {
-                            td.InnerHtml.SetHtmlContent(TagHelperUtilities.TagHelperDisplay(HtmlHelper, Model, TemplateName).ToRawString());
-                        }
+                        td.InnerHtml.SetHtmlContent(TagHelperUtilities.TagHelperDisplay(HtmlHelper, Model, TemplateName).ToRawString());
                     }
 
                     output.Content.SetHtmlContent(th.ToRawString() + td.ToRawString());
                 }
             }
-        }
-
-        private IHtmlContent BooleanIconAndText(bool? boolean) {
-            TagBuilder tag = new TagBuilder("span");
-            if (boolean.HasValue && boolean.Value) {
-                tag.AddCssClass("mdi mdi-checkbox-marked-outline text-success");
-                tag.Attributes.Add("title", "True");
-            } else if (boolean.HasValue) {
-                tag.AddCssClass("mdi mdi-checkbox-blank-off-outline text-danger");
-                tag.Attributes.Add("title", "False");
-            } else {
-                tag.AddCssClass("mdi mdi-checkbox-blank-outline text-secondary");
-                tag.Attributes.Add("title", "Unknown");
-            }
-            TagBuilder container = new TagBuilder("span");
-            container.InnerHtml.AppendHtml(tag.ToRawString() + " ");
-            if (boolean.HasValue && boolean.Value) {
-                container.InnerHtml.AppendHtml("True");
-            } else if (boolean.HasValue) {
-                container.InnerHtml.AppendHtml("False");
-            } else {
-                container.InnerHtml.AppendHtml("Unknown");
-            }
-            return container;
         }
     }
 }

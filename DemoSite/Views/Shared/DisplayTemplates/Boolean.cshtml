@@ -1,0 +1,8 @@
+﻿@model bool?
+@if (Model.HasValue && Model.Value) {
+    @:True
+} else if (Model.HasValue) {
+    @:False
+} else {
+    @:Unknown
+}
