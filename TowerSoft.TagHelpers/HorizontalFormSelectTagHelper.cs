@@ -107,6 +107,12 @@ namespace TowerSoft.TagHelpers {
             if (!string.IsNullOrWhiteSpace(InputCss)) {
                 htmlAttributes.Add("class", InputCss);
             }
+            if (context.AllAttributes.ContainsName("disabled")) {
+                htmlAttributes.Add("disabled", string.Empty);
+            }
+            if (context.AllAttributes.ContainsName("readonly")) {
+                htmlAttributes.Add("readonly", string.Empty);
+            }
             foreach (var attr in context.AllAttributes.Where(x => x.Name.StartsWith("data-"))) {
                 htmlAttributes.Add(attr.Name, attr.Value.ToString());
             }
