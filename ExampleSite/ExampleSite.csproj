@@ -20,8 +20,4 @@
     <ProjectReference Include="..\TowerSoft.TagHelpers\TowerSoft.TagHelpers.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Area\Reports\Views\" />
-  </ItemGroup>
-
 </Project>

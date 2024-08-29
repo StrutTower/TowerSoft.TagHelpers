@@ -78,18 +78,13 @@ namespace TowerSoft.TagHelpers {
 
             string action = Action ?? "Index";
             string controller = Controller ?? "Home";
-            string area = Area ?? "";
             string fragment = Fragment ?? null;
 
-            RouteValueDictionary routeValues = null;
+            RouteValueDictionary routeValues = [];
             if (_routeValues != null && _routeValues.Count > 0) {
                 routeValues = new RouteValueDictionary(_routeValues);
             }
-
-            if (Area != null) {
-                routeValues ??= [];
-                routeValues["area"] = Area ?? "";
-            }
+            routeValues["area"] = Area ?? "";
 
             TagBuilder link = new("a");
             link.Attributes.Add("href", urlHelper.Action(action, controller, routeValues, null, null, fragment: fragment));
@@ -97,6 +92,7 @@ namespace TowerSoft.TagHelpers {
             TagHelperContent childContent = await output.GetChildContentAsync();
             if (childContent.IsEmptyOrWhiteSpace) {
                 TagBuilder icon = new("span");
+
                 icon.AddCssClass("mdi mdi-fw mdi-home");
 
                 TagBuilder hiddenText = new("span");
