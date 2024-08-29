@@ -1,0 +1,173 @@
+﻿@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+    string stringTest = "From Variable";
+}
+
+<div class="display-6 mb-3">Anchor/Link Enabled</div>
+
+<a href="https://github.com/StrutTower" target="_blank" rel="noopener noreferrer">Enabled Link</a>
+
+-
+
+<a href="https://github.com/StrutTower" target="_blank" rel="noopener noreferrer" asp-enabled="false">Disabled Link</a>
+
+<hr />
+
+<div class="display-6 mb-3">Breadcrumbs</div>
+
+<breadcrumbs>
+    <breadcrumb-item-home />
+    <breadcrumb-item-home asp-action="Test" />
+    <breadcrumb-item-home asp-controller="Placeholder" />
+    <breadcrumb-item-home asp-area="Reports" />
+    <breadcrumb-item-home>Home (Overridden Content)</breadcrumb-item-home>
+    <breadcrumb-item asp-action="Index" asp-controller="Test">Hard Coded String</breadcrumb-item>
+    <breadcrumb-item asp-action="Index" asp-controller="Test" display-for="@stringTest" />
+    <breadcrumb-item asp-action="Index" asp-controller="Test" display-for="TestString" />
+    <breadcrumb-item asp-action="Index" asp-controller="Test" asp-fragment="Fragment">Fragment Test</breadcrumb-item>
+    <breadcrumb-item>Active Breadcrumb</breadcrumb-item>
+</breadcrumbs>
+
+<hr />
+
+<div class="display-6 mb-3">Description</div>
+
+<description asp-for="TestString" />
+
+<hr />
+
+<div class="display-6 mb-3">DisplayFor</div>
+
+<div display-for="TestString"></div>
+<div display-for="TestDate" template="Date"></div>
+<div display-for="TestDate"></div>
+
+<hr />
+
+<div class="display-6 mb-3">ImgBytes</div>
+
+
+<img asp-bytes="@Model.ImageData" />
+
+<hr />
+
+<div class="display-6 mb-3">Label Required</div>
+
+
+<label asp-for="TestString"></label>
+
+<hr />
+
+<div class="display-6 mb-3">Truncate</div>
+
+
+<truncate string="@Model.TestString" characters="3"></truncate>
+
+<hr />
+
+<div class="display-6 mb-3">Vertical Table Row</div>
+
+<table class="table-vertical">
+    <tr-display asp-for="TestString" />
+    <tr-display asp-for="TestDate" template="Date" />
+    <tr-display asp-for="NullString" null-text="Unknown" />
+    <tr-display asp-for="NullInt" null-text="Unknown" />
+    <tr-display asp-for="TestBooleanNullable" />
+    <tr-display asp-for="TestBooleanNullableTrue" />
+    <tr-display asp-for="TestBooleanNullableFalse" />
+    <tr-display asp-for="NullInt" hide-null="true" label="Should be hidden" />
+    <tr-display asp-for="BlankString" hide-null="true" label="Should be hidden" />
+</table>
+
+<hr />
+
+<div class="display-6 mb-3">Visible</div>
+
+<div>
+    <button class="btn btn-primary">Button 1</button>
+    <button class="btn btn-primary" asp-visible="false">Button 2</button>
+    <button class="btn btn-primary">Button 3</button>
+</div>
+
+<div class="mb-5"></div>
+
+<div class="display-3 mb-3 pb-2 border-bottom">Form Field Tag Helpers</div>
+
+<div class="display-6 mb-3">FormField</div>
+
+<formField asp-for="TestString" />
+<formField asp-for="TestString" input-css="form-control additional-css-class" />
+
+<hr />
+
+<div class="display-6 mb-3">FormSelect</div>
+
+
+<formSelect asp-for="TestString" asp-items="Model.TestSelectList" />
+<formSelect asp-for="TestString" asp-items="Model.TestSelectList" input-css="form-select additional-css-class" />
+
+<hr />
+
+<div class="display-6 mb-3">hrFormField</div>
+
+<hrFormField asp-for="TestString" />
+<hr />
+
+<div class="display-6 mb-3">hrFormSelect</div>
+
+
+<hrFormSelect asp-for="TestString" asp-items="Model.TestSelectList" input-css="form-select additional-css-class" />
+
+<hr />
+
+<div class="display-6 mb-3">hrFormContainer</div>
+<p>Allows adding an input element manually while still using the horizontal field layout</p>
+
+<hrFormContainer asp-for="TestString">
+    <select asp-for="TestString" class="form-select">
+        <option value=""></option>
+        <option value="value1">Value 1</option>
+        <option value="value2">Value 2</option>
+        <option value="value3">Value 3</option>
+        <option value="value4">Value 4</option>
+    </select>
+</hrFormContainer>
+
+<hr />
+
+<div class="display-6 mb-3">hrFormSubmit</div>
+
+
+<hrFormSubmit>
+    <button type="button" class="btn btn-secondary">Cancel</button>
+
+    <div class="form-check form-check-inline ms-2">
+        <label class="form-check-label">
+            <input type="checkbox" class="form-check-input" /> Test
+        </label>
+    </div>
+</hrFormSubmit>
+
+<div class="display-5 mb-3">HtmlRenderers</div>
+
+<hrFormField asp-for="TestBooleanTrue" />
+<hrFormField asp-for="TestBooleanFalse" />
+<hrFormField asp-for="TestBooleanNullable" />
+<hrFormField asp-for="TestBooleanNullableTrue" />
+<hrFormField asp-for="TestBooleanNullableFalse" />
+
+<hrFormField asp-for="TestBooleanTrue" renderer="@HtmlRenderer.BooleanRadio" data-labels="Yes,No" />
+<hrFormField asp-for="TestBooleanFalse" renderer="@HtmlRenderer.BooleanRadio" />
+<hrFormField asp-for="TestBooleanNullable" renderer="@HtmlRenderer.BooleanRadio" data-labels="Affirmative,Negative,Unknown" />
+<hrFormField asp-for="TestBooleanNullableTrue" renderer="@HtmlRenderer.BooleanRadio" />
+<hrFormField asp-for="TestBooleanNullableFalse" renderer="@HtmlRenderer.BooleanRadio" />
+
+<hrFormField asp-for="TestDate" label="Date and Time" />
+<hrFormField asp-for="TestDate" renderer="@HtmlRenderer.Date" label="Date" />
+<hrFormField asp-for="TestDate" renderer="@HtmlRenderer.Time" label="Time" />
+<hrFormField asp-for="TestFile" />
+<hrFormField asp-for="TestInt" />
+<hrFormField asp-for="TestLong" />
+<hrFormField asp-for="TestString" />
+<hrFormField asp-for="TestString" renderer="@HtmlRenderer.TextArea" />

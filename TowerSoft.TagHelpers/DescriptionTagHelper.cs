@@ -26,6 +26,7 @@ namespace TowerSoft.TagHelpers {
         /// <param name="output"></param>
         public override void Process(TagHelperContext context, TagHelperOutput output) {
             output.TagName = "div";
+            output.TagMode = TagMode.StartTagAndEndTag;
             output.AddClass("text-muted", HtmlEncoder.Default);
             output.AddClass("ps-3", HtmlEncoder.Default);
             output.AddClass("small", HtmlEncoder.Default);

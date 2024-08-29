@@ -16,39 +16,32 @@ namespace TowerSoft.TagHelpers {
     /// Renders a Bootstrap style form group with a label, input, description, and ASP.NET validation message
     /// </summary>
     [HtmlTargetElement("formField", Attributes = "asp-for")]
-    public class FormFieldTagHelper : TagHelper {
+    public class FormFieldTagHelper(IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper) : TagHelper {
         private AutocompleteSetting _autocompleteSetting;
 
-        public FormFieldTagHelper(IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper) {
-            HtmlGenerator = htmlGenerator;
-            HtmlHelper = htmlHelper;
-        }
-
-        public IHtmlGenerator HtmlGenerator { get; }
-        public IHtmlHelper HtmlHelper { get; }
-
+        /// <summary>Model</summary>
         [HtmlAttributeName("asp-for")]
         public ModelExpression For { get; set; }
 
         /// <summary>
         /// Sets the renderer used for this field. Default will be based on the datatype of the property
         /// </summary>
-        public string? Renderer { get; set; }
+        public string Renderer { get; set; }
 
         /// <summary>
         /// Overrides the label display text
         /// </summary>
-        public string? Label { get; set; }
+        public string Label { get; set; }
 
         /// <summary>
         /// Sets CSS on the input. Overrides the default Bootstrap class
         /// </summary>
-        public string? InputCss { get; set; }
+        public string InputCss { get; set; }
 
         /// <summary>
         /// Sets the placeholder text for the input
         /// </summary>
-        public string? Placeholder { get; set; }
+        public string Placeholder { get; set; }
 
         /// <summary>
         /// Sets the autocomplete attribute on the input. Default is off
@@ -73,13 +66,17 @@ namespace TowerSoft.TagHelpers {
         [HtmlAttributeNotBound]
         public ViewContext ViewContext { get; set; }
 
+        /// <summary></summary>
+        /// <param name="context"></param>
+        /// <param name="output"></param>
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output) {
-            ((IViewContextAware)HtmlHelper).Contextualize(ViewContext);
+            (htmlHelper as IViewContextAware).Contextualize(ViewContext);
 
             output.TagName = "div";
+            output.TagMode = TagMode.StartTagAndEndTag;
             output.Attributes.SetAttribute("class", "mb-3");
 
-            TagHelperUtilities utils = new(For, HtmlGenerator, HtmlHelper, ViewContext);
+            TagHelperUtilities utils = new(For, htmlGenerator, htmlHelper, ViewContext);
 
             Type type = For.Metadata.ModelType;
             type = Nullable.GetUnderlyingType(type) ?? type;
@@ -95,7 +92,7 @@ namespace TowerSoft.TagHelpers {
                 output.Content.AppendHtml(await utils.CreateValidationMessageElement(context));
                 output.Content.AppendHtml(await utils.CreateDescriptionElement(context));
             } else {
-                Dictionary<string, string> htmlAttributes = new Dictionary<string, string> {
+                Dictionary<string, string> htmlAttributes = new() {
                     { "autocomplete", Autocomplete.ToString() }
                 };
                 if (!string.IsNullOrWhiteSpace(Placeholder)) {

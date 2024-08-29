@@ -58,6 +58,7 @@ namespace TowerSoft.TagHelpers {
             field.InnerHtml.AppendHtml(await output.GetChildContentAsync());
 
             output.TagName = "div";
+            output.TagMode = TagMode.StartTagAndEndTag;
             output.AddClass("row", HtmlEncoder.Default);
             output.AddClass("mb-3", HtmlEncoder.Default);
             output.Content.AppendHtml(label);

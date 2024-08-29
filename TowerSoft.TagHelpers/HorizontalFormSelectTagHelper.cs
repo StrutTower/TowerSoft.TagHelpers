@@ -13,20 +13,13 @@ namespace TowerSoft.TagHelpers {
     /// <summary>
     /// Horizontal form group tag helper for select lists
     /// </summary>
+    /// <remarks>
+    /// HorizontalFormSelect Constructor
+    /// </remarks>
+    /// <param name="htmlGenerator"></param>
+    /// <param name="htmlHelper"></param>
     [HtmlTargetElement("hrFormSelect", Attributes = "asp-for")]
-    public class HorizontalFormSelectTagHelper : TagHelper {
-        /// <summary>
-        /// HorizontalFormSelect Constructor
-        /// </summary>
-        /// <param name="htmlGenerator"></param>
-        /// <param name="htmlHelper"></param>
-        public HorizontalFormSelectTagHelper(IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper) {
-            HtmlGenerator = htmlGenerator;
-            HtmlHelper = htmlHelper;
-        }
-
-        public IHtmlGenerator HtmlGenerator { get; }
-        public IHtmlHelper HtmlHelper { get; }
+    public class HorizontalFormSelectTagHelper(IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper) : TagHelper {
 
         /// <summary>
         /// An expression to be evaluated against the current model.
@@ -89,6 +82,7 @@ namespace TowerSoft.TagHelpers {
         /// <returns></returns>
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output) {
             output.TagName = "div";
+            output.TagMode = TagMode.StartTagAndEndTag;
             output.AddClass("row", HtmlEncoder.Default);
             output.AddClass("mb-3", HtmlEncoder.Default);
 
@@ -100,7 +94,7 @@ namespace TowerSoft.TagHelpers {
             TagBuilder fieldDiv = new("div");
             fieldDiv.AddCssClass(fieldColumnCss);
 
-            Dictionary<string, string> htmlAttributes = new();
+            Dictionary<string, string> htmlAttributes = [];
             if (context.AllAttributes.ContainsName("autofocus")) {
                 htmlAttributes.Add("autofocus", string.Empty);
             }
@@ -117,7 +111,7 @@ namespace TowerSoft.TagHelpers {
                 htmlAttributes.Add(attr.Name, attr.Value.ToString());
             }
 
-            TagHelperUtilities utils = new(For, HtmlGenerator, HtmlHelper, ViewContext);
+            TagHelperUtilities utils = new(For, htmlGenerator, htmlHelper, ViewContext);
 
             TagHelperOutput labelElement = await utils.CreateLabelRequiredElement(context, LabelName);
             IHtmlContent inputElement = await utils.CreateSelectElement(context, Items, Multiple, OptionLabel, htmlAttributes);

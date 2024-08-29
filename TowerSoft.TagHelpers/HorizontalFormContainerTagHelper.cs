@@ -11,45 +11,40 @@ namespace TowerSoft.TagHelpers {
     /// Similar to the hrFormField this generates a label, description and ASP.NET validation message but the input element is taken from the inner HTML of the tag helper.
     /// </summary>
     [HtmlTargetElement("hrFormContainer", Attributes = "asp-for")]
-    public class HorizontalFormContainerTagHelper : TagHelper {
+    public class HorizontalFormContainerTagHelper(IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper) : TagHelper {
 
-        public HorizontalFormContainerTagHelper(IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper) {
-            HtmlGenerator = htmlGenerator;
-            HtmlHelper = htmlHelper;
-        }
-
-        public IHtmlGenerator HtmlGenerator { get; }
-        public IHtmlHelper HtmlHelper { get; }
-
+        /// <summary>Model</summary>
         [HtmlAttributeName("asp-for")]
         public ModelExpression For { get; set; }
 
         /// <summary>
         /// Overrides the label display text
         /// </summary>
-        public string? Label { get; set; }
+        public string Label { get; set; }
 
         /// <summary>
         /// Bootstrap column CSS for the label. If not set, defaults to: col-md-4 col-lg-3
         /// </summary>
-        public string? LabelCol { get; set; }
+        public string LabelCol { get; set; }
 
         /// <summary>
         /// Bootstrap column CSS for the input. If not set, defaults to: col-md-7 col-lg-6
         /// </summary>
-        public string? InputCol { get; set; }
+        public string InputCol { get; set; }
 
         /// <summary></summary>
         [ViewContext]
         [HtmlAttributeNotBound]
         public ViewContext ViewContext { get; set; }
 
+        /// <summary></summary>
         public async override Task ProcessAsync(TagHelperContext context, TagHelperOutput output) {
             output.TagName = "div";
+            output.TagMode = TagMode.StartTagAndEndTag;
             output.AddClass("row", HtmlEncoder.Default);
             output.AddClass("mb-3", HtmlEncoder.Default);
 
-            TagHelperUtilities utils = new(For, HtmlGenerator, HtmlHelper, ViewContext);
+            TagHelperUtilities utils = new(For, htmlGenerator, htmlHelper, ViewContext);
 
             string labelColumnCss = LabelCol ?? "col-md-4 col-lg-3";
             string fieldColumnCss = InputCol ?? "col-md-7 col-lg-6";

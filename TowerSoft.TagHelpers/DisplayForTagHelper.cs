@@ -7,6 +7,10 @@ namespace TowerSoft.TagHelpers {
     /// <summary>
     /// Displays the value of a property similar to Html.DisplayFor
     /// </summary>
+    /// <remarks>
+    /// DisplayForTagHelper constructor
+    /// </remarks>
+    /// <param name="htmlHelper"></param>
     [HtmlTargetElement("div", Attributes = "display-for")]
     [HtmlTargetElement("span", Attributes = "display-for")]
     [HtmlTargetElement("a", Attributes = "display-for")]
@@ -24,16 +28,7 @@ namespace TowerSoft.TagHelpers {
     [HtmlTargetElement("h6", Attributes = "display-for")]
     [HtmlTargetElement("li", Attributes = "display-for")]
     [HtmlTargetElement("option", Attributes = "display-for")]
-    public class DisplayForTagHelper : TagHelper {
-        /// <summary>
-        /// DisplayForTagHelper constructor
-        /// </summary>
-        /// <param name="htmlHelper"></param>
-        public DisplayForTagHelper(IHtmlHelper htmlHelper) {
-            HtmlHelper = htmlHelper;
-        }
-
-        private IHtmlHelper HtmlHelper { get; set; }
+    public class DisplayForTagHelper(IHtmlHelper htmlHelper) : TagHelper {
 
         /// <summary>
         /// Model expression for the property
@@ -63,11 +58,11 @@ namespace TowerSoft.TagHelpers {
         /// <param name="context"></param>
         /// <param name="output"></param>
         public override void Process(TagHelperContext context, TagHelperOutput output) {
-            ((IViewContextAware)HtmlHelper).Contextualize(ViewContext);
+            ((IViewContextAware)htmlHelper).Contextualize(ViewContext);
             if (Append)
-                output.PostContent.AppendHtml(TagHelperUtilities.TagHelperDisplay(HtmlHelper, Model, TemplateName));
+                output.PostContent.AppendHtml(TagHelperUtilities.TagHelperDisplay(htmlHelper, Model, TemplateName));
             else
-                output.PreContent.AppendHtml(TagHelperUtilities.TagHelperDisplay(HtmlHelper, Model, TemplateName));
+                output.PreContent.AppendHtml(TagHelperUtilities.TagHelperDisplay(htmlHelper, Model, TemplateName));
         }
     }
 }

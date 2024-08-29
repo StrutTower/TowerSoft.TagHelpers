@@ -22,6 +22,7 @@ namespace TowerSoft.TagHelpers {
         public override void Process(TagHelperContext context, TagHelperOutput output) {
             if (Data.Model != null && Data.Model is byte[] data) {
                 output.TagName = "img";
+                output.TagMode = TagMode.SelfClosing;
                 output.Attributes.Add("src", "data:image/jpg;base64," + Convert.ToBase64String(data));
             }
         }

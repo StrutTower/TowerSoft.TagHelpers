@@ -7,7 +7,7 @@ namespace TowerSoft.TagHelpers {
     /// Bootstrap breadcrumb container. Use breadcrumb-item as child elements to define the breadcrumb items.
     /// </summary>
     [HtmlTargetElement("breadcrumbs")]
-    [RestrictChildren("breadcrumb-item")]
+    [RestrictChildren("breadcrumb-item", "breadcrumb-item-home")]
     public class BreadcrumbTagHelper : TagHelper {
 
         /// <summary>
@@ -17,6 +17,7 @@ namespace TowerSoft.TagHelpers {
         /// <param name="output"></param>
         public override void Process(TagHelperContext context, TagHelperOutput output) {
             output.TagName = "ul";
+            output.TagMode = TagMode.StartTagAndEndTag;
             output.AddClass("breadcrumb", HtmlEncoder.Default);
         }
     }

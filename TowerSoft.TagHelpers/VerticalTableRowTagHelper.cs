@@ -10,14 +10,9 @@ namespace TowerSoft.TagHelpers {
     /// Generates a table row to display the value of a property with a th and td.
     /// The th will have the display name of the property. The td will have the value of the property
     /// </summary>
+    /// <remarks>VerticalTableRow Constructor</remarks>
     [HtmlTargetElement("tr-display")]
-    public class VerticalTableRowTagHelper : TagHelper {
-        /// <summary>VerticalTableRow Constructor</summary>
-        public VerticalTableRowTagHelper(IHtmlHelper htmlHelper) {
-            HtmlHelper = htmlHelper;
-        }
-
-        private IHtmlHelper HtmlHelper { get; set; }
+    public class VerticalTableRowTagHelper(IHtmlHelper htmlHelper) : TagHelper {
 
         /// <summary>
         /// Model expression for the property
@@ -63,7 +58,7 @@ namespace TowerSoft.TagHelpers {
                 if (HideNull && (Model.Model == null || (Model.Model is string modelStr && string.IsNullOrWhiteSpace(modelStr)))) {
                     output.SuppressOutput();
                 } else {
-                    ((IViewContextAware)HtmlHelper).Contextualize(ViewContext);
+                    ((IViewContextAware)htmlHelper).Contextualize(ViewContext);
                     output.TagName = "tr";
 
                     TagBuilder th = new("th");
@@ -77,7 +72,7 @@ namespace TowerSoft.TagHelpers {
                         td.AddCssClass("twr-taghelper-tr-display-null");
                         td.InnerHtml.SetHtmlContent(NullText);
                     } else {
-                        td.InnerHtml.SetHtmlContent(TagHelperUtilities.TagHelperDisplay(HtmlHelper, Model, TemplateName).ToRawString());
+                        td.InnerHtml.SetHtmlContent(TagHelperUtilities.TagHelperDisplay(htmlHelper, Model, TemplateName).ToRawString());
                     }
 
                     output.Content.SetHtmlContent(th.ToRawString() + td.ToRawString());

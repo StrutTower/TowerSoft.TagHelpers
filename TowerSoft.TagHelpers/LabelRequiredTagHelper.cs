@@ -25,7 +25,7 @@ namespace TowerSoft.TagHelpers {
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output) {
             await base.ProcessAsync(context, output);
             if (For.Metadata.IsRequired) {
-                TagBuilder span = new TagBuilder("span");
+                TagBuilder span = new("span");
                 span.InnerHtml.Append("*");
                 span.AddCssClass("text-danger ps-1");
                 span.Attributes.Add("title", "This field is required.");

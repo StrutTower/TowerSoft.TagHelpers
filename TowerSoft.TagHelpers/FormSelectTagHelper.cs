@@ -14,14 +14,7 @@ namespace TowerSoft.TagHelpers {
     /// Form group tag helper for select lists
     /// </summary>
     [HtmlTargetElement("formSelect", Attributes = "asp-for")]
-    public class FormSelectTagHelper : TagHelper {
-        public FormSelectTagHelper(IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper) {
-            HtmlGenerator = htmlGenerator;
-            HtmlHelper = htmlHelper;
-        }
-
-        public IHtmlGenerator HtmlGenerator { get; }
-        public IHtmlHelper HtmlHelper { get; }
+    public class FormSelectTagHelper(IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper) : TagHelper {
 
         /// <summary>
         /// An expression to be evaluated against the current model.
@@ -40,7 +33,7 @@ namespace TowerSoft.TagHelpers {
         /// The null or blank option. Set to null to exclude that option from the select list.
         /// </summary>
         [HtmlAttributeName("asp-option-label")]
-        public string? OptionLabel { get; set; }
+        public string OptionLabel { get; set; }
 
         /// <summary>
         /// Sets CSS on the input. Overrides the default Bootstrap class
@@ -52,7 +45,7 @@ namespace TowerSoft.TagHelpers {
         /// Overrides the label display text
         /// </summary>
         [HtmlAttributeName("label")]
-        public string? LabelName { get; set; }
+        public string LabelName { get; set; }
 
         public bool Multiple { get; set; } = false;
 
@@ -61,11 +54,13 @@ namespace TowerSoft.TagHelpers {
         [HtmlAttributeNotBound]
         public ViewContext ViewContext { get; set; }
 
+        /// <summary></summary>
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output) {
             output.TagName = "div";
+            output.TagMode = TagMode.StartTagAndEndTag;
             output.AddClass("mb-3", HtmlEncoder.Default);
 
-            Dictionary<string, string> htmlAttributes = new();
+            Dictionary<string, string> htmlAttributes = [];
             if (context.AllAttributes.ContainsName("autofocus")) {
                 htmlAttributes.Add("autofocus", string.Empty);
             }
@@ -82,7 +77,7 @@ namespace TowerSoft.TagHelpers {
                 htmlAttributes.Add(attr.Name, attr.Value.ToString());
             }
 
-            TagHelperUtilities utils = new(For, HtmlGenerator, HtmlHelper, ViewContext);
+            TagHelperUtilities utils = new(For, htmlGenerator, htmlHelper, ViewContext);
 
             TagHelperOutput labelElement = await utils.CreateLabelRequiredElement(context, LabelName);
             IHtmlContent inputElement = await utils.CreateSelectElement(context, Items, Multiple, OptionLabel, htmlAttributes);
