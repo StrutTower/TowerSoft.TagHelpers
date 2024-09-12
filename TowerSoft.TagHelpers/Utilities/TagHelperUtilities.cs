@@ -31,10 +31,10 @@ namespace TowerSoft.TagHelpers.Utilities {
         public ViewContext ViewContext { get; }
 
         #region Create Elements
-        internal async Task<TagHelperOutput> CreateLabelElement(TagHelperContext context, string? labelName = null, string? css = null) {
+        internal async Task<TagHelperOutput> CreateLabelElement(TagHelperContext context, string labelName = null, string css = null) {
 
             LabelTagHelper labelTagHelper =
-                new LabelTagHelper(HtmlGenerator) {
+                new(HtmlGenerator) {
                     For = For,
                     ViewContext = ViewContext
                 };
@@ -50,9 +50,8 @@ namespace TowerSoft.TagHelpers.Utilities {
             return labelOutput;
         }
 
-        internal async Task<TagHelperOutput> CreateLabelRequiredElement(TagHelperContext context, string? labelName = null, string? css = null) {
-            LabelRequiredTagHelper labelTagHelper =
-                new LabelRequiredTagHelper(HtmlGenerator) {
+        internal async Task<TagHelperOutput> CreateLabelRequiredElement(TagHelperContext context, string labelName = null, string css = null) {
+            LabelRequiredTagHelper labelTagHelper = new(HtmlGenerator) {
                     For = For,
                     ViewContext = ViewContext
                 };
@@ -61,11 +60,14 @@ namespace TowerSoft.TagHelpers.Utilities {
             if (!string.IsNullOrWhiteSpace(labelName))
                 labelOutput.Content.SetContent(labelName);
 
+            if (!string.IsNullOrWhiteSpace(css))
+                labelOutput.AddClass(css, HtmlEncoder.Default);
+
             await labelTagHelper.ProcessAsync(context, labelOutput);
             return labelOutput;
         }
 
-        internal IHtmlContent CreateInputElement(string? rendererName = null, string? css = null, Dictionary<string, string>? htmlAttributes = null) {
+        internal IHtmlContent CreateInputElement(string rendererName = null, string css = null, Dictionary<string, string> htmlAttributes = null) {
             if (!string.IsNullOrWhiteSpace(rendererName))
                 return RendererRegistration.Get(rendererName).Render(For, HtmlGenerator, HtmlHelper, ViewContext, css, htmlAttributes);
 
@@ -76,9 +78,9 @@ namespace TowerSoft.TagHelpers.Utilities {
                 }
 
                 if (For.Metadata.ContainerMetadata != null) {
-                    PropertyInfo? prop = For.Metadata.ContainerMetadata.ModelType.GetProperty(For.Metadata.PropertyName);
+                    PropertyInfo prop = For.Metadata.ContainerMetadata.ModelType.GetProperty(For.Metadata.PropertyName);
                     if (prop != null && prop.IsDefined(typeof(DataTypeAttribute))) {
-                        DataTypeAttribute? attr = prop.GetCustomAttribute<DataTypeAttribute>();
+                        DataTypeAttribute attr = prop.GetCustomAttribute<DataTypeAttribute>();
                         if (attr != null && RendererRegistration.Exists(attr.DataType.ToString())) {
                             return RendererRegistration.Get(attr.DataType.ToString()).Render(For, HtmlGenerator, HtmlHelper, ViewContext, css, htmlAttributes);
                         }
@@ -94,7 +96,7 @@ namespace TowerSoft.TagHelpers.Utilities {
         }
 
         internal async Task<TagHelperOutput> CreateSelectElement(TagHelperContext context, IEnumerable<SelectListItem> items, bool multiple = false,
-            string? optionLabel = null, Dictionary<string, string>? htmlAttributes = null) {
+            string optionLabel = null, Dictionary<string, string> htmlAttributes = null) {
 
             if (For.Model != null) {
                 if (For.ModelExplorer.ModelType.IsEnum) {
@@ -118,7 +120,7 @@ namespace TowerSoft.TagHelpers.Utilities {
                 }
             }
 
-            SelectTagHelper selectTagHelper = new SelectTagHelper(HtmlGenerator) {
+            SelectTagHelper selectTagHelper = new(HtmlGenerator) {
                 For = For,
                 Items = items,
                 ViewContext = ViewContext
@@ -127,7 +129,7 @@ namespace TowerSoft.TagHelpers.Utilities {
             TagHelperOutput selectOutput = CreateTagHelperOutput("select");
             selectOutput.AddClass("form-select", HtmlEncoder.Default);
             if (!multiple && optionLabel != "null" || multiple && !string.IsNullOrWhiteSpace(optionLabel)) {
-                TagBuilder option = new TagBuilder("option");
+                TagBuilder option = new("option");
                 option.InnerHtml.SetContent(optionLabel);
                 option.Attributes.Add("value", "");
                 selectOutput.PreContent.SetHtmlContent(option);
@@ -149,8 +151,7 @@ namespace TowerSoft.TagHelpers.Utilities {
         }
 
         internal async Task<TagHelperOutput> CreateValidationMessageElement(TagHelperContext context) {
-            ValidationMessageTagHelper validationMessageTagHelper =
-                new ValidationMessageTagHelper(HtmlGenerator) {
+            ValidationMessageTagHelper validationMessageTagHelper = new(HtmlGenerator) {
                     For = For,
                     ViewContext = ViewContext
                 };
@@ -161,7 +162,7 @@ namespace TowerSoft.TagHelpers.Utilities {
         }
 
         internal async Task<TagHelperOutput> CreateDescriptionElement(TagHelperContext context) {
-            DescriptionTagHelper descriptionTagHelper = new DescriptionTagHelper() {
+            DescriptionTagHelper descriptionTagHelper = new() {
                 ModelEx = For
             };
 
@@ -184,7 +185,7 @@ namespace TowerSoft.TagHelpers.Utilities {
             return htmlHelper.Display(GetExpressionText(modelExpression.Name), templateName);
         }
 
-        private static Func<HtmlHelper, ModelExplorer, string, string, object, IHtmlContent>? _getDisplayThunk;
+        private static Func<HtmlHelper, ModelExplorer, string, string, object, IHtmlContent> _getDisplayThunk;
 
         private static string GetExpressionText(string expression) {
             // If it's exactly "model", then give them an empty string, to replicate the lambda behavior.
@@ -192,10 +193,10 @@ namespace TowerSoft.TagHelpers.Utilities {
         }
         #endregion
 
-        private TagHelperOutput CreateTagHelperOutput(string tagName) {
+        private static TagHelperOutput CreateTagHelperOutput(string tagName) {
             return new TagHelperOutput(
                 tagName: tagName,
-                attributes: new TagHelperAttributeList(),
+                attributes: [],
                 getChildContentAsync: (s, t) => {
                     return Task.Factory.StartNew<TagHelperContent>(
                             () => new DefaultTagHelperContent());

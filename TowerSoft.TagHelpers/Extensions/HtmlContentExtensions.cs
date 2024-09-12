@@ -5,7 +5,7 @@ using System.Text.Encodings.Web;
 namespace TowerSoft.TagHelpers.Extensions {
     internal static class HtmlContentExtensions {
         internal static string ToRawString(this IHtmlContent htmlContent) {
-            using StringWriter writer = new StringWriter();
+            using StringWriter writer = new();
             htmlContent.WriteTo(writer, HtmlEncoder.Default);
             return writer.ToString();
         }

@@ -4,13 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Diagnostics;
 
 namespace ExampleSite.Controllers {
-    public class HomeController : Controller {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger) {
-            _logger = logger;
-        }
-
+    public class HomeController() : Controller {
         public IActionResult Index() {
             string imagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "towersoft-logo_128x.png");
             IndexModel model = new() {

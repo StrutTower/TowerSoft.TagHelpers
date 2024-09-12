@@ -16,7 +16,8 @@ namespace TowerSoft.TagHelpers.Interfaces {
         /// <param name="htmlHelper"></param>
         /// <param name="viewContext"></param>
         /// <param name="css">Custom CSS for the input element passed through from the input-css attribute</param>
+        /// <param name="htmlAttributes"></param>
         /// <returns></returns>
-        public IHtmlContent Render(ModelExpression modelEx, IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper, ViewContext viewContext, string? css, Dictionary<string, string>? htmlAttributes);
+        public IHtmlContent Render(ModelExpression modelEx, IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper, ViewContext viewContext, string css, Dictionary<string, string> htmlAttributes);
     }
 }

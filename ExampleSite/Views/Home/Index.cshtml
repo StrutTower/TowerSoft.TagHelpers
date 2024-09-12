@@ -72,7 +72,7 @@
     <tr-display asp-for="TestString" />
     <tr-display asp-for="TestDate" template="Date" />
     <tr-display asp-for="NullString" null-text="Unknown" />
-    <tr-display asp-for="NullInt" null-text="Unknown" />
+    <tr-display asp-for="NullInt" null-text="Unknown" tooltip="This is a test for the tooltip attribute." />
     <tr-display asp-for="TestBooleanNullable" />
     <tr-display asp-for="TestBooleanNullableTrue" />
     <tr-display asp-for="TestBooleanNullableFalse" />
@@ -98,6 +98,8 @@
 
 <formField asp-for="TestString" />
 <formField asp-for="TestString" input-css="form-control additional-css-class" />
+<formField asp-for="TestBooleanTrue" />
+<formField asp-for="TestBooleanNullable" />
 
 <hr />
 
@@ -112,6 +114,8 @@
 <div class="display-6 mb-3">hrFormField</div>
 
 <hrFormField asp-for="TestString" />
+<hrFormField asp-for="TestBooleanTrue" />
+<hrFormField asp-for="TestBooleanNullable" />
 <hr />
 
 <div class="display-6 mb-3">hrFormSelect</div>
@@ -133,7 +137,7 @@
         <option value="value4">Value 4</option>
     </select>
 </hrFormContainer>
-
+<hrFormField asp-for="TestString" />
 <hr />
 
 <div class="display-6 mb-3">hrFormSubmit</div>
@@ -157,11 +161,11 @@
 <hrFormField asp-for="TestBooleanNullableTrue" />
 <hrFormField asp-for="TestBooleanNullableFalse" />
 
-<hrFormField asp-for="TestBooleanTrue" renderer="@HtmlRenderer.BooleanRadio" data-labels="Yes,No" />
-<hrFormField asp-for="TestBooleanFalse" renderer="@HtmlRenderer.BooleanRadio" />
-<hrFormField asp-for="TestBooleanNullable" renderer="@HtmlRenderer.BooleanRadio" data-labels="Affirmative,Negative,Unknown" />
-<hrFormField asp-for="TestBooleanNullableTrue" renderer="@HtmlRenderer.BooleanRadio" />
-<hrFormField asp-for="TestBooleanNullableFalse" renderer="@HtmlRenderer.BooleanRadio" />
+<hrFormField asp-for="TestBooleanTrue" data-labels="True,False" />
+<hrFormField asp-for="TestBooleanFalse" />
+<hrFormField asp-for="TestBooleanNullable" data-labels="Affirmative,Negative,Unknown" />
+<hrFormField asp-for="TestBooleanNullableTrue" />
+<hrFormField asp-for="TestBooleanNullableFalse" />
 
 <hrFormField asp-for="TestDate" label="Date and Time" />
 <hrFormField asp-for="TestDate" renderer="@HtmlRenderer.Date" label="Date" />

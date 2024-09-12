@@ -44,6 +44,17 @@ namespace TowerSoft.TagHelpers {
         [HtmlAttributeName("hide-null")]
         public bool HideNull { get; set; }
 
+        /// <summary>
+        /// Text to show in the tooltip
+        /// </summary>
+        [HtmlAttributeName("tooltip")]
+        public string Tooltip { get; set; }
+
+        /// <summary>
+        /// CSS classes for the tooltip icon. Default is 'mdi mdi-alert-circle-outline text-info d-print-none'
+        /// </summary>
+        public string TooltipIconClass { get; set; } = "mdi mdi-alert-circle-outline text-info d-print-none";
+
         /// <summary></summary>
         [ViewContext]
         public ViewContext ViewContext { get; set; }
@@ -60,12 +71,22 @@ namespace TowerSoft.TagHelpers {
                 } else {
                     ((IViewContextAware)htmlHelper).Contextualize(ViewContext);
                     output.TagName = "tr";
+                    output.TagMode = TagMode.StartTagAndEndTag;
 
                     TagBuilder th = new("th");
+                    if (!string.IsNullOrWhiteSpace(Tooltip)) {
+                        TagBuilder tooltip = new("span");
+                        tooltip.AddCssClass(TooltipIconClass);
+                        tooltip.Attributes.Add("title", Tooltip);
+                        
+                        th.InnerHtml.AppendHtml(tooltip);
+                        th.InnerHtml.AppendHtml(new HtmlString(" "));
+                    }
+
                     if (string.IsNullOrWhiteSpace(LabelName))
-                        th.InnerHtml.SetContent(Model.Metadata.GetDisplayName());
+                        th.InnerHtml.AppendHtml(Model.Metadata.GetDisplayName());
                     else
-                        th.InnerHtml.SetContent(LabelName);
+                        th.InnerHtml.AppendHtml(LabelName);
 
                     TagBuilder td = new("td");
                     if (!string.IsNullOrWhiteSpace(NullText) && (Model.Model == null || (Model.Model is string modelStr2 && string.IsNullOrWhiteSpace(modelStr2)))) {

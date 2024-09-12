@@ -17,8 +17,9 @@ namespace TowerSoft.TagHelpers.HtmlRenderers {
         /// <param name="htmlHelper"></param>
         /// <param name="viewContext"></param>
         /// <param name="css">Custom CSS to add to the input</param>
+        /// <param name="htmlAttributes"></param>
         /// <returns></returns>
-        public IHtmlContent Render(ModelExpression modelEx, IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper, ViewContext viewContext, string? css, Dictionary<string, string>? htmlAttributes) {
+        public IHtmlContent Render(ModelExpression modelEx, IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper, ViewContext viewContext, string css, Dictionary<string, string> htmlAttributes) {
             TagBuilder output = htmlGenerator.GenerateTextArea(viewContext, modelEx.ModelExplorer, modelEx.Name, 6, 10, null);
             output.AddCssClass("form-control");
             if (!string.IsNullOrWhiteSpace(css))

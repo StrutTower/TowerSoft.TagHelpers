@@ -5,10 +5,13 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using TowerSoft.TagHelpers.Enums;
+using TowerSoft.TagHelpers.Options;
 using TowerSoft.TagHelpers.Utilities;
 
 namespace TowerSoft.TagHelpers {
@@ -93,20 +96,33 @@ namespace TowerSoft.TagHelpers {
             string labelColumnCss = LabelCol ?? "col-md-4 col-lg-3";
             string fieldColumnCss = InputCol ?? "col-md-7 col-lg-6";
 
-            if (type == typeof(bool) && string.IsNullOrWhiteSpace(Renderer)) {
+            if (type == typeof(bool) && (string.IsNullOrWhiteSpace(Renderer) || Renderer == HtmlRenderer.Boolean)) {
+                // Handle Booleans/Checkbox
+                PropertyInfo prop = For.Metadata.ContainerType.GetProperty(For.Metadata.Name);
+                bool required = false;
+                bool nullable = For.ModelExplorer.Metadata.IsNullableValueType;
+
+                if (prop != null)
+                    required = prop.IsDefined(typeof(RequiredAttribute), true);
+
+
                 TagBuilder labelDiv = new("div");
-                labelDiv.AddCssClass(labelColumnCss);
+                labelDiv.AddCssClass(labelColumnCss + " text-md-end");
                 TagBuilder fieldDiv = new("div");
                 fieldDiv.AddCssClass(fieldColumnCss);
 
-                // Handle Booleans/Checkbox
-                TagBuilder formCheck = new("div");
-                formCheck.AddCssClass("form-check");
-                formCheck.InnerHtml.AppendHtml(utils.CreateInputElement(null, InputCss));
-                formCheck.InnerHtml.AppendHtml(await utils.CreateLabelElement(context, Label, "form-check-label"));
-                fieldDiv.InnerHtml.AppendHtml(formCheck);
-                fieldDiv.InnerHtml.AppendHtml(await utils.CreateValidationMessageElement(context));
-                fieldDiv.InnerHtml.AppendHtml(await utils.CreateDescriptionElement(context));
+
+                if (required || !nullable) {
+                    TagBuilder formCheck = new("div");
+                    formCheck.AddCssClass("form-check");
+                    formCheck.InnerHtml.AppendHtml(utils.CreateInputElement(null, InputCss));
+                    formCheck.InnerHtml.AppendHtml(await utils.CreateLabelElement(context, Label, "form-check-label"));
+                    fieldDiv.InnerHtml.AppendHtml(formCheck);
+                } else {
+                    TagHelperOutput labelElement = await utils.CreateLabelRequiredElement(context, Label);
+                    labelDiv.InnerHtml.AppendHtml(labelElement);
+                    fieldDiv.InnerHtml.AppendHtml(utils.CreateInputElement(HtmlRenderer.Boolean, InputCss));
+                }
 
                 output.Content.AppendHtml(labelDiv);
                 output.Content.AppendHtml(fieldDiv);

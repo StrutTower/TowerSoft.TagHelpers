@@ -56,10 +56,7 @@ namespace TowerSoft.TagHelpers {
         [HtmlAttributeName(RouteValuesDictionaryName, DictionaryAttributePrefix = RouteValuesPrefix)]
         public IDictionary<string, string> RouteValues {
             get {
-                if (_routeValues == null) {
-                    _routeValues = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-                }
-
+                _routeValues ??= new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
                 return _routeValues;
             }
             set {

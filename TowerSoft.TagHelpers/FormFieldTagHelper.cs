@@ -4,9 +4,12 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using TowerSoft.TagHelpers.Enums;
+using TowerSoft.TagHelpers.Options;
 using TowerSoft.TagHelpers.Utilities;
 
 // Source: https://stackoverflow.com/questions/47547844/tag-helper-embedded-in-another-tag-helpers-code-doesnt-render
@@ -81,13 +84,25 @@ namespace TowerSoft.TagHelpers {
             Type type = For.Metadata.ModelType;
             type = Nullable.GetUnderlyingType(type) ?? type;
 
-            if (type == typeof(bool) && string.IsNullOrWhiteSpace(Renderer)) {
+            if (type == typeof(bool) && (string.IsNullOrWhiteSpace(Renderer) || Renderer == HtmlRenderer.Boolean)) {
                 // Handle Booleans/Checkbox
-                TagBuilder formCheck = new("div");
-                formCheck.AddCssClass("form-check");
-                formCheck.InnerHtml.AppendHtml(utils.CreateInputElement(null, InputCss));
-                formCheck.InnerHtml.AppendHtml(await utils.CreateLabelElement(context, Label, "form-check-label"));
-                output.Content.AppendHtml(formCheck);
+                PropertyInfo prop = For.Metadata.ContainerType.GetProperty(For.Metadata.Name);
+                bool required = false;
+                bool nullable = For.ModelExplorer.Metadata.IsNullableValueType;
+
+                if (prop != null)
+                    required = prop.IsDefined(typeof(RequiredAttribute), true);
+
+                if (required || !nullable) {
+                    TagBuilder formCheck = new("div");
+                    formCheck.AddCssClass("form-check");
+                    formCheck.InnerHtml.AppendHtml(utils.CreateInputElement(null, InputCss));
+                    formCheck.InnerHtml.AppendHtml(await utils.CreateLabelElement(context, Label, "form-check-label"));
+                    output.Content.AppendHtml(formCheck);
+                } else {
+                    output.Content.AppendHtml(await utils.CreateLabelRequiredElement(context, Label));
+                    output.Content.AppendHtml(utils.CreateInputElement(HtmlRenderer.Boolean, InputCss));
+                }
 
                 output.Content.AppendHtml(await utils.CreateValidationMessageElement(context));
                 output.Content.AppendHtml(await utils.CreateDescriptionElement(context));
@@ -107,11 +122,11 @@ namespace TowerSoft.TagHelpers {
                 if (context.AllAttributes.ContainsName("readonly")) {
                     htmlAttributes.Add("readonly", string.Empty);
                 }
-                foreach (var attr in context.AllAttributes.Where(x => x.Name.StartsWith("data-"))) {
+                foreach (TagHelperAttribute attr in context.AllAttributes.Where(x => x.Name.StartsWith("data-"))) {
                     htmlAttributes.Add(attr.Name, attr.Value.ToString());
                 }
 
-                // Default editor or supplied editor template
+                // Default editor or supplied renderer
                 TagHelperOutput labelElement = await utils.CreateLabelRequiredElement(context, Label);
                 IHtmlContent inputElement = utils.CreateInputElement(Renderer, InputCss, htmlAttributes);
                 TagHelperOutput validationMessageElement = await utils.CreateValidationMessageElement(context);

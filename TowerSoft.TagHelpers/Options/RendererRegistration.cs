@@ -9,15 +9,15 @@ namespace TowerSoft.TagHelpers.Options {
     /// Handles HtmlRenderers for the FormField and HorizontalFormField TagHelpers
     /// </summary>
     public static class RendererRegistration {
-        private static Dictionary<string, IHtmlRenderer> Renderers { get; set; } = new Dictionary<string, IHtmlRenderer>();
+        private static Dictionary<string, IHtmlRenderer> Renderers { get; set; } = [];
 
         /// <summary>
         /// Registers all of the HtmlRenders included in the project
         /// </summary>
         public static void RegisterDefaultRenderers() {
             Add<BooleanInputRenderer>(HtmlRenderer.Boolean);
-            Add<BooleanRadioInputRenderer>(HtmlRenderer.BooleanRadio);
-            Add<YesNoBooleanHtmlRenderer>(HtmlRenderer.YesNoRadio);
+            //Add<BooleanRadioInputRenderer>(HtmlRenderer.BooleanRadio);
+            //Add<YesNoBooleanHtmlRenderer>(HtmlRenderer.YesNoRadio);
             Add<DateInputRenderer>(HtmlRenderer.Date);
             Add<DateTimeInputRenderer>(HtmlRenderer.DateTime);
             Add<EmailInputHtmlRenderer>(HtmlRenderer.Email);
@@ -45,8 +45,7 @@ namespace TowerSoft.TagHelpers.Options {
             if (!typeof(IHtmlRenderer).IsAssignableFrom(type))
                 throw new NotSupportedException("The renderer type must be assignable to IHtmlRenderer.");
 
-            object? renderer = Activator.CreateInstance(type);
-            if (renderer == null)
+            object renderer = Activator.CreateInstance(type) ?? 
                 throw new Exception($"Unable to create an instance of {type.FullName}.");
 
             Renderers.Add(name.ToLower(), (IHtmlRenderer)renderer);

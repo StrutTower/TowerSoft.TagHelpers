@@ -5,8 +5,8 @@ namespace ExampleSite.Controllers {
         public IActionResult Index() {
             return Content("Placeholder controller index action");
         }
-        public IActionResult View() {
-            return Content("Placeholder controller view action");
+        public IActionResult List() {
+            return Content("Placeholder controller list action");
         }
     }
 }

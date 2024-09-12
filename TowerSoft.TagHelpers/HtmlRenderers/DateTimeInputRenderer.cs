@@ -7,7 +7,7 @@ using TowerSoft.TagHelpers.Interfaces;
 
 namespace TowerSoft.TagHelpers.HtmlRenderers {
     public class DateTimeInputRenderer : IHtmlRenderer {
-        public IHtmlContent Render(ModelExpression modelEx, IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper, ViewContext viewContext, string? css, Dictionary<string, string>? htmlAttributes) {
+        public IHtmlContent Render(ModelExpression modelEx, IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper, ViewContext viewContext, string css, Dictionary<string, string> htmlAttributes) {
             string value = string.Empty;
             if (modelEx.Model != null && modelEx.Model is DateTime datetime) {
                 if (datetime != DateTime.MinValue)

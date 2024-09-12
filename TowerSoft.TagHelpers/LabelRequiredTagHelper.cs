@@ -8,13 +8,9 @@ namespace TowerSoft.TagHelpers {
     /// <summary>
     /// Extend the default LabelTagHelper. Adds a red * to the end if the field is required.
     /// </summary>
+    /// <param name="htmlGenerator"></param>
     [HtmlTargetElement("label", Attributes = "asp-for")]
-    public class LabelRequiredTagHelper : LabelTagHelper {
-        /// <summary>
-        /// LabelRequired Constructor
-        /// </summary>
-        /// <param name="htmlGenerator"></param>
-        public LabelRequiredTagHelper(IHtmlGenerator htmlGenerator) : base(htmlGenerator) { }
+    public class LabelRequiredTagHelper(IHtmlGenerator htmlGenerator) : LabelTagHelper(htmlGenerator) {
 
         /// <summary>
         /// Process Method

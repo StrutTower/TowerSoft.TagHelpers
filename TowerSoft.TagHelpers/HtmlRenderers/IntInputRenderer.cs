@@ -6,12 +6,12 @@ using TowerSoft.TagHelpers.Interfaces;
 
 namespace TowerSoft.TagHelpers.HtmlRenderers {
     public class IntInputRenderer : IHtmlRenderer {
-        public IHtmlContent Render(ModelExpression modelEx, IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper, ViewContext viewContext, string? css, Dictionary<string, string>? htmlAttributes) {
+        public IHtmlContent Render(ModelExpression modelEx, IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper, ViewContext viewContext, string css, Dictionary<string, string> htmlAttributes) {
             string value = string.Empty;
-            if (modelEx.Model != null && modelEx.Model is long && (long)modelEx.Model != 0) {
+            if (modelEx.Model != null && modelEx.Model is long longNumber && longNumber != 0) {
                 value = modelEx.Model.ToString();
             }
-            if (modelEx.Model != null && modelEx.Model is int && (int)modelEx.Model != 0) {
+            if (modelEx.Model != null && modelEx.Model is int intNumber && intNumber != 0) {
                 value = modelEx.Model.ToString();
             }
 

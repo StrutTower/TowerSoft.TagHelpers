@@ -32,11 +32,11 @@ namespace TowerSoft.TagHelpers {
             output.AddClass("small", HtmlEncoder.Default);
             var prop = ModelEx.Metadata.ContainerType.GetProperty(ModelEx.Metadata.Name);
             if (prop != null) {
-                DescriptionAttribute? descAttr = prop.GetCustomAttribute<DescriptionAttribute>(true);
+                DescriptionAttribute descAttr = prop.GetCustomAttribute<DescriptionAttribute>(true);
                 if (descAttr != null) {
                     output.Content.SetContent(descAttr.Description);
                 } else {
-                    DisplayAttribute? disAttr = prop.GetCustomAttribute<DisplayAttribute>(true);
+                    DisplayAttribute disAttr = prop.GetCustomAttribute<DisplayAttribute>(true);
                     if (disAttr != null) {
                         output.Content.SetContent(disAttr.Description);
                     }

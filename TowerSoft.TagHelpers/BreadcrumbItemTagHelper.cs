@@ -21,12 +21,6 @@ namespace TowerSoft.TagHelpers {
     /// <param name="htmlHelper"></param>
     /// <param name="urlHelperFactory"></param>
     [HtmlTargetElement("breadcrumb-item", ParentTag = "breadcrumbs")]
-    //[HtmlTargetElement("breadcrumb-item", Attributes = ActionAttributeName, ParentTag = "breadcrumbs")]
-    //[HtmlTargetElement("breadcrumb-item", Attributes = ControllerAttributeName, ParentTag = "breadcrumbs")]
-    //[HtmlTargetElement("breadcrumb-item", Attributes = AreaAttributeName, ParentTag = "breadcrumbs")]
-    //[HtmlTargetElement("breadcrumb-item", Attributes = RouteValuesPrefix + "*", ParentTag = "breadcrumbs")]
-    //[HtmlTargetElement("breadcrumb-item", Attributes = DisplayForAttributeName, ParentTag = "breadcrumbs")]
-    //[HtmlTargetElement("breadcrumb-item", Attributes = TemplateAttributeName, ParentTag = "breadcrumbs")]
     public class BreadcrumbItemTagHelper(IHtmlHelper htmlHelper, IUrlHelperFactory urlHelperFactory) : TagHelper {
         private IDictionary<string, string> _routeValues;
 
@@ -72,10 +66,7 @@ namespace TowerSoft.TagHelpers {
         [HtmlAttributeName(RouteValuesDictionaryName, DictionaryAttributePrefix = RouteValuesPrefix)]
         public IDictionary<string, string> RouteValues {
             get {
-                if (_routeValues == null) {
-                    _routeValues = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-                }
-
+                _routeValues ??= new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
                 return _routeValues;
             }
             set {
@@ -103,12 +94,13 @@ namespace TowerSoft.TagHelpers {
             }
 
             if (Area != null) {
-                if (routeValues == null) routeValues = [];
+                routeValues ??= [];
                 routeValues["area"] = Area;
             }
 
             if (string.IsNullOrWhiteSpace(Action)) {
                 output.TagName = "li";
+                output.TagMode = TagMode.StartTagAndEndTag;
                 output.AddClass("breadcrumb-item", HtmlEncoder.Default);
                 output.AddClass("active", HtmlEncoder.Default);
             } else {
