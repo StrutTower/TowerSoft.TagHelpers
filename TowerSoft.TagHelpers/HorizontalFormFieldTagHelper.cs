@@ -21,9 +21,14 @@ namespace TowerSoft.TagHelpers {
     [HtmlTargetElement("hrFormField", Attributes = "asp-for")]
     public class HorizontalFormFieldTagHelper(IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper) : TagHelper {
         private AutocompleteSetting _autocompleteSetting;
+        private Dictionary<string, string> inputAttributes;
+
+        private const string ModelExpressionName = "asp-for";
+        private const string InputAttributeDictionaryName = "asp-all-input-attributes";
+        private const string InputAttributePrefix = "asp-input-attribute-";
 
         /// <summary>Model</summary>
-        [HtmlAttributeName("asp-for")]
+        [HtmlAttributeName(ModelExpressionName)]
         public ModelExpression For { get; set; }
 
         /// <summary>
@@ -55,6 +60,20 @@ namespace TowerSoft.TagHelpers {
         /// Sets the placeholder text for the input
         /// </summary>
         public string Placeholder { get; set; }
+
+        /// <summary>
+        /// Dictonary to set custom attributes on the input element
+        /// </summary>
+        [HtmlAttributeName(InputAttributeDictionaryName, DictionaryAttributePrefix = InputAttributePrefix)]
+        public Dictionary<string, string> InputAttributes {
+            get {
+                inputAttributes ??= new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+                return inputAttributes;
+            }
+            set {
+                inputAttributes = value;
+            }
+        }
 
         /// <summary>
         /// Sets the autocomplete attribute on the input. Default is off
@@ -96,6 +115,9 @@ namespace TowerSoft.TagHelpers {
             string labelColumnCss = LabelCol ?? "col-md-4 col-lg-3";
             string fieldColumnCss = InputCol ?? "col-md-7 col-lg-6";
 
+            if (inputAttributes == null)
+                inputAttributes = [];
+
             if (type == typeof(bool) && (string.IsNullOrWhiteSpace(Renderer) || Renderer == HtmlRenderer.Boolean)) {
                 // Handle Booleans/Checkbox
                 PropertyInfo prop = For.Metadata.ContainerType.GetProperty(For.Metadata.Name);
@@ -111,17 +133,19 @@ namespace TowerSoft.TagHelpers {
                 TagBuilder fieldDiv = new("div");
                 fieldDiv.AddCssClass(fieldColumnCss);
 
-
                 if (required || !nullable) {
                     TagBuilder formCheck = new("div");
                     formCheck.AddCssClass("form-check");
-                    formCheck.InnerHtml.AppendHtml(utils.CreateInputElement(null, InputCss));
+                    formCheck.InnerHtml.AppendHtml(utils.CreateInputElement(null, InputCss, inputAttributes));
                     formCheck.InnerHtml.AppendHtml(await utils.CreateLabelElement(context, Label, "form-check-label"));
                     fieldDiv.InnerHtml.AppendHtml(formCheck);
                 } else {
+                    TagHelperAttribute labelsAttribute = context.AllAttributes.SingleOrDefault(x => x.Name == "data-labels");
+                    if (labelsAttribute != null)
+                        inputAttributes.Add(labelsAttribute.Name, labelsAttribute.Value.ToString());
                     TagHelperOutput labelElement = await utils.CreateLabelRequiredElement(context, Label);
                     labelDiv.InnerHtml.AppendHtml(labelElement);
-                    fieldDiv.InnerHtml.AppendHtml(utils.CreateInputElement(HtmlRenderer.Boolean, InputCss));
+                    fieldDiv.InnerHtml.AppendHtml(utils.CreateInputElement(HtmlRenderer.Boolean, InputCss, inputAttributes));
                 }
 
                 output.Content.AppendHtml(labelDiv);
@@ -132,28 +156,28 @@ namespace TowerSoft.TagHelpers {
                 TagBuilder fieldDiv = new("div");
                 fieldDiv.AddCssClass(fieldColumnCss);
 
-                Dictionary<string, string> htmlAttributes = new() {
-                    { "autocomplete", Autocomplete.ToString() }
-                };
-                if (!string.IsNullOrWhiteSpace(Placeholder)) {
-                    htmlAttributes.Add("placeholder", Placeholder);
+                if (!inputAttributes.ContainsKey("autocomplete"))
+                    inputAttributes.Add("autocomplete", Autocomplete.ToString());
+                if (!string.IsNullOrWhiteSpace(Placeholder) && !inputAttributes.ContainsKey("placeholder")) {
+                    inputAttributes.Add("placeholder", Placeholder);
                 }
-                if (context.AllAttributes.ContainsName("autofocus")) {
-                    htmlAttributes.Add("autofocus", string.Empty);
+                if (context.AllAttributes.ContainsName("autofocus") && !inputAttributes.ContainsKey("autofocus")) {
+                    inputAttributes.Add("autofocus", string.Empty);
                 }
-                if (context.AllAttributes.ContainsName("disabled")) {
-                    htmlAttributes.Add("disabled", string.Empty);
+                if (context.AllAttributes.ContainsName("disabled") && !inputAttributes.ContainsKey("disabled")) {
+                    inputAttributes.Add("disabled", string.Empty);
                 }
-                if (context.AllAttributes.ContainsName("readonly")) {
-                    htmlAttributes.Add("readonly", string.Empty);
+                if (context.AllAttributes.ContainsName("readonly") && !inputAttributes.ContainsKey("readonly")) {
+                    inputAttributes.Add("readonly", string.Empty);
                 }
-                foreach(var attr in context.AllAttributes.Where(x => x.Name.StartsWith("data-"))) {
-                    htmlAttributes.Add(attr.Name, attr.Value.ToString());
+                foreach (TagHelperAttribute attr in context.AllAttributes.Where(x => x.Name.StartsWith("data-"))) {
+                    if (!inputAttributes.ContainsKey(attr.Name))
+                        inputAttributes.Add(attr.Name, attr.Value.ToString());
                 }
 
                 // Default editor or supplied editor template
                 TagHelperOutput labelElement = await utils.CreateLabelRequiredElement(context, Label);
-                IHtmlContent inputElement = utils.CreateInputElement(Renderer, InputCss, htmlAttributes);
+                IHtmlContent inputElement = utils.CreateInputElement(Renderer, InputCss, inputAttributes);
                 TagHelperOutput validationMessageElement = await utils.CreateValidationMessageElement(context);
                 TagHelperOutput descriptionElement = await utils.CreateDescriptionElement(context);
 

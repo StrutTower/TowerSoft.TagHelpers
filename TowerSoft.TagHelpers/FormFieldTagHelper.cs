@@ -21,9 +21,14 @@ namespace TowerSoft.TagHelpers {
     [HtmlTargetElement("formField", Attributes = "asp-for")]
     public class FormFieldTagHelper(IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper) : TagHelper {
         private AutocompleteSetting _autocompleteSetting;
+        private Dictionary<string, string> inputAttributes;
+
+        private const string ModelExpressionName = "asp-for";
+        private const string InputAttributeDictionaryName = "asp-all-input-attributes";
+        private const string InputAttributePrefix = "asp-input-attribute-";
 
         /// <summary>Model</summary>
-        [HtmlAttributeName("asp-for")]
+        [HtmlAttributeName(ModelExpressionName)]
         public ModelExpression For { get; set; }
 
         /// <summary>
@@ -45,6 +50,20 @@ namespace TowerSoft.TagHelpers {
         /// Sets the placeholder text for the input
         /// </summary>
         public string Placeholder { get; set; }
+
+        /// <summary>
+        /// Dictonary to set custom attributes on the input element
+        /// </summary>
+        [HtmlAttributeName(InputAttributeDictionaryName, DictionaryAttributePrefix = InputAttributePrefix)]
+        public Dictionary<string, string> InputAttributes {
+            get {
+                inputAttributes ??= new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+                return inputAttributes;
+            }
+            set {
+                inputAttributes = value;
+            }
+        }
 
         /// <summary>
         /// Sets the autocomplete attribute on the input. Default is off
@@ -96,39 +115,49 @@ namespace TowerSoft.TagHelpers {
                 if (required || !nullable) {
                     TagBuilder formCheck = new("div");
                     formCheck.AddCssClass("form-check");
-                    formCheck.InnerHtml.AppendHtml(utils.CreateInputElement(null, InputCss));
+                    formCheck.InnerHtml.AppendHtml(utils.CreateInputElement(null, InputCss, inputAttributes));
                     formCheck.InnerHtml.AppendHtml(await utils.CreateLabelElement(context, Label, "form-check-label"));
                     output.Content.AppendHtml(formCheck);
                 } else {
+                    TagHelperAttribute labelsAttribute = context.AllAttributes.SingleOrDefault(x => x.Name == "data-labels");
+                    if (labelsAttribute != null)
+                        inputAttributes.Add(labelsAttribute.Name, labelsAttribute.Value.ToString());
                     output.Content.AppendHtml(await utils.CreateLabelRequiredElement(context, Label));
-                    output.Content.AppendHtml(utils.CreateInputElement(HtmlRenderer.Boolean, InputCss));
+                    output.Content.AppendHtml(utils.CreateInputElement(HtmlRenderer.Boolean, InputCss, inputAttributes));
                 }
 
                 output.Content.AppendHtml(await utils.CreateValidationMessageElement(context));
                 output.Content.AppendHtml(await utils.CreateDescriptionElement(context));
             } else {
-                Dictionary<string, string> htmlAttributes = new() {
-                    { "autocomplete", Autocomplete.ToString() }
-                };
-                if (!string.IsNullOrWhiteSpace(Placeholder)) {
-                    htmlAttributes.Add("placeholder", Placeholder);
+                if (inputAttributes == null)
+                    inputAttributes = [];
+
+                if (!inputAttributes.ContainsKey("autocomplete"))
+                    inputAttributes.Add("autocomplete", Autocomplete.ToString());
+
+                if (!string.IsNullOrWhiteSpace(Placeholder) && !inputAttributes.ContainsKey("placeholder")) {
+                    inputAttributes.Add("placeholder", Placeholder);
                 }
-                if (context.AllAttributes.ContainsName("autofocus")) {
-                    htmlAttributes.Add("autofocus", string.Empty);
+
+                // Legacy Support before adding InputAttributes dictionary
+                if (context.AllAttributes.ContainsName("autofocus") && !inputAttributes.ContainsKey("autofocus")) {
+                    inputAttributes.Add("autofocus", string.Empty);
                 }
-                if (context.AllAttributes.ContainsName("disabled")) {
-                    htmlAttributes.Add("disabled", string.Empty);
+                if (context.AllAttributes.ContainsName("disabled") && !inputAttributes.ContainsKey("disabled")) {
+                    inputAttributes.Add("disabled", string.Empty);
                 }
-                if (context.AllAttributes.ContainsName("readonly")) {
-                    htmlAttributes.Add("readonly", string.Empty);
+                if (context.AllAttributes.ContainsName("readonly") && !inputAttributes.ContainsKey("readonly")) {
+                    inputAttributes.Add("readonly", string.Empty);
                 }
                 foreach (TagHelperAttribute attr in context.AllAttributes.Where(x => x.Name.StartsWith("data-"))) {
-                    htmlAttributes.Add(attr.Name, attr.Value.ToString());
+                    if (!inputAttributes.ContainsKey(attr.Name))
+                        inputAttributes.Add(attr.Name, attr.Value.ToString());
                 }
+                //----
 
                 // Default editor or supplied renderer
                 TagHelperOutput labelElement = await utils.CreateLabelRequiredElement(context, Label);
-                IHtmlContent inputElement = utils.CreateInputElement(Renderer, InputCss, htmlAttributes);
+                IHtmlContent inputElement = utils.CreateInputElement(Renderer, InputCss, inputAttributes);
                 TagHelperOutput validationMessageElement = await utils.CreateValidationMessageElement(context);
                 TagHelperOutput descriptionElement = await utils.CreateDescriptionElement(context);
 

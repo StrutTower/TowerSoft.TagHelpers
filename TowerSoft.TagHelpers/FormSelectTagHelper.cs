@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Encodings.Web;
@@ -15,30 +16,36 @@ namespace TowerSoft.TagHelpers {
     /// </summary>
     [HtmlTargetElement("formSelect", Attributes = "asp-for")]
     public class FormSelectTagHelper(IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper) : TagHelper {
+        private Dictionary<string, string> selectAttributes;
+
+        private const string ModelExpressionName = "asp-for";
+        private const string ListItemsName = "asp-items";
+        private const string OptionLabelName = "asp-option-label";
+        private const string SelectAttributeDictionaryName = "asp-all-select-attributes";
+        private const string SelectAttributePrefix = "asp-select-attribute-";
 
         /// <summary>
         /// An expression to be evaluated against the current model.
         /// </summary>
-        [HtmlAttributeName("asp-for")]
+        [HtmlAttributeName(ModelExpressionName)]
         public ModelExpression For { get; set; }
 
         /// <summary>
         /// A collection of <see cref="SelectListItem"/> objects used to populate the &lt;select&gt; element with
         /// &lt;optgroup&gt; and &lt;option&gt; elements.
         /// </summary>
-        [HtmlAttributeName("asp-items")]
+        [HtmlAttributeName(ListItemsName)]
         public IEnumerable<SelectListItem> Items { get; set; }
 
         /// <summary>
         /// The null or blank option. Set to null to exclude that option from the select list.
         /// </summary>
-        [HtmlAttributeName("asp-option-label")]
+        [HtmlAttributeName(OptionLabelName)]
         public string OptionLabel { get; set; }
 
         /// <summary>
         /// Sets CSS on the input. Overrides the default Bootstrap class
         /// </summary>
-        [HtmlAttributeName("input-css")]
         public string InputCss { get; set; }
 
         /// <summary>
@@ -48,6 +55,20 @@ namespace TowerSoft.TagHelpers {
         public string LabelName { get; set; }
 
         public bool Multiple { get; set; } = false;
+
+        /// <summary>
+        /// Dictonary to set custom attributes on the select element
+        /// </summary>
+        [HtmlAttributeName(SelectAttributeDictionaryName, DictionaryAttributePrefix = SelectAttributePrefix)]
+        public Dictionary<string, string> InputAttributes {
+            get {
+                selectAttributes ??= new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+                return selectAttributes;
+            }
+            set {
+                selectAttributes = value;
+            }
+        }
 
         /// <summary></summary>
         [ViewContext]
@@ -60,27 +81,32 @@ namespace TowerSoft.TagHelpers {
             output.TagMode = TagMode.StartTagAndEndTag;
             output.AddClass("mb-3", HtmlEncoder.Default);
 
-            Dictionary<string, string> htmlAttributes = [];
-            if (context.AllAttributes.ContainsName("autofocus")) {
-                htmlAttributes.Add("autofocus", string.Empty);
+            if (selectAttributes == null)
+                selectAttributes = [];
+
+            // Legacy Support before adding InputAttributes dictionary
+            if (context.AllAttributes.ContainsName("autofocus") && !selectAttributes.ContainsKey("autofocus")) {
+                selectAttributes.Add("autofocus", string.Empty);
             }
-            if (!string.IsNullOrWhiteSpace(InputCss)) {
-                htmlAttributes.Add("class", InputCss);
+            if (!string.IsNullOrWhiteSpace(InputCss) && !selectAttributes.ContainsKey("class")) {
+                selectAttributes.Add("class", InputCss);
             }
-            if (context.AllAttributes.ContainsName("disabled")) {
-                htmlAttributes.Add("disabled", string.Empty);
+            if (context.AllAttributes.ContainsName("disabled") && !selectAttributes.ContainsKey("disabled")) {
+                selectAttributes.Add("disabled", string.Empty);
             }
-            if (context.AllAttributes.ContainsName("readonly")) {
-                htmlAttributes.Add("readonly", string.Empty);
+            if (context.AllAttributes.ContainsName("readonly") && !selectAttributes.ContainsKey("readonly")) {
+                selectAttributes.Add("readonly", string.Empty);
             }
             foreach (var attr in context.AllAttributes.Where(x => x.Name.StartsWith("data-"))) {
-                htmlAttributes.Add(attr.Name, attr.Value.ToString());
+                if (!selectAttributes.ContainsKey(attr.Name))
+                    selectAttributes.Add(attr.Name, attr.Value.ToString());
             }
+            //----
 
             TagHelperUtilities utils = new(For, htmlGenerator, htmlHelper, ViewContext);
 
             TagHelperOutput labelElement = await utils.CreateLabelRequiredElement(context, LabelName);
-            IHtmlContent inputElement = await utils.CreateSelectElement(context, Items, Multiple, OptionLabel, htmlAttributes);
+            IHtmlContent inputElement = await utils.CreateSelectElement(context, Items, Multiple, OptionLabel, selectAttributes);
             TagHelperOutput validationMessageElement = await utils.CreateValidationMessageElement(context);
             TagHelperOutput descriptionElement = await utils.CreateDescriptionElement(context);
 

@@ -16,8 +16,7 @@ namespace TowerSoft.TagHelpers.Options {
         /// </summary>
         public static void RegisterDefaultRenderers() {
             Add<BooleanInputRenderer>(HtmlRenderer.Boolean);
-            //Add<BooleanRadioInputRenderer>(HtmlRenderer.BooleanRadio);
-            //Add<YesNoBooleanHtmlRenderer>(HtmlRenderer.YesNoRadio);
+            Add<BooleanRadioInputRenderer>(HtmlRenderer.BooleanRadio);
             Add<DateInputRenderer>(HtmlRenderer.Date);
             Add<DateTimeInputRenderer>(HtmlRenderer.DateTime);
             Add<EmailInputHtmlRenderer>(HtmlRenderer.Email);

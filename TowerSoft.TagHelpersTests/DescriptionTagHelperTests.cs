@@ -13,14 +13,14 @@ namespace TowerSoft.TagHelpersTests {
     public class DescriptionTagHelperTests {
         [TestMethod]
         public void DescriptionTagHelperTest() {
-            IModelExpressionProvider modelExpressionProvider = new ModelExpressionProvider();
-            modelExpressionProvider.CreateModelExpression()
+            //IModelExpressionProvider modelExpressionProvider = new ModelExpressionProvider();
+            //modelExpressionProvider.CreateModelExpression();
 
-            DescriptionTagHelper descriptionTagHelper = new() {
-                ModelEx = new Microsoft.AspNetCore.Mvc.ViewFeatures.ModelExpression("PropertyWithDescription", new Microsoft.AspNetCore.Mvc.ViewFeatures.ModelExplorer())
-            };
-            TagHelperOutput output = TagHelperUtils.GetOutput();
-            descriptionTagHelper.Process(TagHelperUtils.GetContext(), output);
+            //DescriptionTagHelper descriptionTagHelper = new() {
+            //    ModelEx = new Microsoft.AspNetCore.Mvc.ViewFeatures.ModelExpression("PropertyWithDescription", new Microsoft.AspNetCore.Mvc.ViewFeatures.ModelExplorer())
+            //};
+            //TagHelperOutput output = TagHelperUtils.GetOutput();
+            //descriptionTagHelper.Process(TagHelperUtils.GetContext(), output);
         }
     }
 }

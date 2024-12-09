@@ -6,13 +6,8 @@ namespace TowerSoft.TagHelpers.Options {
         /// <summary>Default boolean renderer as a checkbox</summary>
         public const string Boolean = "boolean";
 
-        [Obsolete("Redirected to standard boolean renderer")]
         /// <summary>Boolean renderer as radio buttons</summary>
-        public const string BooleanRadio = "boolean";
-
-        [Obsolete("Redirected to standard boolean renderer")]
-        /// <summary>Boolean renderer as radio button with Yes and No label</summary>
-        public const string YesNoRadio = "boolean";
+        public const string BooleanRadio = "booleanradio";
 
         /// <summary>Date input renderer</summary>
         public const string Date = "date";
