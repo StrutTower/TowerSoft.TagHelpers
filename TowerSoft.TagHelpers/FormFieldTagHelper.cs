@@ -103,6 +103,9 @@ namespace TowerSoft.TagHelpers {
             Type type = For.Metadata.ModelType;
             type = Nullable.GetUnderlyingType(type) ?? type;
 
+            if (inputAttributes == null)
+                inputAttributes = [];
+
             if (type == typeof(bool) && (string.IsNullOrWhiteSpace(Renderer) || Renderer == HtmlRenderer.Boolean)) {
                 // Handle Booleans/Checkbox
                 PropertyInfo prop = For.Metadata.ContainerType.GetProperty(For.Metadata.Name);
@@ -129,9 +132,6 @@ namespace TowerSoft.TagHelpers {
                 output.Content.AppendHtml(await utils.CreateValidationMessageElement(context));
                 output.Content.AppendHtml(await utils.CreateDescriptionElement(context));
             } else {
-                if (inputAttributes == null)
-                    inputAttributes = [];
-
                 if (!inputAttributes.ContainsKey("autocomplete"))
                     inputAttributes.Add("autocomplete", Autocomplete.ToString());
 
