@@ -66,7 +66,7 @@ namespace TowerSoft.TagHelpers.HtmlRenderers {
             if (!string.IsNullOrWhiteSpace(css))
                 input.Attributes["class"] = css;
 
-            if (value == null && modelEx.Model == null) {
+            if (value == null && modelEx.Model == null && !input.Attributes.ContainsKey("checked")) {
                 input.Attributes.Add("checked", "");
             }
 
