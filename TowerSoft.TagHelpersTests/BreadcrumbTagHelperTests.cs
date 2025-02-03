@@ -6,11 +6,11 @@ namespace TowerSoft.TagHelpersTests {
     [TestClass]
     public class BreadcrumbTagHelperTests {
         [TestMethod]
-        public void Test() {
+        public void GenerateBreadcrumbs() {
             BreadcrumbTagHelper breadcrumbTagHelper = new();
 
-            TagHelperOutput output = TagHelperUtils.GetOutput();
-            breadcrumbTagHelper.Process(TagHelperUtils.GetContext(), output);
+            TagHelperOutput output = TagHelperUtils.GetOutput("breadcrumbs");
+            breadcrumbTagHelper.Process(TagHelperUtils.GetContext("breadcrumbs"), output);
 
             Assert.AreEqual("ul", output.TagName);
             Assert.IsTrue(output.Attributes["class"].Value.ToString().Contains("breadcrumb"));

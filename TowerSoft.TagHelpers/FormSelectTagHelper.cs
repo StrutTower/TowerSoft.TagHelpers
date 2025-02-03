@@ -54,6 +54,10 @@ namespace TowerSoft.TagHelpers {
         [HtmlAttributeName("label")]
         public string LabelName { get; set; }
 
+        /// <summary>
+        /// Sets select list to multiple if included. Does not need a value.
+        /// </summary>
+        [HtmlAttributeName("multiple")]
         public bool Multiple { get; set; } = false;
 
         /// <summary>
@@ -81,8 +85,7 @@ namespace TowerSoft.TagHelpers {
             output.TagMode = TagMode.StartTagAndEndTag;
             output.AddClass("mb-3", HtmlEncoder.Default);
 
-            if (selectAttributes == null)
-                selectAttributes = [];
+            selectAttributes ??= [];
 
             // Legacy Support before adding InputAttributes dictionary
             if (context.AllAttributes.ContainsName("autofocus") && !selectAttributes.ContainsKey("autofocus")) {
@@ -97,7 +100,7 @@ namespace TowerSoft.TagHelpers {
             if (context.AllAttributes.ContainsName("readonly") && !selectAttributes.ContainsKey("readonly")) {
                 selectAttributes.Add("readonly", string.Empty);
             }
-            foreach (var attr in context.AllAttributes.Where(x => x.Name.StartsWith("data-"))) {
+            foreach (TagHelperAttribute attr in context.AllAttributes.Where(x => x.Name.StartsWith("data-"))) {
                 if (!selectAttributes.ContainsKey(attr.Name))
                     selectAttributes.Add(attr.Name, attr.Value.ToString());
             }

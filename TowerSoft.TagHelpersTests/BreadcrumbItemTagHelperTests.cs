@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System;
@@ -12,10 +13,24 @@ using TowerSoft.TagHelpersTests.Utilities;
 namespace TowerSoft.TagHelpersTests {
     [TestClass]
     public class BreadcrumbItemTagHelperTests {
+        private IHtmlHelper htmlHelper;
+        private IUrlHelperFactory urlHelperFactory;
+
+        [TestInitialize]
+        public void Initialize() {
+            htmlHelper = null;
+            urlHelperFactory = null;
+        }
+
         //[TestMethod]
-        public void ActiveBreadcrumbItem() {
-            //BreadcrumbItemTagHelper tagHelper = new();
-            //TagHelperOutput output = TagHelperUtils.GetOutput();
+        public void GenerateBreadcrumbItem() {
+            BreadcrumbItemTagHelper breadcrumbItemTagHelper = new(htmlHelper, urlHelperFactory);
+
+            TagHelperOutput output = TagHelperUtils.GetOutput("breadcrumb-item");
+            breadcrumbItemTagHelper.Process(TagHelperUtils.GetContext("breadcrumb-item"), output);
+
+            Assert.AreEqual("li", output.TagName);
+            Assert.IsTrue(output.Attributes["class"].Value.ToString().Contains("breadcrumb"));
         }
     }
 }

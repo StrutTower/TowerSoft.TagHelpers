@@ -8,17 +8,22 @@ namespace ExampleSite.Controllers {
         public IActionResult Index() {
             string imagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "towersoft-logo_128x.png");
             IndexModel model = new() {
-                TestString = "Model String",
-                TestBooleanTrue = true,
-                TestBooleanFalse = false,
-                TestBooleanNullable = null,
-                TestBooleanNullableTrue = true,
-                TestBooleanNullableFalse = false,
-                TestDate = DateTime.Now,
                 ImageData = System.IO.File.ReadAllBytes(imagePath),
-                TestSelectList = new SelectList(new[] { "Item 1", "Item 2", "Item 3" }),
-                BlankString = string.Empty
             };
+
+            List<TestIntObject> testObjects = [];
+            for (int i = 1; i < 7; i++) {
+                testObjects.Add(new() { ID = i, Name = "Test Object " + i });
+            }
+            model.FormSelectIntList = new SelectList(testObjects, "ID", "Name");
+
+
+            List<TestLongObject> testLongObjects = [];
+            for (int i = 1; i < 7; i++) {
+                testLongObjects.Add(new() { ID = i, Name = "Test Object " + i });
+            }
+            model.FormSelectLongList = new SelectList(testLongObjects, "ID", "Name");
+
             return View(model);
         }
 

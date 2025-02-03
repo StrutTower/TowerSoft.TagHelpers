@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace TowerSoft.TagHelpers.Options {
+﻿namespace TowerSoft.TagHelpers.Options {
     /// <summary>Constants for selecting an HtmlRenderer</summary>
     public class HtmlRenderer {
         /// <summary>Default boolean renderer as a checkbox</summary>

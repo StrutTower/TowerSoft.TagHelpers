@@ -34,15 +34,15 @@
 
 <div class="display-6 mb-3">Description</div>
 
-<description asp-for="TestString" />
+<description asp-for="TestDescription" />
 
 <hr />
 
 <div class="display-6 mb-3">DisplayFor</div>
 
-<div display-for="TestString"></div>
-<div display-for="TestDate" template="Date"></div>
-<div display-for="TestDate"></div>
+<div display-for="DisplayTestString"></div>
+<div display-for="DisplayTestDate" template="Date"></div>
+<div display-for="DisplayTestDate"></div>
 
 <hr />
 
@@ -55,29 +55,33 @@
 
 <div class="display-6 mb-3">Label Required</div>
 
-
-<label asp-for="TestString"></label>
+<div>
+    <label asp-for="LabelTestWithDisplay"></label>
+</div>
+<div>
+    <label asp-for="LabelTestWithDisplayName"></label>
+</div>
 
 <hr />
 
 <div class="display-6 mb-3">Truncate</div>
 
 
-<truncate string="@Model.TestString" characters="3"></truncate>
+<truncate string="@Model.TruncateTestString" characters="15"></truncate>
 
 <hr />
 
 <div class="display-6 mb-3">Vertical Table Row</div>
 
 <table class="table-vertical">
-    <tr-display asp-for="TestString" />
-    <tr-display asp-for="TestDate" template="Date" />
-    <tr-display asp-for="NullString" null-text="Unknown" />
-    <tr-display asp-for="NullInt" null-text="Unknown" tooltip="This is a test for the tooltip attribute." />
-    <tr-display asp-for="TestBooleanNullable" />
-    <tr-display asp-for="TestBooleanNullableTrue" />
-    <tr-display asp-for="TestBooleanNullableFalse" />
-    <tr-display asp-for="NullInt" hide-null="true" label="Should be hidden" />
+    <tr-display asp-for="TrDisplayTestString" />
+    <tr-display asp-for="TrDisplayTestDate" template="Date" />
+    <tr-display asp-for="TrDisplayNullString" null-text="Unknown" />
+    <tr-display asp-for="TrDisplayNullInt" null-text="Unknown" tooltip="This is a test for the tooltip attribute." />
+    <tr-display asp-for="TrDisplayTestBooleanNullable" />
+    <tr-display asp-for="TrDisplayTestBooleanNullableTrue" />
+    <tr-display asp-for="TrDisplayTestBooleanNullableFalse" />
+    <tr-display asp-for="TrDisplayNullInt" hide-null="true" label="Should be hidden" />
     <tr-display asp-for="BlankString" hide-null="true" label="Should be hidden" />
 </table>
 
@@ -97,41 +101,53 @@
 
 <div class="display-6 mb-3">FormField</div>
 
-<formField asp-for="TestString" asp-input-attribute-minlength="3" />
-<formField asp-for="TestString" input-css="form-control additional-css-class" />
-<formField asp-for="TestBooleanTrue" />
-<formField asp-for="TestBooleanFalse" renderer="@HtmlRenderer.BooleanRadio" />
-<formField asp-for="TestBooleanNullable" />
+<formField asp-for="FormFieldTestString1" asp-input-attribute-minlength="3" />
+<formField asp-for="FormFieldTestString2" input-css="form-control additional-css-class" />
+<formField asp-for="FormFieldTestBooleanTrue" renderer="@HtmlRenderer.BooleanRadio"  />
+<formField asp-for="FormFieldTestBooleanFalse" />
+<formField asp-for="FormFieldTestBooleanNullable" />
 
 <hr />
 
 <div class="display-6 mb-3">FormSelect</div>
 
 
-<formSelect asp-for="TestString" asp-items="Model.TestSelectList" />
-<formSelect asp-for="TestString" asp-items="Model.TestSelectList" input-css="form-select additional-css-class" />
+<formSelect asp-for="FormSelectIntID" asp-items="Model.FormSelectIntList" />
+<formSelect asp-for="FormSelectMultipleIntID" asp-items="Model.FormSelectIntList" multiple />
+<formSelect asp-for="FormSelectLongID" asp-items="Model.FormSelectLongList" input-css="form-select additional-css-class" />
+<formSelect asp-for="FormSelectString" asp-items="Model.FormSelectStringList" />
 
 <hr />
 
 <div class="display-6 mb-3">hrFormField</div>
 
-<hrFormField asp-for="TestString" />
-<hrFormField asp-for="TestBooleanTrue" />
-<hrFormField asp-for="TestBooleanNullable" />
+<hrFormField asp-for="HrFormFieldTestString1" asp-input-attribute-minlength="3" />
+<hrFormField asp-for="HrFormFieldTestString2" input-css="form-control additional-css-class" />
+<hrFormField asp-for="HrFormFieldTestBooleanTrue" />
+<hrFormField asp-for="HrFormFieldTestBooleanFalse" renderer="@HtmlRenderer.BooleanRadio" />
+<hrFormField asp-for="HrFormFieldTestBooleanNullable" />
+
 <hr />
 
 <div class="display-6 mb-3">hrFormSelect</div>
 
 
-<hrFormSelect asp-for="TestString" asp-items="Model.TestSelectList" input-css="form-select additional-css-class" />
+<hrFormSelect asp-for="HrFormSelectIntID" asp-items="Model.FormSelectIntList" />
+<hrFormSelect asp-for="HrFormSelectMultipleIntID" asp-items="Model.FormSelectIntList" multiple />
+<hrFormSelect asp-for="HrFormSelectLongID" asp-items="Model.FormSelectLongList" input-css="form-select additional-css-class" />
+<hrFormSelect asp-for="HrFormSelectString" asp-items="Model.FormSelectStringList" />
 
 <hr />
 
 <div class="display-6 mb-3">hrFormContainer</div>
 <p>Allows adding an input element manually while still using the horizontal field layout</p>
 
-<hrFormContainer asp-for="TestString">
-    <select asp-for="TestString" class="form-select">
+<hrFormContainer asp-for="HrFormContainerString">
+    <input asp-for="HrFormContainerString" class="form-control" />
+</hrFormContainer>
+
+<hrFormContainer asp-for="HrFormContainerSelect">
+    <select asp-for="HrFormContainerSelect" class="form-select">
         <option value=""></option>
         <option value="value1">Value 1</option>
         <option value="value2">Value 2</option>
@@ -139,7 +155,6 @@
         <option value="value4">Value 4</option>
     </select>
 </hrFormContainer>
-<hrFormField asp-for="TestString" />
 <hr />
 
 <div class="display-6 mb-3">hrFormSubmit</div>
@@ -155,25 +170,25 @@
     </div>
 </hrFormSubmit>
 
-<div class="display-5 mb-3">HtmlRenderers</div>
+<div class="display-6 mb-3">HtmlRenderers</div>
 
-<hrFormField asp-for="TestBooleanTrue" />
-<hrFormField asp-for="TestBooleanFalse" renderer="@HtmlRenderer.BooleanRadio" />
-<hrFormField asp-for="TestBooleanNullable" />
-<hrFormField asp-for="TestBooleanNullableTrue" />
-<hrFormField asp-for="TestBooleanNullableFalse" />
+<hrFormField asp-for="RendererTestBooleanTrue" />
+<hrFormField asp-for="RendererTestBooleanFalse" renderer="@HtmlRenderer.BooleanRadio" />
+<hrFormField asp-for="RendererTestBooleanNullable" />
+<hrFormField asp-for="RendererTestBooleanNullableTrue" />
+<hrFormField asp-for="RendererTestBooleanNullableFalse" />
 
-<hrFormField asp-for="TestBooleanTrue" data-labels="True,False" />
-<hrFormField asp-for="TestBooleanFalse" />
-<hrFormField asp-for="TestBooleanNullable" data-labels="Affirmative,Negative,Unknown" />
-<hrFormField asp-for="TestBooleanNullableTrue" />
-<hrFormField asp-for="TestBooleanNullableFalse" />
+<hrFormField asp-for="RendererTestBooleanTrue2" data-labels="True,False" />
+<hrFormField asp-for="RendererTestBooleanFalse2" />
+<hrFormField asp-for="RendererTestBooleanNullable2" data-labels="Affirmative,Negative,Unknown" />
+<hrFormField asp-for="RendererTestBooleanNullableTrue2" />
+<hrFormField asp-for="RendererTestBooleanNullableFalse2" />
 
-<hrFormField asp-for="TestDate" label="Date and Time" />
-<hrFormField asp-for="TestDate" renderer="@HtmlRenderer.Date" label="Date" />
-<hrFormField asp-for="TestDate" renderer="@HtmlRenderer.Time" label="Time" />
-<hrFormField asp-for="TestFile" />
-<hrFormField asp-for="TestInt" />
-<hrFormField asp-for="TestLong" />
-<hrFormField asp-for="TestString" />
-<hrFormField asp-for="TestString" renderer="@HtmlRenderer.TextArea" />
+<hrFormField asp-for="RendererTestDate1" label="Date and Time" />
+<hrFormField asp-for="RendererTestDate2" renderer="@HtmlRenderer.Date" label="Date" />
+<hrFormField asp-for="RendererTestDate3" renderer="@HtmlRenderer.Time" label="Time" />
+<hrFormField asp-for="RendererTestFile" />
+<hrFormField asp-for="RendererTestInt" />
+<hrFormField asp-for="RendererTestLong" />
+<hrFormField asp-for="RendererTestString1" />
+<hrFormField asp-for="RendererTestString2" renderer="@HtmlRenderer.TextArea" />

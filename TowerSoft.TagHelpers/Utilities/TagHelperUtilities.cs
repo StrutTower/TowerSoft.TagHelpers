@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
@@ -52,9 +54,9 @@ namespace TowerSoft.TagHelpers.Utilities {
 
         internal async Task<TagHelperOutput> CreateLabelRequiredElement(TagHelperContext context, string labelName = null, string css = null) {
             LabelRequiredTagHelper labelTagHelper = new(HtmlGenerator) {
-                    For = For,
-                    ViewContext = ViewContext
-                };
+                For = For,
+                ViewContext = ViewContext
+            };
 
             TagHelperOutput labelOutput = CreateTagHelperOutput("label");
             if (!string.IsNullOrWhiteSpace(labelName))
@@ -97,32 +99,12 @@ namespace TowerSoft.TagHelpers.Utilities {
 
         internal async Task<TagHelperOutput> CreateSelectElement(TagHelperContext context, IEnumerable<SelectListItem> items, bool multiple = false,
             string optionLabel = null, Dictionary<string, string> htmlAttributes = null) {
-
-            if (For.Model != null) {
-                if (For.ModelExplorer.ModelType.IsEnum) {
-                    foreach (SelectListItem item in items) {
-                        if (item.Value.ToString() == ((int)For.Model).ToString()) {
-                            item.Selected = true;
-                        }
-                    }
-                } else {
-                    foreach (SelectListItem item in items) {
-                        if (item.Value == null) {
-                            if (item.Text == For.Model.ToString()) {
-                                item.Selected = true;
-                            }
-                        } else {
-                            if (item.Value.ToString() == For.Model.ToString()) {
-                                item.Selected = true;
-                            }
-                        }
-                    }
-                }
-            }
+            if (items == null)
+                throw new ArgumentException("Select list items is null");
 
             SelectTagHelper selectTagHelper = new(HtmlGenerator) {
                 For = For,
-                Items = items,
+                Items = GetSelectListItems(items),
                 ViewContext = ViewContext
             };
 
@@ -134,11 +116,13 @@ namespace TowerSoft.TagHelpers.Utilities {
                 option.Attributes.Add("value", "");
                 selectOutput.PreContent.SetHtmlContent(option);
             }
+
             if (multiple) {
                 selectOutput.Attributes.Add("multiple", "");
             }
+
             if (htmlAttributes != null) {
-                foreach(KeyValuePair<string, string> keyValuePair in htmlAttributes) {
+                foreach (KeyValuePair<string, string> keyValuePair in htmlAttributes) {
                     if (selectOutput.Attributes.ContainsName(keyValuePair.Key)) {
                         selectOutput.Attributes.SetAttribute(keyValuePair.Key, keyValuePair.Value);
                     } else {
@@ -152,9 +136,9 @@ namespace TowerSoft.TagHelpers.Utilities {
 
         internal async Task<TagHelperOutput> CreateValidationMessageElement(TagHelperContext context) {
             ValidationMessageTagHelper validationMessageTagHelper = new(HtmlGenerator) {
-                    For = For,
-                    ViewContext = ViewContext
-                };
+                For = For,
+                ViewContext = ViewContext
+            };
 
             TagHelperOutput validationMessageOutput = CreateTagHelperOutput("span");
             await validationMessageTagHelper.ProcessAsync(context, validationMessageOutput);
@@ -176,7 +160,7 @@ namespace TowerSoft.TagHelpers.Utilities {
         public static IHtmlContent TagHelperDisplay(IHtmlHelper htmlHelper, ModelExpression modelExpression, string templateName) {
             if (htmlHelper is HtmlHelper htmlHelperConcrete) {
                 if (_getDisplayThunk == null) {
-                    var methodInfo = typeof(HtmlHelper).GetTypeInfo().GetMethod("GenerateDisplay", BindingFlags.NonPublic | BindingFlags.Instance);
+                    MethodInfo methodInfo = typeof(HtmlHelper).GetTypeInfo().GetMethod("GenerateDisplay", BindingFlags.NonPublic | BindingFlags.Instance);
                     _getDisplayThunk = (Func<HtmlHelper, ModelExplorer, string, string, object, IHtmlContent>)methodInfo
                         .CreateDelegate(typeof(Func<HtmlHelper, ModelExplorer, string, string, object, IHtmlContent>));
                 }
@@ -202,6 +186,54 @@ namespace TowerSoft.TagHelpers.Utilities {
                             () => new DefaultTagHelperContent());
                 }
             );
+        }
+
+        private List<SelectListItem> GetSelectListItems(IEnumerable<SelectListItem> items) {
+            List<SelectListItem> output = [];
+            if (For.Model != null) {
+                if (For.ModelExplorer.ModelType.IsEnum) {
+                    foreach (SelectListItem item in items) {
+                        output.Add(GetSelectListItem(item, ((int)For.Model).ToString()));
+                    }
+                } else {
+                    IEnumerable modelList = For.Model as IEnumerable;
+                    if (modelList == null || For.Model is string) {
+                        foreach (SelectListItem item in items) {
+                            output.Add(GetSelectListItem(item, For.Model.ToString()));
+                        }
+                    } else {
+                        List<string> modelStrings = [];
+                        foreach (object listValue in modelList) {
+                            modelStrings.Add(listValue.ToString());
+                        }
+                        foreach (SelectListItem item in items) {
+                            output.Add(GetSelectListItem(item, compareList: modelStrings));
+                        }
+                    }
+                }
+            }
+            return output;
+        }
+
+        private static SelectListItem GetSelectListItem(SelectListItem item, string compareTo = null, IEnumerable<string> compareList = null) {
+            SelectListItem newItem = new() {
+                Text = item.Text,
+                Value = item.Value,
+                Group = item.Group,
+                Disabled = item.Disabled
+            };
+
+            string compareFrom = item.Text;
+            if (item.Value != null)
+                compareFrom = item.Value;
+
+            if (compareList != null) {
+                if (compareList.Contains(compareFrom))
+                    newItem.Selected = true;
+            } else if (compareTo == compareFrom) {
+                newItem.Selected = true;
+            }
+            return newItem;
         }
     }
 }
