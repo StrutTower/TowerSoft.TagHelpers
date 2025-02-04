@@ -190,25 +190,27 @@ namespace TowerSoft.TagHelpers.Utilities {
 
         private List<SelectListItem> GetSelectListItems(IEnumerable<SelectListItem> items) {
             List<SelectListItem> output = [];
-            if (For.Model != null) {
-                if (For.ModelExplorer.ModelType.IsEnum) {
+            if (For.ModelExplorer.ModelType.IsEnum) {
+                foreach (SelectListItem item in items) {
+                    output.Add(GetSelectListItem(item, ((int)For.Model).ToString()));
+                }
+            } else {
+                IEnumerable modelList = null;
+                if (For.Model != null) {
+                    modelList = For.Model as IEnumerable;
+                }
+
+                if (modelList == null || For.Model is string) {
                     foreach (SelectListItem item in items) {
-                        output.Add(GetSelectListItem(item, ((int)For.Model).ToString()));
+                        output.Add(GetSelectListItem(item, For?.Model?.ToString()));
                     }
                 } else {
-                    IEnumerable modelList = For.Model as IEnumerable;
-                    if (modelList == null || For.Model is string) {
-                        foreach (SelectListItem item in items) {
-                            output.Add(GetSelectListItem(item, For.Model.ToString()));
-                        }
-                    } else {
-                        List<string> modelStrings = [];
-                        foreach (object listValue in modelList) {
-                            modelStrings.Add(listValue.ToString());
-                        }
-                        foreach (SelectListItem item in items) {
-                            output.Add(GetSelectListItem(item, compareList: modelStrings));
-                        }
+                    List<string> modelStrings = [];
+                    foreach (object listValue in modelList) {
+                        modelStrings.Add(listValue.ToString());
+                    }
+                    foreach (SelectListItem item in items) {
+                        output.Add(GetSelectListItem(item, compareList: modelStrings));
                     }
                 }
             }

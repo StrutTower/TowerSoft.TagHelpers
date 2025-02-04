@@ -103,7 +103,7 @@
 
 <formField asp-for="FormFieldTestString1" asp-input-attribute-minlength="3" />
 <formField asp-for="FormFieldTestString2" input-css="form-control additional-css-class" />
-<formField asp-for="FormFieldTestBooleanTrue" renderer="@HtmlRenderer.BooleanRadio"  />
+<formField asp-for="FormFieldTestBooleanTrue" renderer="@HtmlRenderer.BooleanRadio" />
 <formField asp-for="FormFieldTestBooleanFalse" />
 <formField asp-for="FormFieldTestBooleanNullable" />
 
@@ -116,6 +116,7 @@
 <formSelect asp-for="FormSelectMultipleIntID" asp-items="Model.FormSelectIntList" multiple />
 <formSelect asp-for="FormSelectLongID" asp-items="Model.FormSelectLongList" input-css="form-select additional-css-class" />
 <formSelect asp-for="FormSelectString" asp-items="Model.FormSelectStringList" />
+<formSelect asp-for="FormSelectNullable" asp-items="Model.FormSelectIntList" />
 
 <hr />
 
@@ -136,6 +137,7 @@
 <hrFormSelect asp-for="HrFormSelectMultipleIntID" asp-items="Model.FormSelectIntList" multiple />
 <hrFormSelect asp-for="HrFormSelectLongID" asp-items="Model.FormSelectLongList" input-css="form-select additional-css-class" />
 <hrFormSelect asp-for="HrFormSelectString" asp-items="Model.FormSelectStringList" />
+<hrFormSelect asp-for="HrFormSelectNullable" asp-items="Model.FormSelectIntList" />
 
 <hr />
 
