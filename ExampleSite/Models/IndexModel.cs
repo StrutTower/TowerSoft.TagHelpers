@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace ExampleSite.Models {
     public class IndexModel {
@@ -32,6 +32,9 @@ namespace ExampleSite.Models {
 
         public string FormFieldTestString1 { get; set; } = "FormField Test String 1";
         public string FormFieldTestString2 { get; set; } = "FormField Test String 2";
+        public string FormFieldTestString3 { get; set; } = "FormField Test String 3 Not Required";
+        [Required]
+        public string FormFieldTestString4 { get; set; } = "FormField Test String 4 Required";
         public bool FormFieldTestBooleanTrue { get; set; } = true;
         public bool FormFieldTestBooleanFalse { get; set; } = false;
         public bool? FormFieldTestBooleanNullable { get; set; }

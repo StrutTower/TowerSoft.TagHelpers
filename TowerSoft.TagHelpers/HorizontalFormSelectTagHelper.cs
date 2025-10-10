@@ -77,6 +77,11 @@ namespace TowerSoft.TagHelpers {
         public bool Multiple { get; set; } = false;
 
         /// <summary>
+        /// Allows manually setting the required value for the red astrix
+        /// </summary>
+        public bool? ForceRequiredAstrix { get; set; }
+
+        /// <summary>
         /// Dictonary to set custom attributes on the select element
         /// </summary>
         [HtmlAttributeName(SelectAttributeDictionaryName, DictionaryAttributePrefix = SelectAttributePrefix)]
@@ -130,14 +135,14 @@ namespace TowerSoft.TagHelpers {
             if (context.AllAttributes.ContainsName("readonly") && !selectAttributes.ContainsKey("readonly")) {
                 selectAttributes.Add("readonly", string.Empty);
             }
-            foreach (var attr in context.AllAttributes.Where(x => x.Name.StartsWith("data-"))) {
+            foreach (TagHelperAttribute attr in context.AllAttributes.Where(x => x.Name.StartsWith("data-"))) {
                 if (!selectAttributes.ContainsKey(attr.Name))
                     selectAttributes.Add(attr.Name, attr.Value.ToString());
             }
 
             TagHelperUtilities utils = new(For, htmlGenerator, htmlHelper, ViewContext);
 
-            TagHelperOutput labelElement = await utils.CreateLabelRequiredElement(context, LabelName);
+            TagHelperOutput labelElement = await utils.CreateLabelRequiredElement(context, LabelName, forceRequiredAstrix: ForceRequiredAstrix);
             IHtmlContent inputElement = await utils.CreateSelectElement(context, Items, Multiple, OptionLabel, selectAttributes);
             TagHelperOutput validationMessageElement = await utils.CreateValidationMessageElement(context);
             TagHelperOutput descriptionElement = await utils.CreateDescriptionElement(context);

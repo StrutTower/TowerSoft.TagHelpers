@@ -52,6 +52,11 @@ namespace TowerSoft.TagHelpers {
         public string Placeholder { get; set; }
 
         /// <summary>
+        /// Allows manually setting the required value for the red astrix
+        /// </summary>
+        public bool? ForceRequiredAstrix { get; set; }
+
+        /// <summary>
         /// Dictonary to set custom attributes on the input element
         /// </summary>
         [HtmlAttributeName(InputAttributeDictionaryName, DictionaryAttributePrefix = InputAttributePrefix)]
@@ -156,7 +161,7 @@ namespace TowerSoft.TagHelpers {
                 //----
 
                 // Default editor or supplied renderer
-                TagHelperOutput labelElement = await utils.CreateLabelRequiredElement(context, Label);
+                TagHelperOutput labelElement = await utils.CreateLabelRequiredElement(context, Label, forceRequiredAstrix: ForceRequiredAstrix);
                 IHtmlContent inputElement = utils.CreateInputElement(Renderer, InputCss, inputAttributes);
                 TagHelperOutput validationMessageElement = await utils.CreateValidationMessageElement(context);
                 TagHelperOutput descriptionElement = await utils.CreateDescriptionElement(context);

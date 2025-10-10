@@ -60,6 +60,12 @@ namespace TowerSoft.TagHelpers {
         [HtmlAttributeName("multiple")]
         public bool Multiple { get; set; } = false;
 
+
+        /// <summary>
+        /// Allows manually setting the required value for the red astrix
+        /// </summary>
+        public bool? ForceRequiredAstrix { get; set; }
+
         /// <summary>
         /// Dictonary to set custom attributes on the select element
         /// </summary>
@@ -108,7 +114,7 @@ namespace TowerSoft.TagHelpers {
 
             TagHelperUtilities utils = new(For, htmlGenerator, htmlHelper, ViewContext);
 
-            TagHelperOutput labelElement = await utils.CreateLabelRequiredElement(context, LabelName);
+            TagHelperOutput labelElement = await utils.CreateLabelRequiredElement(context, LabelName, forceRequiredAstrix: ForceRequiredAstrix);
             IHtmlContent inputElement = await utils.CreateSelectElement(context, Items, Multiple, OptionLabel, selectAttributes);
             TagHelperOutput validationMessageElement = await utils.CreateValidationMessageElement(context);
             TagHelperOutput descriptionElement = await utils.CreateDescriptionElement(context);

@@ -52,10 +52,11 @@ namespace TowerSoft.TagHelpers.Utilities {
             return labelOutput;
         }
 
-        internal async Task<TagHelperOutput> CreateLabelRequiredElement(TagHelperContext context, string labelName = null, string css = null) {
+        internal async Task<TagHelperOutput> CreateLabelRequiredElement(TagHelperContext context, string labelName = null, string css = null, bool? forceRequiredAstrix = null) {
             LabelRequiredTagHelper labelTagHelper = new(HtmlGenerator) {
                 For = For,
-                ViewContext = ViewContext
+                ViewContext = ViewContext,
+                ForceRequiredAstrix = forceRequiredAstrix
             };
 
             TagHelperOutput labelOutput = CreateTagHelperOutput("label");

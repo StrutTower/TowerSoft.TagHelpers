@@ -32,6 +32,11 @@ namespace TowerSoft.TagHelpers {
         /// </summary>
         public string InputCol { get; set; }
 
+        /// <summary>
+        /// Allows manually setting the required value for the red astrix
+        /// </summary>
+        public bool? ForceRequiredAstrix { get; set; }
+
         /// <summary></summary>
         [ViewContext]
         [HtmlAttributeNotBound]
@@ -54,7 +59,7 @@ namespace TowerSoft.TagHelpers {
             TagBuilder fieldDiv = new("div");
             fieldDiv.AddCssClass(fieldColumnCss);
 
-            TagHelperOutput labelElement = await utils.CreateLabelRequiredElement(context, Label);
+            TagHelperOutput labelElement = await utils.CreateLabelRequiredElement(context, Label, forceRequiredAstrix: ForceRequiredAstrix);
             TagHelperOutput validationMessageElement = await utils.CreateValidationMessageElement(context);
             TagHelperOutput descriptionElement = await utils.CreateDescriptionElement(context);
 
