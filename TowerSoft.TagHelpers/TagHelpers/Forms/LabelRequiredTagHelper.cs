@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System.Threading.Tasks;
 
-namespace TowerSoft.TagHelpers {
+namespace TowerSoft.TagHelpers.TagHelpers.Forms {
     /// <summary>
     /// Extend the default LabelTagHelper. Adds a red astrix to the end if the field is required.
     /// </summary>
@@ -26,8 +26,8 @@ namespace TowerSoft.TagHelpers {
         /// <returns></returns>
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output) {
             await base.ProcessAsync(context, output);
-            if ((ForceRequiredAstrix.HasValue && ForceRequiredAstrix.Value) ||
-                (!ForceRequiredAstrix.HasValue && For.Metadata.IsRequired)) {
+            if (ForceRequiredAstrix.HasValue && ForceRequiredAstrix.Value ||
+                !ForceRequiredAstrix.HasValue && For.Metadata.IsRequired) {
 
                 TagBuilder span = new("span");
                 span.InnerHtml.Append("*");

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System;
@@ -8,18 +7,19 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using TowerSoft.TagHelpers.Enums;
 using TowerSoft.TagHelpers.Options;
 using TowerSoft.TagHelpers.Utilities;
 
-namespace TowerSoft.TagHelpers {
+// Source: https://stackoverflow.com/questions/47547844/tag-helper-embedded-in-another-tag-helpers-code-doesnt-render
+// Source: https://stackoverflow.com/questions/48322431/what-is-the-tag-helper-equivalent-of-html-editorfor
+namespace TowerSoft.TagHelpers.TagHelpers.Forms {
     /// <summary>
-    /// Renders a horizontal Bootstrap style form group with a label, input, description, and ASP.NET validation message
+    /// Renders a Bootstrap style form group with a label, input, description, and ASP.NET validation message
     /// </summary>
-    [HtmlTargetElement("hrFormField", Attributes = "asp-for")]
-    public class HorizontalFormFieldTagHelper(IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper) : TagHelper {
+    [HtmlTargetElement("formField", Attributes = "asp-for")]
+    public class FormFieldTagHelper(IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper) : TagHelper {
         private AutocompleteSetting _autocompleteSetting;
         private Dictionary<string, string> inputAttributes;
 
@@ -40,16 +40,6 @@ namespace TowerSoft.TagHelpers {
         /// Overrides the label display text
         /// </summary>
         public string Label { get; set; }
-
-        /// <summary>
-        /// Bootstrap column CSS for the label. If not set, defaults to: col-md-4 col-lg-3
-        /// </summary>
-        public string LabelCol { get; set; }
-
-        /// <summary>
-        /// Bootstrap column CSS for the input. If not set, defaults to: col-md-7 col-lg-6
-        /// </summary>
-        public string InputCol { get; set; }
 
         /// <summary>
         /// Sets CSS on the input. Overrides the default Bootstrap class
@@ -104,21 +94,19 @@ namespace TowerSoft.TagHelpers {
         public ViewContext ViewContext { get; set; }
 
         /// <summary></summary>
+        /// <param name="context"></param>
+        /// <param name="output"></param>
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output) {
-            ((IViewContextAware)htmlHelper).Contextualize(ViewContext);
+            (htmlHelper as IViewContextAware).Contextualize(ViewContext);
 
             output.TagName = "div";
             output.TagMode = TagMode.StartTagAndEndTag;
-            output.AddClass("row", HtmlEncoder.Default);
-            output.AddClass("mb-3", HtmlEncoder.Default);
+            output.Attributes.SetAttribute("class", "mb-3");
 
             TagHelperUtilities utils = new(For, htmlGenerator, htmlHelper, ViewContext);
 
             Type type = For.Metadata.ModelType;
             type = Nullable.GetUnderlyingType(type) ?? type;
-
-            string labelColumnCss = LabelCol ?? "col-md-4 col-lg-3";
-            string fieldColumnCss = InputCol ?? "col-md-7 col-lg-6";
 
             if (inputAttributes == null)
                 inputAttributes = [];
@@ -132,40 +120,31 @@ namespace TowerSoft.TagHelpers {
                 if (prop != null)
                     required = prop.IsDefined(typeof(RequiredAttribute), true);
 
-
-                TagBuilder labelDiv = new("div");
-                labelDiv.AddCssClass(labelColumnCss + " text-md-end");
-                TagBuilder fieldDiv = new("div");
-                fieldDiv.AddCssClass(fieldColumnCss);
-
                 if (required || !nullable) {
                     TagBuilder formCheck = new("div");
                     formCheck.AddCssClass("form-check");
                     formCheck.InnerHtml.AppendHtml(utils.CreateInputElement(null, InputCss, inputAttributes));
                     formCheck.InnerHtml.AppendHtml(await utils.CreateLabelElement(context, Label, "form-check-label"));
-                    fieldDiv.InnerHtml.AppendHtml(formCheck);
+                    output.Content.AppendHtml(formCheck);
                 } else {
                     TagHelperAttribute labelsAttribute = context.AllAttributes.SingleOrDefault(x => x.Name == "data-labels");
                     if (labelsAttribute != null)
                         inputAttributes.Add(labelsAttribute.Name, labelsAttribute.Value.ToString());
-                    TagHelperOutput labelElement = await utils.CreateLabelRequiredElement(context, Label);
-                    labelDiv.InnerHtml.AppendHtml(labelElement);
-                    fieldDiv.InnerHtml.AppendHtml(utils.CreateInputElement(HtmlRenderer.Boolean, InputCss, inputAttributes));
+                    output.Content.AppendHtml(await utils.CreateLabelRequiredElement(context, Label));
+                    output.Content.AppendHtml(utils.CreateInputElement(HtmlRenderer.Boolean, InputCss, inputAttributes));
                 }
 
-                output.Content.AppendHtml(labelDiv);
-                output.Content.AppendHtml(fieldDiv);
+                output.Content.AppendHtml(await utils.CreateValidationMessageElement(context));
+                output.Content.AppendHtml(await utils.CreateDescriptionElement(context));
             } else {
-                TagBuilder labelDiv = new("div");
-                labelDiv.AddCssClass(labelColumnCss + " text-md-end");
-                TagBuilder fieldDiv = new("div");
-                fieldDiv.AddCssClass(fieldColumnCss);
-
                 if (!inputAttributes.ContainsKey("autocomplete"))
                     inputAttributes.Add("autocomplete", Autocomplete.ToString());
+
                 if (!string.IsNullOrWhiteSpace(Placeholder) && !inputAttributes.ContainsKey("placeholder")) {
                     inputAttributes.Add("placeholder", Placeholder);
                 }
+
+                // Legacy Support before adding InputAttributes dictionary
                 if (context.AllAttributes.ContainsName("autofocus") && !inputAttributes.ContainsKey("autofocus")) {
                     inputAttributes.Add("autofocus", string.Empty);
                 }
@@ -179,20 +158,18 @@ namespace TowerSoft.TagHelpers {
                     if (!inputAttributes.ContainsKey(attr.Name))
                         inputAttributes.Add(attr.Name, attr.Value.ToString());
                 }
+                //----
 
-                // Default editor or supplied editor template
+                // Default editor or supplied renderer
                 TagHelperOutput labelElement = await utils.CreateLabelRequiredElement(context, Label, forceRequiredAstrix: ForceRequiredAstrix);
                 IHtmlContent inputElement = utils.CreateInputElement(Renderer, InputCss, inputAttributes);
                 TagHelperOutput validationMessageElement = await utils.CreateValidationMessageElement(context);
                 TagHelperOutput descriptionElement = await utils.CreateDescriptionElement(context);
 
-                labelDiv.InnerHtml.AppendHtml(labelElement);
-                fieldDiv.InnerHtml.AppendHtml(inputElement);
-                fieldDiv.InnerHtml.AppendHtml(validationMessageElement);
-                fieldDiv.InnerHtml.AppendHtml(descriptionElement);
-
-                output.Content.AppendHtml(labelDiv);
-                output.Content.AppendHtml(fieldDiv);
+                output.Content.AppendHtml(labelElement);
+                output.Content.AppendHtml(inputElement);
+                output.Content.AppendHtml(validationMessageElement);
+                output.Content.AppendHtml(descriptionElement);
             }
         }
     }

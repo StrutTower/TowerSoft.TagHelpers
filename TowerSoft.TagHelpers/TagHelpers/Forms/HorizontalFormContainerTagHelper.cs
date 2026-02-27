@@ -6,7 +6,7 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using TowerSoft.TagHelpers.Utilities;
 
-namespace TowerSoft.TagHelpers {
+namespace TowerSoft.TagHelpers.TagHelpers.Forms {
     /// <summary>
     /// Similar to the hrFormField this generates a label, description and ASP.NET validation message but the input element is taken from the inner HTML of the tag helper.
     /// </summary>

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
-using TowerSoft.TagHelpers;
+using TowerSoft.TagHelpers.TagHelpers.Breadcrumbs;
 using TowerSoft.TagHelpersTests.Utilities;
 
 namespace TowerSoft.TagHelpersTests {
@@ -7,7 +7,7 @@ namespace TowerSoft.TagHelpersTests {
     public class BreadcrumbTagHelperTests {
         [TestMethod]
         public void GenerateBreadcrumbs() {
-            BreadcrumbTagHelper breadcrumbTagHelper = new();
+            BreadcrumbContainerTagHelper breadcrumbTagHelper = new();
 
             TagHelperOutput output = TagHelperUtils.GetOutput("breadcrumbs");
             breadcrumbTagHelper.Process(TagHelperUtils.GetContext("breadcrumbs"), output);

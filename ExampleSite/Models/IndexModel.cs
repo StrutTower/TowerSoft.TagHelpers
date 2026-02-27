@@ -45,6 +45,8 @@ namespace ExampleSite.Models {
         public long FormSelectLongID { get; set; } = 3;
         public string FormSelectString { get; set; } = "Item 3";
         public int? FormSelectNullable { get; set; }
+        public TestEnum FormSelectEnum { get; set; } = TestEnum.Value3;
+        public TestEnum? FormSelectNullableEnum { get; set; }
 
 
         public string HrFormFieldTestString1 { get; set; } = "HrFormField Test String 1";
@@ -59,6 +61,8 @@ namespace ExampleSite.Models {
         public long HrFormSelectLongID { get; set; } = 3;
         public string HrFormSelectString { get; set; } = "Item 3";
         public int? HrFormSelectNullable { get; set; }
+        public TestEnum HrFormSelectEnum { get; set; } = TestEnum.Value3;
+        public TestEnum? HrFormSelectNullableEnum { get; set; }
 
 
         public SelectList FormSelectIntList { get; set; }

@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using System.Text.Encodings.Web;
 
-namespace TowerSoft.TagHelpers {
+namespace TowerSoft.TagHelpers.TagHelpers.Forms {
     /// <summary>
     /// Renders the description of the property from the DescriptionAttribute or DisplayAttribtue Description
     /// </summary>

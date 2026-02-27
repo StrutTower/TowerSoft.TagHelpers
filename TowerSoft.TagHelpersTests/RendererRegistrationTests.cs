@@ -27,9 +27,10 @@ namespace TowerSoft.TagHelpersTests {
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void Get_UnregisteredKey_ShouldThrowException() {
-            RendererRegistration.Get("unregisteredKey");
+            Assert.Throws<ArgumentException>(() => {
+                RendererRegistration.Get("unregisteredKey");
+            });
         }
 
         [TestMethod]
@@ -44,17 +45,19 @@ namespace TowerSoft.TagHelpersTests {
         }
 
         [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
         public void Add_KeyAlreadyInUse_ShouldThrowException() {
             string rendererKey = "string";
-            RendererRegistration.Add<TestRenderer>(rendererKey);
+            Assert.Throws<ArgumentException>(() => {
+                RendererRegistration.Add<TestRenderer>(rendererKey);
+            });
         }
 
         [TestMethod]
-        [ExpectedException(typeof(NotSupportedException))]
         public void Add_NotIHtmlRenderer_ShouldThrowException() {
             string rendererKey = "notIHtmlRenderer";
-            RendererRegistration.Add<int>(rendererKey);
+            Assert.Throws<NotSupportedException>(() => {
+                RendererRegistration.Add<int>(rendererKey);
+            });
         }
 
         [TestMethod]

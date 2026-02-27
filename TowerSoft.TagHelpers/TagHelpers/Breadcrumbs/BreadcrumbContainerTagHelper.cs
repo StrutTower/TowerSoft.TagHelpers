@@ -2,13 +2,13 @@
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System.Text.Encodings.Web;
 
-namespace TowerSoft.TagHelpers {
+namespace TowerSoft.TagHelpers.TagHelpers.Breadcrumbs {
     /// <summary>
     /// Bootstrap breadcrumb container. Use breadcrumb-item as child elements to define the breadcrumb items.
     /// </summary>
     [HtmlTargetElement("breadcrumbs")]
-    [RestrictChildren("breadcrumb-item", "breadcrumb-item-home")]
-    public class BreadcrumbTagHelper : TagHelper {
+    [RestrictChildren("breadcrumb", "breadcrumb-home", "breadcrumb-item", "breadcrumb-item-home")]
+    public class BreadcrumbContainerTagHelper : TagHelper {
 
         /// <summary>
         /// Process Method

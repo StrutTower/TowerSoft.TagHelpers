@@ -10,12 +10,17 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using TowerSoft.TagHelpers.Utilities;
 
-namespace TowerSoft.TagHelpers {
+namespace TowerSoft.TagHelpers.TagHelpers.Forms {
     /// <summary>
-    /// Form group tag helper for select lists
+    /// Horizontal form group tag helper for select lists
     /// </summary>
-    [HtmlTargetElement("formSelect", Attributes = "asp-for")]
-    public class FormSelectTagHelper(IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper) : TagHelper {
+    /// <remarks>
+    /// HorizontalFormSelect Constructor
+    /// </remarks>
+    /// <param name="htmlGenerator"></param>
+    /// <param name="htmlHelper"></param>
+    [HtmlTargetElement("hrFormSelect", Attributes = "asp-for")]
+    public class HorizontalFormSelectTagHelper(IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper) : TagHelper {
         private Dictionary<string, string> selectAttributes;
 
         private const string ModelExpressionName = "asp-for";
@@ -23,7 +28,6 @@ namespace TowerSoft.TagHelpers {
         private const string OptionLabelName = "asp-option-label";
         private const string SelectAttributeDictionaryName = "asp-all-select-attributes";
         private const string SelectAttributePrefix = "asp-select-attribute-";
-
         /// <summary>
         /// An expression to be evaluated against the current model.
         /// </summary>
@@ -44,22 +48,33 @@ namespace TowerSoft.TagHelpers {
         public string OptionLabel { get; set; }
 
         /// <summary>
-        /// Sets CSS on the input. Overrides the default Bootstrap class
+        /// Bootstrap column CSS for the label. If not set, defaults to: col-md-4 col-lg-3
         /// </summary>
+        [HtmlAttributeName("label-col")]
+        public string LabelCol { get; set; }
+
+        /// <summary>
+        /// Bootstrap column CSS for the input. If not set, defaults to: col-md-7 col-lg-6
+        /// </summary>
+        [HtmlAttributeName("input-col")]
+        public string InputCol { get; set; }
+
+        /// <summary>
+        /// Sets the CSS class on the input. Overrides the default Bootstrap class
+        /// </summary>
+        [HtmlAttributeName("input-css")]
         public string InputCss { get; set; }
 
         /// <summary>
-        /// Overrides the label display text
+        /// Override the label name
         /// </summary>
         [HtmlAttributeName("label")]
         public string LabelName { get; set; }
 
         /// <summary>
-        /// Sets select list to multiple if included. Does not need a value.
+        /// Set the multiple attribute on the select element
         /// </summary>
-        [HtmlAttributeName("multiple")]
         public bool Multiple { get; set; } = false;
-
 
         /// <summary>
         /// Allows manually setting the required value for the red astrix
@@ -85,15 +100,29 @@ namespace TowerSoft.TagHelpers {
         [HtmlAttributeNotBound]
         public ViewContext ViewContext { get; set; }
 
-        /// <summary></summary>
+        /// <summary>
+        /// Process Method
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="output"></param>
+        /// <returns></returns>
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output) {
             output.TagName = "div";
             output.TagMode = TagMode.StartTagAndEndTag;
+            output.AddClass("row", HtmlEncoder.Default);
             output.AddClass("mb-3", HtmlEncoder.Default);
 
-            selectAttributes ??= [];
+            string labelColumnCss = LabelCol ?? "col-md-4 col-lg-3";
+            string fieldColumnCss = InputCol ?? "col-md-7 col-lg-6";
 
-            // Legacy Support before adding InputAttributes dictionary
+            TagBuilder labelDiv = new("div");
+            labelDiv.AddCssClass(labelColumnCss + " text-md-end");
+            TagBuilder fieldDiv = new("div");
+            fieldDiv.AddCssClass(fieldColumnCss);
+
+            if (selectAttributes == null)
+                selectAttributes = [];
+
             if (context.AllAttributes.ContainsName("autofocus") && !selectAttributes.ContainsKey("autofocus")) {
                 selectAttributes.Add("autofocus", string.Empty);
             }
@@ -110,7 +139,6 @@ namespace TowerSoft.TagHelpers {
                 if (!selectAttributes.ContainsKey(attr.Name))
                     selectAttributes.Add(attr.Name, attr.Value.ToString());
             }
-            //----
 
             TagHelperUtilities utils = new(For, htmlGenerator, htmlHelper, ViewContext);
 
@@ -119,10 +147,13 @@ namespace TowerSoft.TagHelpers {
             TagHelperOutput validationMessageElement = await utils.CreateValidationMessageElement(context);
             TagHelperOutput descriptionElement = await utils.CreateDescriptionElement(context);
 
-            output.Content.AppendHtml(labelElement);
-            output.Content.AppendHtml(inputElement);
-            output.Content.AppendHtml(validationMessageElement);
-            output.Content.AppendHtml(descriptionElement);
+            labelDiv.InnerHtml.AppendHtml(labelElement);
+            fieldDiv.InnerHtml.AppendHtml(inputElement);
+            fieldDiv.InnerHtml.AppendHtml(validationMessageElement);
+            fieldDiv.InnerHtml.AppendHtml(descriptionElement);
+
+            output.Content.AppendHtml(labelDiv);
+            output.Content.AppendHtml(fieldDiv);
         }
     }
 }

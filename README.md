@@ -5,7 +5,8 @@ Collection of ASP Core TagHelpers that I use.
 ### TagHelper Wiki Pages
 
 - [AnchorEnabledTagHelper](../../wiki/AnchorEnabledTagHelper)
-- [BreadcrumbTagHelper](../../wiki/BreadcrumbTagHelper)
+- [BreadcrumbTagHelpers](../../wiki/BreadcrumbTagHelper)
+- [BootstrapModalTagHelpers](../../wiki/BootstrapModalTagHelpers)
 - [DescriptionTagHelper](../../wiki/DescriptionTagHelper)
 - [DisplayForTagHelper](../../wiki/DisplayForTagHelper)
 - [FormFieldTagHelper](../../wiki/FormFieldTagHelper)

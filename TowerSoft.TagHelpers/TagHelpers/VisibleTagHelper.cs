@@ -12,9 +12,7 @@ namespace TowerSoft.TagHelpers {
         [HtmlAttributeName("asp-visible")]
         public bool Visible { get; set; }
 
-        /// <summary>
-        /// Process Method
-        /// </summary>
+        /// <summary></summary>
         /// <param name="context"></param>
         /// <param name="output"></param>
         public override void Process(TagHelperContext context, TagHelperOutput output) {

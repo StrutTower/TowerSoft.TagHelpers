@@ -12,6 +12,7 @@ using System.Reflection;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using TowerSoft.TagHelpers.Options;
+using TowerSoft.TagHelpers.TagHelpers.Forms;
 
 namespace TowerSoft.TagHelpers.Utilities {
     internal class TagHelperUtilities {

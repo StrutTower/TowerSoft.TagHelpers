@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TowerSoft.TagHelpers;
+using TowerSoft.TagHelpers.TagHelpers.Breadcrumbs;
 using TowerSoft.TagHelpersTests.Utilities;
 
 namespace TowerSoft.TagHelpersTests {
@@ -24,7 +24,7 @@ namespace TowerSoft.TagHelpersTests {
 
         //[TestMethod]
         public void GenerateBreadcrumbItem() {
-            BreadcrumbItemTagHelper breadcrumbItemTagHelper = new(htmlHelper, urlHelperFactory);
+            BreadcrumbTagHelper breadcrumbItemTagHelper = new(htmlHelper, urlHelperFactory);
 
             TagHelperOutput output = TagHelperUtils.GetOutput("breadcrumb-item");
             breadcrumbItemTagHelper.Process(TagHelperUtils.GetContext("breadcrumb-item"), output);

@@ -10,14 +10,14 @@ using System.Collections.Generic;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
-namespace TowerSoft.TagHelpers {
+namespace TowerSoft.TagHelpers.TagHelpers.Breadcrumbs {
     /// <summary>
     /// Generates a Bootstrap breadcrumb item that default to the homepage of the application.
     /// </summary>
     /// <param name="htmlHelper"></param>
     /// <param name="urlHelperFactory"></param>
-    [HtmlTargetElement("breadcrumb-item-home", ParentTag = "breadcrumbs", TagStructure = TagStructure.NormalOrSelfClosing)]
-    public class BreadcrumbItemHomeTagHelper(IHtmlHelper htmlHelper, IUrlHelperFactory urlHelperFactory) : TagHelper {
+    [HtmlTargetElement("breadcrumb-home", ParentTag = "breadcrumbs", TagStructure = TagStructure.NormalOrSelfClosing)]
+    public class BreadcrumbHomeTagHelper(IHtmlHelper htmlHelper, IUrlHelperFactory urlHelperFactory) : TagHelper {
         private IDictionary<string, string> _routeValues;
 
         private const string ActionAttributeName = "asp-action";
@@ -88,16 +88,7 @@ namespace TowerSoft.TagHelpers {
 
             TagHelperContent childContent = await output.GetChildContentAsync();
             if (childContent.IsEmptyOrWhiteSpace) {
-                TagBuilder icon = new("span");
-
-                icon.AddCssClass("mdi mdi-fw mdi-home");
-
-                TagBuilder hiddenText = new("span");
-                hiddenText.AddCssClass("visually-hidden");
-                hiddenText.InnerHtml.Append("Home");
-
-                link.InnerHtml.AppendHtml(icon);
-                link.InnerHtml.AppendHtml(hiddenText);
+                link.InnerHtml.Append("Home");
             } else {
                 link.InnerHtml.AppendHtml(childContent);
             }

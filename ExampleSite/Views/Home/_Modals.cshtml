@@ -1,0 +1,102 @@
+﻿
+<div class="display-6 mb-3">Bootstrap Modals</div>
+
+<button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modal-default">Default Modal</button>
+<button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modal-no-footer">Modal without Footer</button>
+<button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modal-no-header">Modal without Header</button>
+<button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modal-static">Static Modal</button>
+<button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modal-fullscreen">Fullscreen Modal</button>
+<button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modal-scrollable">Scrollable Modal</button>
+
+<bs-modal id="modal-default" title="Default Modal">
+    <bs-modal-body>
+        <p>
+            Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat.
+            In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas.
+            Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+        </p>
+        <p>
+            Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat.
+            In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas.
+            Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+        </p>
+    </bs-modal-body>
+    <bs-modal-footer>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    </bs-modal-footer>
+</bs-modal>
+
+<bs-modal id="modal-no-footer" title="Modal without Footer">
+    <bs-modal-body>
+        <p>
+            Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat.
+            In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas.
+            Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+        </p>
+        <p>
+            Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat.
+            In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas.
+            Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+        </p>
+    </bs-modal-body>
+</bs-modal>
+
+<bs-modal id="modal-no-header" title="Modal without Footer" show-header="false">
+    <bs-modal-body>
+        <p>
+            Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat.
+            In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas.
+            Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+        </p>
+        <p>
+            Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat.
+            In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas.
+            Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+        </p>
+    </bs-modal-body>
+    <bs-modal-footer>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    </bs-modal-footer>
+</bs-modal>
+
+<bs-modal id="modal-static" show-header="false" static-backdrop="true">
+    <bs-modal-body>
+        <p>
+            Are you sure you want to confirm this action?
+        </p>
+        <div>
+            <button type="button" class="btn btn-success" data-bs-dismiss="modal">Accept</button>
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+        </div>
+    </bs-modal-body>
+</bs-modal>
+
+<bs-modal id="modal-fullscreen" title="Fullscreen Modal" modal-fullscreen="ModalFullscreen.modal_fullscreen">
+    <bs-modal-body>
+        @for (int i = 0; i < 20; i++) {
+            <p>
+                Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat.
+                In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas.
+                Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+            </p>
+        }
+    </bs-modal-body>
+    <bs-modal-footer>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    </bs-modal-footer>
+</bs-modal>
+
+<bs-modal id="modal-scrollable" title="Scrollable Modal" dialog-scrollable="true">
+    <bs-modal-body>
+        @for (int i = 0; i < 20; i++) {
+            <p>
+                Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat.
+                In id cursus mi pretium tellus duis convallis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas.
+                Iaculis massa nisl malesuada lacinia integer nunc posuere. Ut hendrerit semper vel class aptent taciti sociosqu. Ad litora torquent per conubia nostra inceptos himenaeos.
+            </p>
+        }
+    </bs-modal-body>
+    <bs-modal-footer>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+    </bs-modal-footer>
+</bs-modal>

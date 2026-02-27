@@ -18,16 +18,17 @@
 <div class="display-6 mb-3">Breadcrumbs</div>
 
 <breadcrumbs>
-    <breadcrumb-item-home />
-    <breadcrumb-item-home asp-action="Test" />
-    <breadcrumb-item-home asp-controller="Placeholder" />
-    <breadcrumb-item-home asp-area="Reports" />
-    <breadcrumb-item-home>Home (Overridden Content)</breadcrumb-item-home>
-    <breadcrumb-item asp-action="Index" asp-controller="Test">Hard Coded String</breadcrumb-item>
-    <breadcrumb-item asp-action="Index" asp-controller="Test" display-for="@stringTest" />
-    <breadcrumb-item asp-action="Index" asp-controller="Test" display-for="TestString" />
-    <breadcrumb-item asp-action="Index" asp-controller="Test" asp-fragment="Fragment">Fragment Test</breadcrumb-item>
-    <breadcrumb-item>Active Breadcrumb</breadcrumb-item>
+    <breadcrumb-home />
+    <breadcrumb-home><span class="mdi mdi-fw mdi-home"></span></breadcrumb-home>
+    <breadcrumb-home asp-action="Test" />
+    <breadcrumb-home asp-controller="Placeholder" />
+    <breadcrumb-home asp-area="Reports" />
+    <breadcrumb-home>Home (Overridden Content)</breadcrumb-home>
+    <breadcrumb asp-action="Index" asp-controller="Test">Hard Coded String</breadcrumb>
+    <breadcrumb asp-action="Index" asp-controller="Test" display-for="@stringTest" />
+    <breadcrumb asp-action="Index" asp-controller="Test" display-for="TestString" />
+    <breadcrumb asp-action="Index" asp-controller="Test" asp-fragment="Fragment">Fragment Test</breadcrumb>
+    <breadcrumb>Active Breadcrumb</breadcrumb>
 </breadcrumbs>
 
 <hr />
@@ -60,6 +61,9 @@
 </div>
 <div>
     <label asp-for="LabelTestWithDisplayName"></label>
+</div>
+<div>
+    <label asp-for="FormFieldTestBooleanNullable" asp-force-required="true">Force Required Astrix on Nullable</label>
 </div>
 
 <hr />
@@ -97,103 +101,10 @@
 
 <div class="mb-5"></div>
 
-<div class="display-3 mb-3 pb-2 border-bottom">Form Field Tag Helpers</div>
+<partial name="_Forms" model="Model" />
 
-<div class="display-6 mb-3">FormField</div>
+<div class="mb-5"></div>
 
-<formField asp-for="FormFieldTestString1" asp-input-attribute-minlength="3" />
-<formField asp-for="FormFieldTestString2" input-css="form-control additional-css-class" />
-<formField asp-for="FormFieldTestBooleanTrue" renderer="@HtmlRenderer.BooleanRadio" />
-<formField asp-for="FormFieldTestBooleanFalse" />
-<formField asp-for="FormFieldTestBooleanNullable" />
+<partial name="_Modals" />
 
-<formField asp-for="FormFieldTestString3" label="Nullable Forced Required" force-required-astrix="true" />
-<formField asp-for="FormFieldTestString4" label="Not Nullable Forced Not Required" force-required-astrix="false" />
-
-<hr />
-
-<div class="display-6 mb-3">FormSelect</div>
-
-
-<formSelect asp-for="FormSelectIntID" asp-items="Model.FormSelectIntList" />
-<formSelect asp-for="FormSelectMultipleIntID" asp-items="Model.FormSelectIntList" multiple />
-<formSelect asp-for="FormSelectLongID" asp-items="Model.FormSelectLongList" input-css="form-select additional-css-class" />
-<formSelect asp-for="FormSelectString" asp-items="Model.FormSelectStringList" />
-<formSelect asp-for="FormSelectNullable" asp-items="Model.FormSelectIntList" />
-
-<hr />
-
-<div class="display-6 mb-3">hrFormField</div>
-
-<hrFormField asp-for="HrFormFieldTestString1" asp-input-attribute-minlength="3" />
-<hrFormField asp-for="HrFormFieldTestString2" input-css="form-control additional-css-class" />
-<hrFormField asp-for="HrFormFieldTestBooleanTrue" />
-<hrFormField asp-for="HrFormFieldTestBooleanFalse" renderer="@HtmlRenderer.BooleanRadio" />
-<hrFormField asp-for="HrFormFieldTestBooleanNullable" />
-
-<hr />
-
-<div class="display-6 mb-3">hrFormSelect</div>
-
-
-<hrFormSelect asp-for="HrFormSelectIntID" asp-items="Model.FormSelectIntList" />
-<hrFormSelect asp-for="HrFormSelectMultipleIntID" asp-items="Model.FormSelectIntList" multiple />
-<hrFormSelect asp-for="HrFormSelectLongID" asp-items="Model.FormSelectLongList" input-css="form-select additional-css-class" />
-<hrFormSelect asp-for="HrFormSelectString" asp-items="Model.FormSelectStringList" />
-<hrFormSelect asp-for="HrFormSelectNullable" asp-items="Model.FormSelectIntList" />
-
-<hr />
-
-<div class="display-6 mb-3">hrFormContainer</div>
-<p>Allows adding an input element manually while still using the horizontal field layout</p>
-
-<hrFormContainer asp-for="HrFormContainerString">
-    <input asp-for="HrFormContainerString" class="form-control" />
-</hrFormContainer>
-
-<hrFormContainer asp-for="HrFormContainerSelect">
-    <select asp-for="HrFormContainerSelect" class="form-select">
-        <option value=""></option>
-        <option value="value1">Value 1</option>
-        <option value="value2">Value 2</option>
-        <option value="value3">Value 3</option>
-        <option value="value4">Value 4</option>
-    </select>
-</hrFormContainer>
-<hr />
-
-<div class="display-6 mb-3">hrFormSubmit</div>
-
-
-<hrFormSubmit>
-    <button type="button" class="btn btn-secondary">Cancel</button>
-
-    <div class="form-check form-check-inline ms-2">
-        <label class="form-check-label">
-            <input type="checkbox" class="form-check-input" /> Test
-        </label>
-    </div>
-</hrFormSubmit>
-
-<div class="display-6 mb-3">HtmlRenderers</div>
-
-<hrFormField asp-for="RendererTestBooleanTrue" />
-<hrFormField asp-for="RendererTestBooleanFalse" renderer="@HtmlRenderer.BooleanRadio" />
-<hrFormField asp-for="RendererTestBooleanNullable" />
-<hrFormField asp-for="RendererTestBooleanNullableTrue" />
-<hrFormField asp-for="RendererTestBooleanNullableFalse" />
-
-<hrFormField asp-for="RendererTestBooleanTrue2" data-labels="True,False" />
-<hrFormField asp-for="RendererTestBooleanFalse2" />
-<hrFormField asp-for="RendererTestBooleanNullable2" data-labels="Affirmative,Negative,Unknown" />
-<hrFormField asp-for="RendererTestBooleanNullableTrue2" />
-<hrFormField asp-for="RendererTestBooleanNullableFalse2" />
-
-<hrFormField asp-for="RendererTestDate1" label="Date and Time" />
-<hrFormField asp-for="RendererTestDate2" renderer="@HtmlRenderer.Date" label="Date" />
-<hrFormField asp-for="RendererTestDate3" renderer="@HtmlRenderer.Time" label="Time" />
-<hrFormField asp-for="RendererTestFile" />
-<hrFormField asp-for="RendererTestInt" />
-<hrFormField asp-for="RendererTestLong" />
-<hrFormField asp-for="RendererTestString1" />
-<hrFormField asp-for="RendererTestString2" renderer="@HtmlRenderer.TextArea" />
+<div class="mb-5"></div>

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using TowerSoft.TagHelpers.Extensions;
 using TowerSoft.TagHelpers.Utilities;
 
-namespace TowerSoft.TagHelpers {
+namespace TowerSoft.TagHelpers.TagHelpers.Breadcrumbs {
     /// <summary>
     /// Generates a Bootstrap breadcrumb item with action, controller, and other attributes for creating links.
     /// Excluding the action attribute will render it as the active item.
@@ -20,8 +20,8 @@ namespace TowerSoft.TagHelpers {
     /// <remarks>BreadcrumbItem constructor</remarks>
     /// <param name="htmlHelper"></param>
     /// <param name="urlHelperFactory"></param>
-    [HtmlTargetElement("breadcrumb-item", ParentTag = "breadcrumbs")]
-    public class BreadcrumbItemTagHelper(IHtmlHelper htmlHelper, IUrlHelperFactory urlHelperFactory) : TagHelper {
+    [HtmlTargetElement("breadcrumb", ParentTag = "breadcrumbs")]
+    public class BreadcrumbTagHelper(IHtmlHelper htmlHelper, IUrlHelperFactory urlHelperFactory) : TagHelper {
         private IDictionary<string, string> _routeValues;
 
         private const string ActionAttributeName = "asp-action";

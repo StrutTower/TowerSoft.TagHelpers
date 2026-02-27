@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
-namespace TowerSoft.TagHelpers {
+namespace TowerSoft.TagHelpers.TagHelpers.Forms {
     /// <summary>
     /// Creates a submit button with the horizontal layout. Additional elements can be rendered next to the button from the inner HTML.
     /// </summary>
