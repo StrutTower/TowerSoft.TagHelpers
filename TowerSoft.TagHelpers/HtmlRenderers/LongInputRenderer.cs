@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using System.Collections.Generic;
 using TowerSoft.TagHelpers.Interfaces;
+using TowerSoft.TagHelpers.Options;
 
 namespace TowerSoft.TagHelpers.HtmlRenderers {
     public class LongInputRenderer : IHtmlRenderer {
@@ -16,7 +17,10 @@ namespace TowerSoft.TagHelpers.HtmlRenderers {
             }
 
             TagBuilder output = htmlGenerator.GenerateTextBox(viewContext, modelEx.ModelExplorer, modelEx.Name, value, null, new { type = "number" });
-            output.AddCssClass("form-control");
+
+            if (TowerSoftTagHelperSettings.InputDefaultClass != null)
+                output.AddCssClass(TowerSoftTagHelperSettings.InputDefaultClass);
+
             if (!string.IsNullOrWhiteSpace(css))
                 output.Attributes["class"] = css;
 

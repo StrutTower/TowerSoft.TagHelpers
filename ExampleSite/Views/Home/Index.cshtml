@@ -5,7 +5,7 @@
 }
 
 
-<div class="display-6 mb-3">Anchor/Link Enabled</div>
+<h2>Anchor/Link Enabled</h2>
 
 <a href="https://github.com/StrutTower" target="_blank" rel="noopener noreferrer">Enabled Link</a>
 
@@ -15,11 +15,11 @@
 
 <hr />
 
-<div class="display-6 mb-3">Breadcrumbs</div>
+<h2>Breadcrumbs</h2>
 
 <breadcrumbs>
     <breadcrumb-home />
-    <breadcrumb-home><span class="mdi mdi-fw mdi-home"></span></breadcrumb-home>
+    <breadcrumb-home>Homepage</breadcrumb-home>
     <breadcrumb-home asp-action="Test" />
     <breadcrumb-home asp-controller="Placeholder" />
     <breadcrumb-home asp-area="Reports" />
@@ -33,13 +33,13 @@
 
 <hr />
 
-<div class="display-6 mb-3">Description</div>
+<h2>Description</h2>
 
 <description asp-for="TestDescription" />
 
 <hr />
 
-<div class="display-6 mb-3">DisplayFor</div>
+<h2>DisplayFor</h2>
 
 <div display-for="DisplayTestString"></div>
 <div display-for="DisplayTestDate" template="Date"></div>
@@ -47,14 +47,14 @@
 
 <hr />
 
-<div class="display-6 mb-3">ImgBytes</div>
+<h2>ImgBytes</h2>
 
 
 <img asp-bytes="@Model.ImageData" />
 
 <hr />
 
-<div class="display-6 mb-3">Label Required</div>
+<h2>Label Required</h2>
 
 <div>
     <label asp-for="LabelTestWithDisplay"></label>
@@ -68,14 +68,14 @@
 
 <hr />
 
-<div class="display-6 mb-3">Truncate</div>
+<h2>Truncate</h2>
 
 
 <truncate string="@Model.TruncateTestString" characters="15"></truncate>
 
 <hr />
 
-<div class="display-6 mb-3">Vertical Table Row</div>
+<h2>Vertical Table Row</h2>
 
 <table class="table-vertical">
     <tr-display asp-for="TrDisplayTestString" />
@@ -91,7 +91,7 @@
 
 <hr />
 
-<div class="display-6 mb-3">Visible</div>
+<h2>Visible</h2>
 
 <div>
     <button class="btn btn-primary">Button 1</button>

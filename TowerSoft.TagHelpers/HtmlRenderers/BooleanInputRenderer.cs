@@ -5,7 +5,9 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
+using System.Web;
 using TowerSoft.TagHelpers.Interfaces;
+using TowerSoft.TagHelpers.Options;
 using TowerSoft.TagHelpers.Utilities;
 
 namespace TowerSoft.TagHelpers.HtmlRenderers {
@@ -35,66 +37,27 @@ namespace TowerSoft.TagHelpers.HtmlRenderers {
 
             if (required || !nullable) {
                 TagBuilder output = htmlGenerator.GenerateCheckBox(viewContext, modelEx.ModelExplorer, modelEx.Name, (bool?)modelEx.Model, htmlAttributes);
-                output.AddCssClass("form-check-input");
+
                 if (!string.IsNullOrWhiteSpace(css))
                     output.Attributes["class"] = css;
 
+                if (TowerSoftTagHelperSettings.CheckboxInputClass != null)
+                    output.AddCssClass(TowerSoftTagHelperSettings.CheckboxInputClass);
+
                 return output;
             } else {
+                TagHelperUtilities tagHelperUtilities = new(modelEx, htmlGenerator, htmlHelper, viewContext);
                 TagBuilder output = new("div");
                 // Yes,No,Not Set Radio Buttons
-                TagBuilder trueButton = GetFormCheckInput(true, modelEx, htmlGenerator, viewContext, css, htmlAttributes);
-                TagBuilder falseButton = GetFormCheckInput(false, modelEx, htmlGenerator, viewContext, css, htmlAttributes);
-                TagBuilder nullButton = GetFormCheckInput(null, modelEx, htmlGenerator, viewContext, css, htmlAttributes);
+                TagBuilder trueButton = tagHelperUtilities.CreateBooleanRadioInput(true, css, htmlAttributes);
+                TagBuilder falseButton = tagHelperUtilities.CreateBooleanRadioInput(false, css, htmlAttributes);
+                TagBuilder nullButton = tagHelperUtilities.CreateBooleanRadioInput(null, css, htmlAttributes);
 
                 output.InnerHtml.AppendHtml(trueButton);
                 output.InnerHtml.AppendHtml(falseButton);
                 output.InnerHtml.AppendHtml(nullButton);
                 return output;
             }
-        }
-
-        private TagBuilder GetFormCheckInput(bool? value, ModelExpression modelEx, IHtmlGenerator htmlGenerator, ViewContext viewContext, string css, Dictionary<string, string> htmlAttributes) {
-            TagBuilder div = new("div");
-            div.AddCssClass("form-check form-check-inline");
-
-            TagBuilder label = new("label");
-            label.AddCssClass("form-check-label");
-
-            TagBuilder input = htmlGenerator.GenerateRadioButton(viewContext, modelEx.ModelExplorer, modelEx.Name, value, (bool?)modelEx.Model == value, null);
-            input.AddCssClass("form-check-input");
-            if (!string.IsNullOrWhiteSpace(css))
-                input.Attributes["class"] = css;
-
-            if (value == null && modelEx.Model == null && !input.Attributes.ContainsKey("checked")) {
-                input.Attributes.Add("checked", "");
-            }
-
-            string trueLabelText = "Yes";
-            string falseLabelText = "No";
-            string nullLabelText = "Not Set";
-            if (htmlAttributes != null && htmlAttributes.TryGetValue("data-labels", out string labels)) {
-                string[] parts = labels.Split(",", System.StringSplitOptions.RemoveEmptyEntries);
-                if (parts.Length >= 1) {
-                    trueLabelText = parts[0].Trim();
-                }
-                if (parts.Length >= 2) {
-                    falseLabelText = parts[1].Trim();
-                }
-                if (parts.Length >= 3) {
-                    nullLabelText = parts[2].Trim();
-                }
-            }
-
-            label.InnerHtml.AppendHtml(input);
-            if (value.HasValue && value.Value)
-                label.InnerHtml.Append(trueLabelText);
-            else if (value.HasValue)
-                label.InnerHtml.Append(falseLabelText);
-            else
-                label.InnerHtml.Append(nullLabelText);
-            div.InnerHtml.AppendHtml(label);
-            return div;
         }
     }
 }

@@ -21,13 +21,17 @@ var options = {
         dest: 'wwwroot/lib'
     },
     css: {
-        libFiles: [
-            '@mdi/font/css/materialdesignicons.css'
-        ],
-        workingDirectory: 'node_modules',
         sassSource: 'Sass/site.scss',
         sassFiles: 'Sass/**/*.scss',
         output: 'bundle.css',
+        dest: 'wwwroot/lib'
+    },
+    cssLib: {
+        files: [
+            '@mdi/font/css/materialdesignicons.css'
+        ],
+        workingDirectory: 'node_modules',
+        output: 'bundle-lib.css',
         dest: 'wwwroot/lib'
     },
     fonts: {
@@ -47,20 +51,28 @@ gulp.task('bundle-JS', function () {
         .pipe(gulp.dest(options.js.dest));
 });
 
-gulp.task('bundle-CSS', function () {
-    var libCSS = gulp.src(options.css.libFiles, { cwd: options.css.workingDirectory });
-
-    var siteCSS = gulp.src(options.css.sassSource)
+gulp.task('bundle-css', () => {
+    return gulp.src(options.css.sassSource)
         .pipe(sass({
             errLogToConsole: true
-        }).on('error', sass.logError));
-
-    return merge(libCSS, siteCSS)
+        }).on('error', sass.logError))
         .pipe(concat(options.css.output))
         .pipe(gulp.dest(options.css.dest))
-        .pipe(cleancss({ level: { 1: { specialComments: 0 } } }))
+        .pipe(cleancss())
         .pipe(rename({ suffix: '.min' }))
         .pipe(gulp.dest(options.css.dest));
+});
+
+gulp.task('bundle-lib-css', () => {
+    return gulp.src(options.cssLib.files, { cwd: options.cssLib.workingDirectory })
+        .pipe(sass({
+            errLogToConsole: true
+        }).on('error', sass.logError))
+        .pipe(concat(options.cssLib.output))
+        .pipe(gulp.dest(options.cssLib.dest))
+        .pipe(cleancss())
+        .pipe(rename({ suffix: '.min' }))
+        .pipe(gulp.dest(options.cssLib.dest));
 });
 
 gulp.task('copy-fonts', function () {
@@ -69,8 +81,7 @@ gulp.task('copy-fonts', function () {
 });
 
 gulp.task('sass-watch', function () {
-    gulp.watch(options.css.sassFiles, gulp.parallel('bundle-CSS'));
+    gulp.watch(options.css.sassFiles, gulp.parallel('bundle-css'));
 });
 
-gulp.task('default', gulp.parallel('bundle-JS', 'bundle-CSS', 'copy-fonts'));
-//#endregion
+gulp.task('default', gulp.parallel('bundle-JS', 'bundle-css', 'bundle-lib-css', 'copy-fonts'));

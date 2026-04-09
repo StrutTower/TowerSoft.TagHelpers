@@ -1,8 +1,8 @@
 ﻿@model IndexModel
 
-<div class="display-3 mb-3 pb-2 border-bottom">Form Field Tag Helpers</div>
+<h2 class="border-bottom">Form Field Tag Helpers</h2>
 
-<div class="display-6 mb-3">FormField</div>
+<h5>FormField</h5>
 
 <formField asp-for="FormFieldTestString1" asp-input-attribute-minlength="3" />
 <formField asp-for="FormFieldTestString2" input-css="form-control additional-css-class" />
@@ -15,7 +15,7 @@
 
 <hr />
 
-<div class="display-6 mb-3">FormSelect</div>
+<h5>FormSelect</h5>
 
 
 <formSelect asp-for="FormSelectIntID" asp-items="Model.FormSelectIntList" />
@@ -28,7 +28,7 @@
 
 <hr />
 
-<div class="display-6 mb-3">hrFormField</div>
+<h5>hrFormField</h5>
 
 <hrFormField asp-for="HrFormFieldTestString1" asp-input-attribute-minlength="3" />
 <hrFormField asp-for="HrFormFieldTestString2" input-css="form-control additional-css-class" />
@@ -38,7 +38,7 @@
 
 <hr />
 
-<div class="display-6 mb-3">hrFormSelect</div>
+<h5>hrFormSelect</h5>
 
 
 <hrFormSelect asp-for="HrFormSelectIntID" asp-items="Model.FormSelectIntList" />
@@ -50,7 +50,7 @@
 <hrFormSelect asp-for="HrFormSelectNullableEnum" asp-items="Html.GetEnumSelectList<TestEnum>()" />
 <hr />
 
-<div class="display-6 mb-3">hrFormContainer</div>
+<h5>hrFormContainer</h5>
 <p>Allows adding an input element manually while still using the horizontal field layout</p>
 
 <hrFormContainer asp-for="HrFormContainerString">
@@ -68,7 +68,7 @@
 </hrFormContainer>
 <hr />
 
-<div class="display-6 mb-3">hrFormSubmit</div>
+<h5>hrFormSubmit</h5>
 
 
 <hrFormSubmit>
@@ -81,7 +81,7 @@
     </div>
 </hrFormSubmit>
 
-<div class="display-6 mb-3">HtmlRenderers</div>
+<h5>HtmlRenderers</h5>
 
 <hrFormField asp-for="RendererTestBooleanTrue" />
 <hrFormField asp-for="RendererTestBooleanFalse" renderer="@HtmlRenderer.BooleanRadio" />

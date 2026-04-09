@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using System.Text.Encodings.Web;
+using TowerSoft.TagHelpers.Options;
 
 namespace TowerSoft.TagHelpers.TagHelpers.Forms {
     /// <summary>
@@ -25,11 +26,12 @@ namespace TowerSoft.TagHelpers.TagHelpers.Forms {
         /// <param name="context"></param>
         /// <param name="output"></param>
         public override void Process(TagHelperContext context, TagHelperOutput output) {
-            output.TagName = "div";
+            output.TagName = TowerSoftTagHelperSettings.FormFieldHelpElement ?? "div";
             output.TagMode = TagMode.StartTagAndEndTag;
-            output.AddClass("text-muted", HtmlEncoder.Default);
-            output.AddClass("ps-3", HtmlEncoder.Default);
-            output.AddClass("small", HtmlEncoder.Default);
+
+            if (TowerSoftTagHelperSettings.FormFieldHelpClass != null)
+                output.Attributes.Add("class", TowerSoftTagHelperSettings.FormFieldHelpClass);
+
             var prop = ModelEx.Metadata.ContainerType.GetProperty(ModelEx.Metadata.Name);
             if (prop != null) {
                 DescriptionAttribute descAttr = prop.GetCustomAttribute<DescriptionAttribute>(true);

@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using TowerSoft.TagHelpers.Extensions;
+using TowerSoft.TagHelpers.Options;
 using TowerSoft.TagHelpers.Utilities;
 
 namespace TowerSoft.TagHelpers.TagHelpers.Breadcrumbs {
@@ -101,8 +102,14 @@ namespace TowerSoft.TagHelpers.TagHelpers.Breadcrumbs {
             if (string.IsNullOrWhiteSpace(Action)) {
                 output.TagName = "li";
                 output.TagMode = TagMode.StartTagAndEndTag;
-                output.AddClass("breadcrumb-item", HtmlEncoder.Default);
-                output.AddClass("active", HtmlEncoder.Default);
+
+                if (TowerSoftTagHelperSettings.BreadcrumbItemClass != null)
+                    output.AddClass("breadcrumb-item", HtmlEncoder.Default);
+                if (TowerSoftTagHelperSettings.BreadcrumbActiveClass != null)
+                    output.AddClass("active", HtmlEncoder.Default);
+
+                if (Model != null)
+                    output.Content.AppendHtml(TagHelperUtilities.TagHelperDisplay(htmlHelper, Model, TemplateName));
             } else {
                 TagBuilder a = new("a");
                 a.Attributes.Add("href", urlHelper.Action(Action, Controller, routeValues));
@@ -118,7 +125,8 @@ namespace TowerSoft.TagHelpers.TagHelpers.Breadcrumbs {
 
                 output.TagName = "li";
                 output.TagMode = TagMode.StartTagAndEndTag;
-                output.AddClass("breadcrumb-item", HtmlEncoder.Default);
+                if (TowerSoftTagHelperSettings.BreadcrumbItemClass != null)
+                    output.AddClass("breadcrumb-item", HtmlEncoder.Default);
                 output.Content.SetHtmlContent(a.ToRawString());
             }
         }

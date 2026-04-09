@@ -111,7 +111,10 @@ namespace TowerSoft.TagHelpers.Utilities {
             };
 
             TagHelperOutput selectOutput = CreateTagHelperOutput("select");
-            selectOutput.AddClass("form-select", HtmlEncoder.Default);
+
+            if (TowerSoftTagHelperSettings.SelectDefaultClass != null)
+                selectOutput.AddClass(TowerSoftTagHelperSettings.SelectDefaultClass, HtmlEncoder.Default);
+
             if (!multiple && optionLabel != "null" || multiple && !string.IsNullOrWhiteSpace(optionLabel)) {
                 TagBuilder option = new("option");
                 option.InnerHtml.SetContent(optionLabel);
@@ -155,6 +158,58 @@ namespace TowerSoft.TagHelpers.Utilities {
             TagHelperOutput validationMessageOutput = CreateTagHelperOutput("div");
             await descriptionTagHelper.ProcessAsync(context, validationMessageOutput);
             return validationMessageOutput;
+        }
+
+        internal TagBuilder CreateBooleanRadioInput(bool? value, string css, Dictionary<string, string> htmlAttributes) {
+            TagBuilder label = new("label");
+            if (TowerSoftTagHelperSettings.CheckboxLabelClass != null)
+                label.AddCssClass(TowerSoftTagHelperSettings.CheckboxLabelClass);
+
+            TagBuilder input = HtmlGenerator.GenerateRadioButton(ViewContext, For.ModelExplorer, For.Name, value, (bool?)For.Model == value, null);
+
+            if (TowerSoftTagHelperSettings.CheckboxInputClass != null)
+                input.AddCssClass(TowerSoftTagHelperSettings.CheckboxInputClass);
+
+            if (!string.IsNullOrWhiteSpace(css))
+                input.Attributes["class"] = css;
+
+            if (value == null && For.Model == null && !input.Attributes.ContainsKey("checked")) {
+                input.Attributes.Add("checked", "");
+            }
+
+            string trueLabelText = "Yes";
+            string falseLabelText = "No";
+            string nullLabelText = "Not Set";
+            if (htmlAttributes != null && htmlAttributes.TryGetValue("data-labels", out string labels)) {
+                string[] parts = labels.Split(",", System.StringSplitOptions.RemoveEmptyEntries);
+                if (parts.Length >= 1) {
+                    trueLabelText = parts[0].Trim();
+                }
+                if (parts.Length >= 2) {
+                    falseLabelText = parts[1].Trim();
+                }
+                if (parts.Length >= 3) {
+                    nullLabelText = parts[2].Trim();
+                }
+            }
+
+
+            label.InnerHtml.AppendHtml(input);
+            if (value.HasValue && value.Value)
+                label.InnerHtml.Append(trueLabelText);
+            else if (value.HasValue)
+                label.InnerHtml.Append(falseLabelText);
+            else
+                label.InnerHtml.Append(nullLabelText);
+
+            if (TowerSoftTagHelperSettings.CheckboxInlineContainerClass != null) {
+                TagBuilder div = new("div");
+                div.AddCssClass(TowerSoftTagHelperSettings.CheckboxInlineContainerClass);
+                div.InnerHtml.AppendHtml(label);
+                return div;
+            }
+
+            return label;
         }
         #endregion
 

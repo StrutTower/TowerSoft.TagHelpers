@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using TowerSoft.TagHelpers.Options;
 using TowerSoft.TagHelpers.Utilities;
 
 namespace TowerSoft.TagHelpers.TagHelpers.Forms {
@@ -107,18 +108,27 @@ namespace TowerSoft.TagHelpers.TagHelpers.Forms {
         /// <param name="output"></param>
         /// <returns></returns>
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output) {
-            output.TagName = "div";
+            output.TagName = TowerSoftTagHelperSettings.HrFormFieldContainerElement ?? "div";
             output.TagMode = TagMode.StartTagAndEndTag;
-            output.AddClass("row", HtmlEncoder.Default);
-            output.AddClass("mb-3", HtmlEncoder.Default);
+            if (TowerSoftTagHelperSettings.HrFormFieldContainerClass != null)
+                output.Attributes.Add("class", TowerSoftTagHelperSettings.HrFormFieldContainerClass);
 
-            string labelColumnCss = LabelCol ?? "col-md-4 col-lg-3";
-            string fieldColumnCss = InputCol ?? "col-md-7 col-lg-6";
+            string labelColumnCss = null;
+            string fieldColumnCss = null;
+
+            if (LabelCol != null || TowerSoftTagHelperSettings.HrFormFieldLabelColumnClass != null)
+                labelColumnCss = LabelCol ?? TowerSoftTagHelperSettings.HrFormFieldLabelColumnClass;
+
+            if (InputCol != null || TowerSoftTagHelperSettings.HrFormFieldInputColumnClass != null)
+                fieldColumnCss = InputCol ?? TowerSoftTagHelperSettings.HrFormFieldInputColumnClass;
 
             TagBuilder labelDiv = new("div");
-            labelDiv.AddCssClass(labelColumnCss + " text-md-end");
+            if (!string.IsNullOrWhiteSpace(labelColumnCss))
+                labelDiv.AddCssClass(labelColumnCss);
+
             TagBuilder fieldDiv = new("div");
-            fieldDiv.AddCssClass(fieldColumnCss);
+            if (!string.IsNullOrWhiteSpace(fieldColumnCss))
+                fieldDiv.AddCssClass(fieldColumnCss);
 
             if (selectAttributes == null)
                 selectAttributes = [];

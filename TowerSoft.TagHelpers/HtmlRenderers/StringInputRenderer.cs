@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using System.Collections.Generic;
 using TowerSoft.TagHelpers.Interfaces;
+using TowerSoft.TagHelpers.Options;
 
 namespace TowerSoft.TagHelpers.HtmlRenderers {
     /// <summary>
@@ -20,7 +21,10 @@ namespace TowerSoft.TagHelpers.HtmlRenderers {
         /// <param name="htmlAttributes">Optional. Dictionary of HTML attributes</param>
         public IHtmlContent Render(ModelExpression modelEx, IHtmlGenerator htmlGenerator, IHtmlHelper htmlHelper, ViewContext viewContext, string css, Dictionary<string, string> htmlAttributes) {
             TagBuilder output = htmlGenerator.GenerateTextBox(viewContext, modelEx.ModelExplorer, modelEx.Name, modelEx.Model, null, null);
-            output.AddCssClass("form-control");
+
+            if (TowerSoftTagHelperSettings.InputDefaultClass != null)
+                output.AddCssClass(TowerSoftTagHelperSettings.InputDefaultClass);
+
             if (!string.IsNullOrWhiteSpace(css))
                 output.Attributes["class"] = css;
 

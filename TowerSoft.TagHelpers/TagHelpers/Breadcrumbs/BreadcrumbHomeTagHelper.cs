@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using TowerSoft.TagHelpers.Options;
 
 namespace TowerSoft.TagHelpers.TagHelpers.Breadcrumbs {
     /// <summary>
@@ -95,7 +96,8 @@ namespace TowerSoft.TagHelpers.TagHelpers.Breadcrumbs {
 
             output.TagName = "li";
             output.TagMode = TagMode.StartTagAndEndTag;
-            output.AddClass("breadcrumb-item", HtmlEncoder.Default);
+            if (TowerSoftTagHelperSettings.BreadcrumbItemClass != null)
+                output.AddClass(TowerSoftTagHelperSettings.BreadcrumbItemClass, HtmlEncoder.Default);
             output.Content.AppendHtml(link);
         }
     }

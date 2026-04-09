@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using TowerSoft.TagHelpers.Options;
 using TowerSoft.TagHelpers.Utilities;
 
 namespace TowerSoft.TagHelpers.TagHelpers.Forms {
@@ -87,9 +88,11 @@ namespace TowerSoft.TagHelpers.TagHelpers.Forms {
 
         /// <summary></summary>
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output) {
-            output.TagName = "div";
+            output.TagName = TowerSoftTagHelperSettings.FormFieldContainerElement ?? "div";
             output.TagMode = TagMode.StartTagAndEndTag;
-            output.AddClass("mb-3", HtmlEncoder.Default);
+
+            if (TowerSoftTagHelperSettings.FormFieldContainerClass != null)
+                output.Attributes.SetAttribute("class", TowerSoftTagHelperSettings.FormFieldContainerClass);
 
             selectAttributes ??= [];
 

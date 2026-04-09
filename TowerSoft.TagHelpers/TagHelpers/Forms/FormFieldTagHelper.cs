@@ -99,9 +99,11 @@ namespace TowerSoft.TagHelpers.TagHelpers.Forms {
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output) {
             (htmlHelper as IViewContextAware).Contextualize(ViewContext);
 
-            output.TagName = "div";
+            output.TagName = TowerSoftTagHelperSettings.FormFieldContainerElement ?? "div";
             output.TagMode = TagMode.StartTagAndEndTag;
-            output.Attributes.SetAttribute("class", "mb-3");
+
+            if (TowerSoftTagHelperSettings.FormFieldContainerClass != null)
+                output.Attributes.SetAttribute("class", TowerSoftTagHelperSettings.FormFieldContainerClass);
 
             TagHelperUtilities utils = new(For, htmlGenerator, htmlHelper, ViewContext);
 
@@ -121,11 +123,18 @@ namespace TowerSoft.TagHelpers.TagHelpers.Forms {
                     required = prop.IsDefined(typeof(RequiredAttribute), true);
 
                 if (required || !nullable) {
-                    TagBuilder formCheck = new("div");
-                    formCheck.AddCssClass("form-check");
-                    formCheck.InnerHtml.AppendHtml(utils.CreateInputElement(null, InputCss, inputAttributes));
-                    formCheck.InnerHtml.AppendHtml(await utils.CreateLabelElement(context, Label, "form-check-label"));
-                    output.Content.AppendHtml(formCheck);
+                    IHtmlContent input = utils.CreateInputElement(null, InputCss, inputAttributes);
+                    TagHelperOutput label = await utils.CreateLabelElement(context, Label, "form-check-label");
+                    if (TowerSoftTagHelperSettings.CheckboxContainerElement != null) {
+                        TagBuilder formCheck = new("div");
+                        formCheck.AddCssClass("form-check");
+                        formCheck.InnerHtml.AppendHtml(input);
+                        formCheck.InnerHtml.AppendHtml(label);
+                        output.Content.AppendHtml(formCheck);
+                    } else {
+                        output.Content.AppendHtml(input);
+                        output.Content.AppendHtml(label);
+                    }
                 } else {
                     TagHelperAttribute labelsAttribute = context.AllAttributes.SingleOrDefault(x => x.Name == "data-labels");
                     if (labelsAttribute != null)
@@ -134,8 +143,8 @@ namespace TowerSoft.TagHelpers.TagHelpers.Forms {
                     output.Content.AppendHtml(utils.CreateInputElement(HtmlRenderer.Boolean, InputCss, inputAttributes));
                 }
 
-                output.Content.AppendHtml(await utils.CreateValidationMessageElement(context));
                 output.Content.AppendHtml(await utils.CreateDescriptionElement(context));
+                output.Content.AppendHtml(await utils.CreateValidationMessageElement(context));
             } else {
                 if (!inputAttributes.ContainsKey("autocomplete"))
                     inputAttributes.Add("autocomplete", Autocomplete.ToString());
@@ -163,13 +172,13 @@ namespace TowerSoft.TagHelpers.TagHelpers.Forms {
                 // Default editor or supplied renderer
                 TagHelperOutput labelElement = await utils.CreateLabelRequiredElement(context, Label, forceRequiredAstrix: ForceRequiredAstrix);
                 IHtmlContent inputElement = utils.CreateInputElement(Renderer, InputCss, inputAttributes);
-                TagHelperOutput validationMessageElement = await utils.CreateValidationMessageElement(context);
                 TagHelperOutput descriptionElement = await utils.CreateDescriptionElement(context);
+                TagHelperOutput validationMessageElement = await utils.CreateValidationMessageElement(context);
 
                 output.Content.AppendHtml(labelElement);
                 output.Content.AppendHtml(inputElement);
-                output.Content.AppendHtml(validationMessageElement);
                 output.Content.AppendHtml(descriptionElement);
+                output.Content.AppendHtml(validationMessageElement);
             }
         }
     }

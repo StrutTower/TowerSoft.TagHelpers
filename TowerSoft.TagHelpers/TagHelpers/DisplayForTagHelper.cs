@@ -29,6 +29,7 @@ namespace TowerSoft.TagHelpers {
     [HtmlTargetElement("li", Attributes = "display-for")]
     [HtmlTargetElement("option", Attributes = "display-for")]
     [HtmlTargetElement("small", Attributes = "display-for")]
+    [HtmlTargetElement("dd", Attributes = "display-for")]
     public class DisplayForTagHelper(IHtmlHelper htmlHelper) : TagHelper {
 
         /// <summary>

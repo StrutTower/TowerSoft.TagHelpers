@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using TowerSoft.TagHelpers.Options;
 
 namespace TowerSoft.TagHelpers.TagHelpers.Forms {
     /// <summary>
@@ -38,14 +37,22 @@ namespace TowerSoft.TagHelpers.TagHelpers.Forms {
         /// <param name="output"></param>
         /// <returns></returns>
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output) {
-            string labelColumnCss = LabelCol ?? "col-md-4 col-lg-3";
-            string fieldColumnCss = InputCol ?? "col-md-7 col-lg-6";
-            string buttonClass = ButtonClass ?? "btn btn-primary";
-            string buttonText = ButtonText ?? "Save";
+            string labelColumnCss = null;
+            string fieldColumnCss = null;
+
+            if (LabelCol != null || TowerSoftTagHelperSettings.HrFormFieldLabelColumnClass != null)
+                labelColumnCss = LabelCol ?? TowerSoftTagHelperSettings.HrFormFieldLabelColumnClass;
+
+            if (InputCol != null || TowerSoftTagHelperSettings.HrFormFieldInputColumnClass != null)
+                fieldColumnCss = InputCol ?? TowerSoftTagHelperSettings.HrFormFieldInputColumnClass;
+
+            string buttonClass = ButtonClass ?? TowerSoftTagHelperSettings.SubmitButtonClass;
+            string buttonText = ButtonText ?? TowerSoftTagHelperSettings.SubmitButtonText ?? "Submit";
 
             TagBuilder button = new("button");
             button.Attributes.Add("type", "submit");
-            button.AddCssClass(buttonClass);
+            if (!string.IsNullOrWhiteSpace(buttonClass))
+                button.AddCssClass(buttonClass);
             button.InnerHtml.Append(buttonText);
 
             TagBuilder label = new("div");
@@ -57,10 +64,10 @@ namespace TowerSoft.TagHelpers.TagHelpers.Forms {
 
             field.InnerHtml.AppendHtml(await output.GetChildContentAsync());
 
-            output.TagName = "div";
+            output.TagName = TowerSoftTagHelperSettings.HrFormFieldContainerElement ?? "div";
             output.TagMode = TagMode.StartTagAndEndTag;
-            output.AddClass("row", HtmlEncoder.Default);
-            output.AddClass("mb-3", HtmlEncoder.Default);
+            if (TowerSoftTagHelperSettings.HrFormFieldContainerClass != null)
+                output.Attributes.Add("class", TowerSoftTagHelperSettings.HrFormFieldContainerClass);
             output.Content.AppendHtml(label);
             output.Content.AppendHtml(field);
         }

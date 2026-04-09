@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System.Threading.Tasks;
+using TowerSoft.TagHelpers.Options;
 
 namespace TowerSoft.TagHelpers.TagHelpers.Forms {
     /// <summary>
@@ -30,10 +31,16 @@ namespace TowerSoft.TagHelpers.TagHelpers.Forms {
                 !ForceRequiredAstrix.HasValue && For.Metadata.IsRequired) {
 
                 TagBuilder span = new("span");
-                span.InnerHtml.Append("*");
-                span.AddCssClass("text-danger ps-1");
+                span.InnerHtml.Append(" * ");
+                if (TowerSoftTagHelperSettings.LabelRequiredAstrixClass != null)
+                    span.AddCssClass(TowerSoftTagHelperSettings.LabelRequiredAstrixClass);
                 span.Attributes.Add("title", "This field is required.");
-                output.PostElement.SetHtmlContent(span);
+
+                if (TowerSoftTagHelperSettings.LabelRequiredAstrixInLabel) {
+                    output.Content.AppendHtml(span);
+                } else {
+                    output.PostElement.SetHtmlContent(span);
+                }
             }
         }
     }

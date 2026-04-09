@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc.TagHelpers;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using System.Text.Encodings.Web;
+using System.Threading.Tasks;
+using TowerSoft.TagHelpers.Options;
 
 namespace TowerSoft.TagHelpers.TagHelpers.Breadcrumbs {
     /// <summary>
@@ -16,9 +17,22 @@ namespace TowerSoft.TagHelpers.TagHelpers.Breadcrumbs {
         /// <param name="context"></param>
         /// <param name="output"></param>
         public override void Process(TagHelperContext context, TagHelperOutput output) {
-            output.TagName = "ul";
+            output.TagName = "nav";
             output.TagMode = TagMode.StartTagAndEndTag;
-            output.AddClass("breadcrumb", HtmlEncoder.Default);
+            output.Attributes.Add("aria-label", "breadcrumb");
+
+            TagBuilder ul = new("ul");
+            if (TowerSoftTagHelperSettings.BreadcrumbContainerClass != null)
+                ul.AddCssClass(TowerSoftTagHelperSettings.BreadcrumbContainerClass);
+
+            TagHelperContent childContent = output.GetChildContentAsync().Result;
+            ul.InnerHtml.AppendHtml(childContent);
+
+            output.Content.AppendHtml(ul);
+
+            //output.TagName = "ul";
+            //output.TagMode = TagMode.StartTagAndEndTag;
+            //output.AddClass("breadcrumb", HtmlEncoder.Default);
         }
     }
 }

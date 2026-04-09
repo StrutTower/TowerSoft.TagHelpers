@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using System;
@@ -8,7 +7,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using TowerSoft.TagHelpers.Enums;
 using TowerSoft.TagHelpers.Options;
@@ -107,18 +105,24 @@ namespace TowerSoft.TagHelpers.TagHelpers.Forms {
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output) {
             ((IViewContextAware)htmlHelper).Contextualize(ViewContext);
 
-            output.TagName = "div";
+            output.TagName = TowerSoftTagHelperSettings.HrFormFieldContainerElement ?? "div";
             output.TagMode = TagMode.StartTagAndEndTag;
-            output.AddClass("row", HtmlEncoder.Default);
-            output.AddClass("mb-3", HtmlEncoder.Default);
+            if (TowerSoftTagHelperSettings.HrFormFieldContainerClass != null)
+                output.Attributes.Add("class", TowerSoftTagHelperSettings.HrFormFieldContainerClass);
 
             TagHelperUtilities utils = new(For, htmlGenerator, htmlHelper, ViewContext);
 
             Type type = For.Metadata.ModelType;
             type = Nullable.GetUnderlyingType(type) ?? type;
 
-            string labelColumnCss = LabelCol ?? "col-md-4 col-lg-3";
-            string fieldColumnCss = InputCol ?? "col-md-7 col-lg-6";
+            string labelColumnCss = null;
+            string fieldColumnCss = null;
+
+            if (LabelCol != null || TowerSoftTagHelperSettings.HrFormFieldLabelColumnClass != null)
+                labelColumnCss = LabelCol ?? TowerSoftTagHelperSettings.HrFormFieldLabelColumnClass;
+
+            if (InputCol != null || TowerSoftTagHelperSettings.HrFormFieldInputColumnClass != null)
+                fieldColumnCss = InputCol ?? TowerSoftTagHelperSettings.HrFormFieldInputColumnClass;
 
             if (inputAttributes == null)
                 inputAttributes = [];
@@ -134,9 +138,12 @@ namespace TowerSoft.TagHelpers.TagHelpers.Forms {
 
 
                 TagBuilder labelDiv = new("div");
-                labelDiv.AddCssClass(labelColumnCss + " text-md-end");
+                if (labelColumnCss != null || TowerSoftTagHelperSettings.HrFormFieldLabelClass != null)
+                    labelDiv.AddCssClass(labelColumnCss + " " + TowerSoftTagHelperSettings.HrFormFieldLabelClass);
+
                 TagBuilder fieldDiv = new("div");
-                fieldDiv.AddCssClass(fieldColumnCss);
+                if (!string.IsNullOrWhiteSpace(fieldColumnCss))
+                    fieldDiv.AddCssClass(fieldColumnCss);
 
                 if (required || !nullable) {
                     TagBuilder formCheck = new("div");
@@ -157,9 +164,12 @@ namespace TowerSoft.TagHelpers.TagHelpers.Forms {
                 output.Content.AppendHtml(fieldDiv);
             } else {
                 TagBuilder labelDiv = new("div");
-                labelDiv.AddCssClass(labelColumnCss + " text-md-end");
+                if (!string.IsNullOrWhiteSpace(labelColumnCss))
+                    labelDiv.AddCssClass(labelColumnCss);
+
                 TagBuilder fieldDiv = new("div");
-                fieldDiv.AddCssClass(fieldColumnCss);
+                if (!string.IsNullOrWhiteSpace(fieldColumnCss))
+                    fieldDiv.AddCssClass(fieldColumnCss);
 
                 if (!inputAttributes.ContainsKey("autocomplete"))
                     inputAttributes.Add("autocomplete", Autocomplete.ToString());
@@ -188,8 +198,8 @@ namespace TowerSoft.TagHelpers.TagHelpers.Forms {
 
                 labelDiv.InnerHtml.AppendHtml(labelElement);
                 fieldDiv.InnerHtml.AppendHtml(inputElement);
-                fieldDiv.InnerHtml.AppendHtml(validationMessageElement);
                 fieldDiv.InnerHtml.AppendHtml(descriptionElement);
+                fieldDiv.InnerHtml.AppendHtml(validationMessageElement);
 
                 output.Content.AppendHtml(labelDiv);
                 output.Content.AppendHtml(fieldDiv);
