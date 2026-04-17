@@ -152,7 +152,7 @@ namespace TowerSoft.TagHelpers.TagHelpers.Forms {
 
             TagHelperUtilities utils = new(For, htmlGenerator, htmlHelper, ViewContext);
 
-            TagHelperOutput labelElement = await utils.CreateLabelRequiredElement(context, LabelName, forceRequiredAstrix: ForceRequiredAstrix);
+            TagHelperOutput labelElement = await utils.CreateLabelRequiredElement(context, LabelName, TowerSoftTagHelperSettings.HrFormFieldLabelClass, forceRequiredAstrix: ForceRequiredAstrix);
             IHtmlContent inputElement = await utils.CreateSelectElement(context, Items, Multiple, OptionLabel, selectAttributes);
             TagHelperOutput validationMessageElement = await utils.CreateValidationMessageElement(context);
             TagHelperOutput descriptionElement = await utils.CreateDescriptionElement(context);

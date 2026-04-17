@@ -3,7 +3,7 @@
   "name": "asp.net",
   "private": true,
   "dependencies": {
-    "tower-bootstrap-theme": "5.3.6",
+    "tower-bootstrap-theme": "5.4.1",
     "@mdi/font": "latest"
   },
   "devDependencies": {

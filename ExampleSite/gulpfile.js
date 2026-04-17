@@ -28,6 +28,7 @@ var options = {
     },
     cssLib: {
         files: [
+            'tower-bootstrap-theme/dist/tower-bootstrap-theme.css',
             '@mdi/font/css/materialdesignicons.css'
         ],
         workingDirectory: 'node_modules',
@@ -65,9 +66,9 @@ gulp.task('bundle-css', () => {
 
 gulp.task('bundle-lib-css', () => {
     return gulp.src(options.cssLib.files, { cwd: options.cssLib.workingDirectory })
-        .pipe(sass({
-            errLogToConsole: true
-        }).on('error', sass.logError))
+        //.pipe(sass({
+        //    errLogToConsole: true
+        //}).on('error', sass.logError))
         .pipe(concat(options.cssLib.output))
         .pipe(gulp.dest(options.cssLib.dest))
         .pipe(cleancss())

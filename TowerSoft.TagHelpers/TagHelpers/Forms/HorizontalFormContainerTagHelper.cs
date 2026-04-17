@@ -69,7 +69,7 @@ namespace TowerSoft.TagHelpers.TagHelpers.Forms {
             if (!string.IsNullOrWhiteSpace(fieldColumnCss))
                 fieldDiv.AddCssClass(fieldColumnCss);
 
-            TagHelperOutput labelElement = await utils.CreateLabelRequiredElement(context, Label, forceRequiredAstrix: ForceRequiredAstrix);
+            TagHelperOutput labelElement = await utils.CreateLabelRequiredElement(context, Label, TowerSoftTagHelperSettings.HrFormFieldLabelClass, forceRequiredAstrix: ForceRequiredAstrix);
             TagHelperOutput validationMessageElement = await utils.CreateValidationMessageElement(context);
             TagHelperOutput descriptionElement = await utils.CreateDescriptionElement(context);
 

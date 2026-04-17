@@ -138,8 +138,8 @@ namespace TowerSoft.TagHelpers.TagHelpers.Forms {
 
 
                 TagBuilder labelDiv = new("div");
-                if (labelColumnCss != null || TowerSoftTagHelperSettings.HrFormFieldLabelClass != null)
-                    labelDiv.AddCssClass(labelColumnCss + " " + TowerSoftTagHelperSettings.HrFormFieldLabelClass);
+                if (!string.IsNullOrWhiteSpace(labelColumnCss))
+                    labelDiv.AddCssClass(labelColumnCss);
 
                 TagBuilder fieldDiv = new("div");
                 if (!string.IsNullOrWhiteSpace(fieldColumnCss))
@@ -191,7 +191,7 @@ namespace TowerSoft.TagHelpers.TagHelpers.Forms {
                 }
 
                 // Default editor or supplied editor template
-                TagHelperOutput labelElement = await utils.CreateLabelRequiredElement(context, Label, forceRequiredAstrix: ForceRequiredAstrix);
+                TagHelperOutput labelElement = await utils.CreateLabelRequiredElement(context, Label, TowerSoftTagHelperSettings.HrFormFieldLabelClass, forceRequiredAstrix: ForceRequiredAstrix);
                 IHtmlContent inputElement = utils.CreateInputElement(Renderer, InputCss, inputAttributes);
                 TagHelperOutput validationMessageElement = await utils.CreateValidationMessageElement(context);
                 TagHelperOutput descriptionElement = await utils.CreateDescriptionElement(context);

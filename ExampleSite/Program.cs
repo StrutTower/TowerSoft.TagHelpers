@@ -3,7 +3,7 @@ using TowerSoft.TagHelpers.Options;
 namespace ExampleSite {
     public class Program {
         public static void Main(string[] args) {
-            TowerSoftTagHelperSettings.UsePicoCssSettings();
+            //TowerSoftTagHelperSettings.UsePicoCssSettings();
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
