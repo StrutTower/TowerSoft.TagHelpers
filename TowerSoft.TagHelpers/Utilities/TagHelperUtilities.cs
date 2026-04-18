@@ -247,9 +247,19 @@ namespace TowerSoft.TagHelpers.Utilities {
 
         private List<SelectListItem> GetSelectListItems(IEnumerable<SelectListItem> items) {
             List<SelectListItem> output = [];
-            if (For.ModelExplorer.ModelType.IsEnum) {
+            Type type = For.ModelExplorer.ModelType;
+
+            if (type.IsGenericType &&
+                type.GetGenericTypeDefinition() == typeof(Nullable<>)) {
+                type = type.GetGenericArguments()[0];
+            }
+
+            if (type.IsEnum) {
                 foreach (SelectListItem item in items) {
-                    output.Add(GetSelectListItem(item, ((int)For.Model).ToString()));
+                    string compareTo = null;
+                    if (For != null && For.Model != null)
+                        compareTo = ((int)For.Model).ToString();
+                    output.Add(GetSelectListItem(item, compareTo));
                 }
             } else {
                 IEnumerable modelList = null;
