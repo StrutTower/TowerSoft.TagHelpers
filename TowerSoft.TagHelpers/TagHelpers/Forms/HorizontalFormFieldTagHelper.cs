@@ -160,6 +160,9 @@ namespace TowerSoft.TagHelpers.TagHelpers.Forms {
                     fieldDiv.InnerHtml.AppendHtml(utils.CreateInputElement(HtmlRenderer.Boolean, InputCss, inputAttributes));
                 }
 
+                fieldDiv.InnerHtml.AppendHtml(await utils.CreateDescriptionElement(context));
+                fieldDiv.InnerHtml.AppendHtml(await utils.CreateValidationMessageElement(context));
+
                 output.Content.AppendHtml(labelDiv);
                 output.Content.AppendHtml(fieldDiv);
             } else {

@@ -44,10 +44,34 @@ namespace TowerSoft.TagHelpers.Options {
             if (!typeof(IHtmlRenderer).IsAssignableFrom(type))
                 throw new NotSupportedException("The renderer type must be assignable to IHtmlRenderer.");
 
-            object renderer = Activator.CreateInstance(type) ?? 
+            object renderer = Activator.CreateInstance(type) ??
                 throw new Exception($"Unable to create an instance of {type.FullName}.");
 
             Renderers.Add(name.ToLower(), (IHtmlRenderer)renderer);
+        }
+
+        /// <summary>
+        /// Removes a IHtmlRenderer from the registration
+        /// </summary>
+        /// <param name="name">Dictionary name of the renderer</param>
+        /// <returns>True if the entry was found and removed. False if it was not found.</returns>
+        public static bool Remove(string name) {
+            if (!Renderers.ContainsKey(name.ToLower()))
+                return false;
+            Renderers.Remove(name.ToLower());
+            return true;
+        }
+
+        /// <summary>
+        /// Replaces an existing IHtmlRenderer from the registration. If an existing entry is not found it just added the new one.
+        /// </summary>
+        /// <typeparam name="T">HtmlRender to add to the registration</typeparam>
+        /// <param name="name">Dictionary name of the renderer</param>
+        public static void Replace<T>(string name) {
+            if (Renderers.ContainsKey(name.ToLower()))
+                Renderers.Remove(name.ToLower());
+
+            Add<T>(name);
         }
 
         /// <summary>

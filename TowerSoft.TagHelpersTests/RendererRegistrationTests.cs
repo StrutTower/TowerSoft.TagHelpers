@@ -75,5 +75,45 @@ namespace TowerSoft.TagHelpersTests {
             IHtmlRenderer htmlRenderer = RendererRegistration.Default();
             Assert.IsInstanceOfType(htmlRenderer, typeof(StringInputRenderer));
         }
+
+        [TestMethod]
+        public void Remove_ShouldRemoveRenderer() {
+            string rendererKey = "RemoveTest";
+            RendererRegistration.Add<TestRenderer>(rendererKey);
+
+            Assert.IsTrue(RendererRegistration.Exists(rendererKey));
+
+            Assert.IsTrue(RendererRegistration.Remove(rendererKey));
+
+            Assert.IsFalse(RendererRegistration.Exists(rendererKey));
+        }
+
+        [TestMethod]
+        public void Remove_DoesNotExist_ShouldReturnFalse() {
+            Assert.IsFalse(RendererRegistration.Remove("thisdoesnotexist"));
+        }
+
+        [TestMethod]
+        public void Replace_ShouldReplaceRenderer() {
+            string rendererKey = "ReplaceTest";
+            RendererRegistration.Add<TestRenderer>(rendererKey);
+
+            RendererRegistration.Replace<TestRenderer2>(rendererKey);
+
+            IHtmlRenderer renderer = RendererRegistration.Get(rendererKey);
+
+            Assert.IsTrue(renderer is TestRenderer2);
+        }
+
+        [TestMethod]
+        public void Replace_ShouldAddRenderer() {
+            string rendererKey = "ReplaceAddTest";
+
+            RendererRegistration.Replace<TestRenderer2>(rendererKey);
+
+            IHtmlRenderer renderer = RendererRegistration.Get(rendererKey);
+
+            Assert.IsTrue(renderer is TestRenderer2);
+        }
     }
 }

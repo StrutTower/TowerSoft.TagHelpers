@@ -52,13 +52,18 @@ namespace ExampleSite.Models {
         public string HrFormFieldTestString1 { get; set; } = "HrFormField Test String 1";
         public string HrFormFieldTestString2 { get; set; } = "HrFormField Test String 2";
         public bool HrFormFieldTestBooleanTrue { get; set; } = true;
+        [Description("Description Test")]
         public bool HrFormFieldTestBooleanFalse { get; set; } = false;
+        [Description("Description Test")]
         public bool? HrFormFieldTestBooleanNullable { get; set; } = null;
 
 
+        [Description("Description Test")]
         public int HrFormSelectIntID { get; set; } = 3;
+        [Description("Description Test")]
         public List<int> HrFormSelectMultipleIntID { get; set; } = [1, 4];
         public long HrFormSelectLongID { get; set; } = 3;
+        [Description("Description Test")]
         public string HrFormSelectString { get; set; } = "Item 3";
         public int? HrFormSelectNullable { get; set; }
         public TestEnum HrFormSelectEnum { get; set; } = TestEnum.Value3;
@@ -70,7 +75,9 @@ namespace ExampleSite.Models {
         public SelectList FormSelectStringList { get; set; } = new SelectList(items);
 
 
+        [Description("Description Test")]
         public string HrFormContainerString { get; set; } = "Test String";
+        [Description("Description Test")]
         public string HrFormContainerSelect { get; set; } = "value2";
 
 
